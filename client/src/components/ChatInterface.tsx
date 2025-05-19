@@ -191,7 +191,7 @@ export default function ChatInterface({
                               </div>
                             ))}
                           </div>
-                          {msg.images.length > 1 && (
+                          {msg.images && msg.images.length > 1 && (
                             <div className="flex justify-center gap-1 p-1 bg-gray-800/10">
                               {msg.images.map((_, index) => (
                                 <div 
