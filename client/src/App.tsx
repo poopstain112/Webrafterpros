@@ -17,6 +17,10 @@ function Router() {
         <Route path="/" component={Home} />
         <Route path="/history" component={History} />
         <Route path="/help" component={Help} />
+        <Route path="/image-test" component={() => {
+          const ImageTest = require('./components/ImageTest').default;
+          return <ImageTest />;
+        }} />
         <Route component={NotFound} />
       </Switch>
     </>

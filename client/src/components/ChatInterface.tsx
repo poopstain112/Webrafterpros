@@ -257,15 +257,30 @@ export default function ChatInterface({
                                   className="relative flex-shrink-0 w-full h-40 snap-center"
                                   style={{ minWidth: "240px" }}
                                 >
-                                  <img
-                                    src={img.url}
-                                    alt={`Uploaded ${imgIndex + 1}`}
-                                    className="w-full h-full object-contain bg-gray-900/20"
-                                    onError={(e) => {
-                                      console.error(`Error loading image ${imgIndex}:`, img.url);
-                                      e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMjJDMTcuNTIyOCAyMiAyMiAxNy41MjI4IDIyIDEyQzIyIDYuNDc3MTUgMTcuNTIyOCAyIDEyIDJDNi40NzcxNSAyIDIgNi40NzcxNSAyIDEyQzIgMTcuNTIyOCA2LjQ3NzE1IDIyIDEyIDIyWiIgc3Ryb2tlPSIjZmYwMDAwIiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNMTIgOFYxMiIgc3Ryb2tlPSIjZmYwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xMiAxNlYxNiIgc3Ryb2tlPSIjZmYwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==';
-                                    }}
-                                  />
+                                  {/* Use plain image placeholder while debugging */}
+                                  <div className="w-full h-full flex items-center justify-center bg-teal-100 rounded-lg">
+                                    <img
+                                      src={img.url.startsWith('http') ? 
+                                        // Extract filename from full URL
+                                        `/uploads/${img.url.split('/').pop()}` : 
+                                        img.url}
+                                      alt={`Uploaded ${imgIndex + 1}`}
+                                      className="max-w-full max-h-full object-contain p-2"
+                                      onError={(e) => {
+                                        console.error(`Error loading image ${imgIndex}:`, img.url);
+                                        e.currentTarget.style.display = 'none';
+                                        // Show filename as fallback
+                                        const parent = e.currentTarget.parentElement;
+                                        if (parent) {
+                                          const filename = img.filename || img.url.split('/').pop();
+                                          parent.innerHTML += `<div class="text-teal-700 font-medium">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="M21 15L16 10L5 21" /></svg>
+                                            Image: ${filename}
+                                          </div>`;
+                                        }
+                                      }}
+                                    />
+                                  </div>
                                   <div className="absolute bottom-1 right-1 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
                                     {imgIndex + 1}/{msg.images?.length || 0}
                                   </div>
