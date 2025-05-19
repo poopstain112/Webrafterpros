@@ -33,7 +33,7 @@ export default function Home() {
     <main className="container mx-auto px-4 py-6">
       <div className="flex flex-col md:flex-row gap-6">
         {/* Left Panel: Chat Interface */}
-        <div className="w-full md:w-1/2 flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-[calc(100vh-180px)]">
+        <div className="w-full md:w-1/2 flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-[calc(100vh-180px)] md:h-[calc(100vh-180px)]">
           <ChatInterface
             messages={messages}
             isLoading={isLoading}
@@ -46,7 +46,7 @@ export default function Home() {
         </div>
 
         {/* Right Panel: Website Preview & Editor */}
-        <div className="w-full md:w-1/2 flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-[calc(100vh-180px)]">
+        <div className="w-full md:w-1/2 flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-[calc(100vh-180px)] md:h-[calc(100vh-180px)]">
           <WebsitePreview
             websiteStructure={websiteStructure}
             isGenerating={isGeneratingWebsite}

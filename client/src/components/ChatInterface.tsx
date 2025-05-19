@@ -180,7 +180,7 @@ export default function ChatInterface({
       </div>
 
       {/* Chat Input */}
-      <div className="p-3 bg-white border-t border-gray-200 shadow-sm">
+      <div className="p-3 bg-white border-t border-gray-200 shadow-sm relative z-50">
         <form onSubmit={handleSubmit} className="relative">
           {isUploadVisible && (
             <div className="mb-3 bg-gray-50 rounded-xl p-3 border border-gray-200">
@@ -200,7 +200,7 @@ export default function ChatInterface({
                 type="button"
                 onClick={() => setIsUploadVisible(!isUploadVisible)}
                 variant="ghost"
-                className="rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors"
+                className="rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors flex-shrink-0"
                 size="icon"
               >
                 <ImageIcon className="h-5 w-5 text-gray-500" />
@@ -210,19 +210,26 @@ export default function ChatInterface({
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Message Website Designer..."
-                className="flex-grow py-2 px-2 bg-transparent border-none focus:ring-0 resize-none min-h-[24px] max-h-[120px] text-sm"
+                className="flex-grow py-2 px-2 bg-transparent border-none focus:ring-0 resize-none min-h-[24px] max-h-[80px] text-sm"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
                     handleSubmit(e);
                   }
                 }}
+                style={{ 
+                  position: 'relative',
+                  zIndex: 20,
+                  overflow: 'auto',
+                  // Ensures it stays visible when keyboard appears
+                  transform: 'translateZ(0)'
+                }}
               />
 
               <Button
                 type="submit"
                 disabled={isLoading || !message.trim()}
-                className="rounded-full w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-sm flex items-center justify-center"
+                className="rounded-full w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-sm flex items-center justify-center flex-shrink-0"
                 size="icon"
               >
                 <Send className="h-5 w-5" />
@@ -236,13 +243,13 @@ export default function ChatInterface({
                 onClick={handleGenerateWebsite}
                 className="mt-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 transition shadow-sm rounded-full"
               >
-                ✨ Generate Website from Description
+                ✨ Generate Website
               </Button>
             )}
           </div>
           
-          <div className="mt-2 text-xs text-center text-gray-400">
-            Describe your website needs or upload images to get started
+          <div className="mt-2 text-xs text-center text-gray-400 pb-1">
+            Describe your website or upload images
           </div>
         </form>
       </div>
