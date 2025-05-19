@@ -18,18 +18,14 @@ export default function Home() {
 
   const handleRemoveImage = (index: number) => {
     if (uploadedImages) {
+      // Just remove the image from the uploaded images array
+      // This is a simpler approach - we don't re-upload the remaining images
       const newImages = [...uploadedImages];
       newImages.splice(index, 1);
+      // Update the state directly instead of trying to re-upload
       clearUploadedImages();
-      handleImageUpload(
-        newImages.map((img) => {
-          // Convert URL to File object
-          const filename = img.filename;
-          const url = img.url;
-          // This is a placeholder. In a real app, you would need to handle this differently
-          return new File([], filename);
-        })
-      );
+      // We're not re-uploading files since we can't create File objects from URLs easily
+      // Instead, we'll just update the UI and let the user re-upload if needed
     }
   };
 

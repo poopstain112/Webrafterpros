@@ -93,6 +93,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // API endpoint to upload images
   app.post("/api/upload", upload.array("images", 10), async (req: Request, res: Response) => {
     try {
+      // Debug logging to see what we're receiving
+      console.log("Upload request received. Files:", req.files);
+      console.log("Upload request body:", req.body);
+      
       const files = req.files as Express.Multer.File[];
       if (!files || files.length === 0) {
         return res.status(400).json({ message: "No files uploaded" });
@@ -101,7 +105,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const filesWithAnalysis = await Promise.all(
         files.map(async (file) => {
           const fileUrl = `${req.protocol}://${req.get("host")}/uploads/${file.filename}`;
-          const analysis = await analyzeImages(fileUrl);
+          console.log("Processing file:", file.filename, "URL:", fileUrl);
+          
+          // Analyze the image using OpenAI
+          let analysis = "";
+          try {
+            analysis = await analyzeImages(fileUrl);
+          } catch (err) {
+            console.error("Error analyzing image:", err);
+            analysis = "Unable to analyze image.";
+          }
           
           // Save image to database
           const imageData = {
@@ -110,6 +123,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             url: fileUrl,
           };
           
+          console.log("Saving image to database:", imageData);
           const savedImage = await storage.createImage(imageData);
           
           return {
@@ -121,6 +135,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json(filesWithAnalysis);
     } catch (error: any) {
+      console.error("Error in image upload:", error);
       res.status(500).json({ message: error.message });
     }
   });

@@ -64,6 +64,7 @@ export async function uploadImages(
     const formData = new FormData();
     formData.append('websiteId', websiteId.toString());
     
+    // Use the same field name as specified in the multer setup
     files.forEach(file => {
       formData.append('images', file);
     });
