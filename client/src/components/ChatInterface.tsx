@@ -223,39 +223,39 @@ export default function ChatInterface({
           
           <div className="flex flex-col gap-2">
             {/* Always visible input area */}
-            <div className="relative flex items-end gap-2 bg-gray-50 rounded-2xl p-2 pl-4 border border-gray-200">
+            <div className="relative flex flex-col items-start gap-2 bg-gray-50 rounded-2xl p-3 border border-gray-200">
               <Textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Message Website Designer..."
-                className="flex-grow py-2 px-2 bg-transparent border-none focus:ring-0 resize-none min-h-[48px] max-h-[160px] text-base"
+                className="flex-grow py-3 px-3 bg-transparent border-none focus:ring-0 resize-none min-h-[120px] max-h-[240px] text-base"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
                     handleSubmit(e);
                   }
                 }}
-                style={{ height: "48px" }}
+                style={{ height: "120px" }}
               />
 
-              <div className="flex-shrink-0 flex">
+              <div className="flex-shrink-0 flex w-full justify-end mt-3">
                 <Button
                   type="button"
                   onClick={() => setIsUploadVisible(!isUploadVisible)}
                   variant="ghost"
-                  className="rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors mr-1"
+                  className="rounded-full w-12 h-12 flex items-center justify-center hover:bg-gray-200 transition-colors mr-2"
                   size="icon"
                 >
-                  <ImageIcon className="h-5 w-5 text-gray-500" />
+                  <ImageIcon className="h-6 w-6 text-gray-500" />
                 </Button>
 
                 <Button
                   type="submit"
                   disabled={isLoading || !message.trim()}
-                  className="rounded-full w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-sm flex items-center justify-center"
+                  className="rounded-full w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-sm flex items-center justify-center"
                   size="icon"
                 >
-                  <Send className="h-5 w-5" />
+                  <Send className="h-6 w-6" />
                 </Button>
               </div>
             </div>
