@@ -105,7 +105,7 @@ export default function ChatInterface({
           <Button
             type="button"
             onClick={() => {
-              setIsUploadVisible(!isUploadVisible);
+              setIsUploadVisible(true);
               setIsFullscreen(false);
             }}
             variant="ghost"
@@ -334,7 +334,7 @@ export default function ChatInterface({
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setIsUploadVisible(!isUploadVisible);
+                  setIsUploadVisible(true);
                 }}
                 variant="ghost"
                 className="rounded-full w-10 h-10 flex items-center justify-center hover:bg-gray-200"
