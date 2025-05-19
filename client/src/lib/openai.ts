@@ -64,10 +64,13 @@ export async function uploadImages(
     const formData = new FormData();
     formData.append('websiteId', websiteId.toString());
     
-    // Use the same field name as specified in the multer setup
+    // Use the same field name as specified in the multer setup on the server
     files.forEach(file => {
       formData.append('images', file);
     });
+    
+    console.log('Uploading images with formData:', 
+      [...formData.entries()].map(entry => `${entry[0]}:${entry[1]}`));
 
     const response = await fetch('/api/upload', {
       method: 'POST',
