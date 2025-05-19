@@ -32,7 +32,8 @@ export async function generateWebsite(
 export async function sendChatMessage(
   websiteId: number,
   content: string,
-  role: 'user' | 'assistant' = 'user'
+  role: 'user' | 'assistant' = 'user',
+  images?: UploadedImage[]
 ): Promise<{ userMessage: Message; aiMessage: Message }> {
   try {
     const response = await fetch(`/api/websites/${websiteId}/messages`, {
@@ -40,7 +41,7 @@ export async function sendChatMessage(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ content, role }),
+      body: JSON.stringify({ content, role, images }),
     });
 
     if (!response.ok) {
