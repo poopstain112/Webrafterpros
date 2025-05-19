@@ -27,6 +27,7 @@ export default function ChatInterface({
 }: ChatInterfaceProps) {
   const [message, setMessage] = useState("");
   const [isUploadVisible, setIsUploadVisible] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when messages change
@@ -79,7 +80,33 @@ export default function ChatInterface({
             Online • Powered by AI
           </p>
         </div>
+        <div className="ml-auto">
+          <Button
+            type="button"
+            onClick={() => setShowGuide(!showGuide)}
+            variant="outline"
+            size="sm"
+            className="text-xs text-blue-500 border-blue-200 hover:bg-blue-50"
+          >
+            {showGuide ? "Hide Guide" : "Website Guide"}
+          </Button>
+        </div>
       </div>
+      
+      {showGuide && (
+        <div className="p-3 bg-blue-50 border-b border-blue-100 text-sm">
+          <h3 className="font-medium mb-2 text-blue-800">Website Description Guide</h3>
+          <p className="text-xs text-blue-700 mb-2">Include these details for better results:</p>
+          <ul className="text-xs text-blue-600 space-y-1 pl-5 list-disc">
+            <li><span className="font-medium">Business type:</span> Restaurant, law firm, salon, e-commerce, etc.</li>
+            <li><span className="font-medium">Brand colors:</span> Mention 2-3 preferred colors or a mood (energetic, calm, professional)</li>
+            <li><span className="font-medium">Key sections:</span> Home, About, Services, Gallery, Contact, etc.</li>
+            <li><span className="font-medium">Special features:</span> Booking system, menu display, portfolio showcase</li>
+            <li><span className="font-medium">Style preference:</span> Modern, minimalist, bold, elegant, playful</li>
+          </ul>
+          <p className="text-xs text-blue-700 mt-2 italic">Example: "Create a modern website for my bakery 'Sweet Delights' using pastel pink and mint green colors. Include sections for our story, menu with photos, customer testimonials, and contact form with our location."</p>
+        </div>
+      )}
 
       {/* Chat Messages */}
       <div className="overflow-y-auto p-4 flex-grow" style={{ backgroundImage: "url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiNmOGZhZmMiIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNMzYgMjRhNiA2IDAgMSAxLTEyIDAgNiA2IDAgMCAxIDEyIDB6bTAgMTJhNiA2IDAgMSAxLTEyIDAgNiA2IDAgMCAxIDEyIDB6bTEyLTEyYTYgNiAwIDEgMS0xMiAwIDYgNiAwIDAgMSAxMiAwem0wIDEyYTYgNiAwIDEgMS0xMiAwIDYgNiAwIDAgMSAxMiAwek0xMiAyNGE2IDYgMCAxIDEtMTIgMCA2IDYgMCAwIDEgMTIgMHptMCAxMmE2IDYgMCAxIDEtMTIgMCA2IDYgMCAwIDEgMTIgMHoiIGZpbGw9IiNlOWVjZWYiIGZpbGwtb3BhY2l0eT0iLjIiIGZpbGwtcnVsZT0ibm9uemVybyIvPjwvZz48L3N2Zz4=')" }}>
