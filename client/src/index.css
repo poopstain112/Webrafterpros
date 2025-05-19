@@ -56,3 +56,28 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
 }
+
+/* Image Gallery and Carousel Styles */
+.embla {
+  --slide-spacing: 1rem;
+  --slide-size: 100%;
+  --slide-height: 19rem;
+}
+
+.embla__viewport {
+  overflow: hidden;
+}
+
+.embla__container {
+  display: flex;
+  flex-direction: row;
+  height: auto;
+  margin-left: calc(var(--slide-spacing) * -1);
+}
+
+.embla__slide {
+  flex: 0 0 var(--slide-size);
+  min-width: 0;
+  position: relative;
+  padding-left: var(--slide-spacing);
+}
