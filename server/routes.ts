@@ -104,7 +104,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const filesWithAnalysis = await Promise.all(
         files.map(async (file) => {
-          const fileUrl = `${req.protocol}://${req.get("host")}/uploads/${file.filename}`;
+          const fileUrl = `/uploads/${file.filename}`;
           console.log("Processing file:", file.filename, "URL:", fileUrl);
           
           // Analyze the image using OpenAI
