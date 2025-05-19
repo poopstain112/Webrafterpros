@@ -70,8 +70,12 @@ export async function uploadImages(
       formData.append('images', file);
     });
     
-    console.log('Uploading images with formData:', 
-      [...formData.entries()].map(entry => `${entry[0]}:${entry[1]}`));
+    // Log the files being uploaded in a more stable way
+    console.log('Uploading images with formData:', {
+      websiteId,
+      fileCount: files.length,
+      fileNames: files.map(f => f.name)
+    });
 
     const response = await fetch('/api/upload', {
       method: 'POST',

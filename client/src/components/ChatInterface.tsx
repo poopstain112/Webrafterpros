@@ -258,7 +258,7 @@ export default function ChatInterface({
                                   style={{ minWidth: "240px" }}
                                 >
                                   <img
-                                    src={img.url.startsWith('http') ? img.url : `${window.location.origin}${img.url}`}
+                                    src={img.url}
                                     alt={`Uploaded ${imgIndex + 1}`}
                                     className="w-full h-full object-contain bg-gray-900/20"
                                     onError={(e) => {
