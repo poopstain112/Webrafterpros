@@ -248,22 +248,30 @@ export default function ChatInterface({
                         </div>
                         <div className="rounded-lg overflow-hidden shadow-md">
                           <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide">
-                            {msg.images.map((img, imgIndex) => (
-                              <div
-                                key={imgIndex}
-                                className="relative flex-shrink-0 w-full h-40 snap-center"
-                                style={{ minWidth: "240px" }}
-                              >
-                                <img
-                                  src={img.url}
-                                  alt={`Uploaded ${imgIndex + 1}`}
-                                  className="w-full h-full object-contain bg-gray-900/20"
-                                />
-                                <div className="absolute bottom-1 right-1 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
-                                  {imgIndex + 1}/{msg.images?.length || 0}
+                            {console.log("Rendering message images:", JSON.stringify(msg.images))}
+                            {msg.images.map((img, imgIndex) => {
+                              console.log(`Image ${imgIndex} URL:`, img.url);
+                              return (
+                                <div
+                                  key={imgIndex}
+                                  className="relative flex-shrink-0 w-full h-40 snap-center"
+                                  style={{ minWidth: "240px" }}
+                                >
+                                  <img
+                                    src={img.url.startsWith('http') ? img.url : `${window.location.origin}${img.url}`}
+                                    alt={`Uploaded ${imgIndex + 1}`}
+                                    className="w-full h-full object-contain bg-gray-900/20"
+                                    onError={(e) => {
+                                      console.error(`Error loading image ${imgIndex}:`, img.url);
+                                      e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMjJDMTcuNTIyOCAyMiAyMiAxNy41MjI4IDIyIDEyQzIyIDYuNDc3MTUgMTcuNTIyOCAyIDEyIDJDNi40NzcxNSAyIDIgNi40NzcxNSAyIDEyQzIgMTcuNTIyOCA2LjQ3NzE1IDIyIDEyIDIyWiIgc3Ryb2tlPSIjZmYwMDAwIiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNMTIgOFYxMiIgc3Ryb2tlPSIjZmYwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xMiAxNlYxNiIgc3Ryb2tlPSIjZmYwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==';
+                                    }}
+                                  />
+                                  <div className="absolute bottom-1 right-1 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                                    {imgIndex + 1}/{msg.images?.length || 0}
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
+                              );
+                            })}
                           </div>
                           {msg.images && msg.images.length > 1 && (
                             <div className="flex justify-center gap-1 p-1 bg-gray-800/10">

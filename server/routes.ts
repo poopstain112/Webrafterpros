@@ -212,9 +212,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Add images to user message if provided
       let userMessageWithImages = savedMessage;
       if (images && images.length > 0) {
+        console.log("Adding images to message:", images);
+        // Convert image URLs to relative paths if they're full URLs
+        const processedImages = images.map(img => {
+          if (img.url.includes('http')) {
+            // Extract the relative path from a full URL
+            const urlParts = img.url.split('/uploads/');
+            if (urlParts.length > 1) {
+              return { ...img, url: `/uploads/${urlParts[1]}` };
+            }
+          }
+          return img;
+        });
+        
         userMessageWithImages = {
           ...savedMessage,
-          images: images
+          images: processedImages
         };
       }
       
