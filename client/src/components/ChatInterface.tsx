@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Image as ImageIcon, X, ArrowLeft } from "lucide-react";
+import { Send, Image as ImageIcon, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Message, UploadedImage } from "@/types";
@@ -106,7 +106,7 @@ export default function ChatInterface({
             type="button"
             onClick={() => {
               setIsUploadVisible(!isUploadVisible);
-              setIsFullscreenMode(false);
+              setIsFullscreen(false);
             }}
             variant="ghost"
             className="text-blue-600 flex items-center"
@@ -323,7 +323,7 @@ export default function ChatInterface({
           {/* Mobile-friendly input area */}
           <div 
             className="flex items-center justify-between gap-2 bg-gray-50 rounded-full py-2 px-4 border border-gray-200"
-            onClick={() => setIsFullscreenMode(true)}
+            onClick={() => setIsFullscreen(true)}
           >
             <div className="flex-grow py-2 text-gray-500 cursor-text truncate">
               {message ? message : "Message Website Designer..."}
