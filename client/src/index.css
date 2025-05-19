@@ -62,6 +62,8 @@
   --slide-spacing: 1rem;
   --slide-size: 100%;
   --slide-height: 19rem;
+  overflow: hidden;
+  position: relative;
 }
 
 .embla__viewport {
@@ -80,4 +82,23 @@
   min-width: 0;
   position: relative;
   padding-left: var(--slide-spacing);
+}
+
+/* Scrollbar customization */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Snap scrolling for image galleries */
+.snap-x {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-center {
+  scroll-snap-align: center;
 }

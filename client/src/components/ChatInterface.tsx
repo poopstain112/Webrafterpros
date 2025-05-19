@@ -163,20 +163,45 @@ export default function ChatInterface({
                   <>
                     <p className="whitespace-pre-line text-sm">{msg.content}</p>
                     {msg.images && msg.images.length > 0 && (
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {msg.images.map((img, imgIndex) => (
-                          <div
-                            key={imgIndex}
-                            className="relative rounded-lg overflow-hidden border border-white/20 shadow-md"
-                            style={{ width: "120px", height: "90px" }}
-                          >
-                            <img
-                              src={img.url}
-                              alt={`Uploaded ${imgIndex + 1}`}
-                              className="w-full h-full object-cover"
-                            />
+                      <div className="mt-3">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs font-medium text-blue-200">
+                            {msg.images.length} photo{msg.images.length > 1 ? 's' : ''} attached
+                          </span>
+                          {msg.images.length > 1 && (
+                            <span className="text-xs text-blue-200">← Swipe →</span>
+                          )}
+                        </div>
+                        <div className="rounded-lg overflow-hidden shadow-md">
+                          <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+                            {msg.images.map((img, imgIndex) => (
+                              <div
+                                key={imgIndex}
+                                className="relative flex-shrink-0 w-full h-40 snap-center"
+                                style={{ minWidth: "240px" }}
+                              >
+                                <img
+                                  src={img.url}
+                                  alt={`Uploaded ${imgIndex + 1}`}
+                                  className="w-full h-full object-contain bg-gray-900/20"
+                                />
+                                <div className="absolute bottom-1 right-1 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                                  {imgIndex + 1}/{msg.images?.length || 0}
+                                </div>
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                          {msg.images.length > 1 && (
+                            <div className="flex justify-center gap-1 p-1 bg-gray-800/10">
+                              {msg.images.map((_, index) => (
+                                <div 
+                                  key={index}
+                                  className={`w-1.5 h-1.5 rounded-full ${index === 0 ? 'bg-blue-400' : 'bg-blue-200/40'}`}
+                                ></div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
                   </>

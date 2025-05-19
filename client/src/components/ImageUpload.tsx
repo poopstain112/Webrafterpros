@@ -176,7 +176,7 @@ export default function ImageUpload({
               {uploadedImages.map((image, index) => (
                 <div
                   key={index}
-                  className={`relative flex-shrink-0 w-14 h-14 rounded-md overflow-hidden cursor-pointer transition ${
+                  className={`relative flex-shrink-0 w-16 h-16 rounded-md overflow-hidden cursor-pointer transition ${
                     currentSlide === index ? 'border-2 border-blue-500' : 'border-2 border-transparent hover:border-blue-300'
                   }`}
                   onClick={() => emblaApi?.scrollTo(index)}
@@ -186,6 +186,7 @@ export default function ImageUpload({
                     alt={`Thumbnail ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
+                  <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors"></div>
                 </div>
               ))}
             </div>
