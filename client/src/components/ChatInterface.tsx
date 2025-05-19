@@ -223,18 +223,19 @@ export default function ChatInterface({
           
           <div className="flex flex-col gap-2">
             {/* Always visible input area */}
-            <div className="relative flex items-end gap-2 bg-gray-50 rounded-full p-1 pl-3 border border-gray-200">
+            <div className="relative flex items-end gap-2 bg-gray-50 rounded-2xl p-2 pl-4 border border-gray-200">
               <Textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Message Website Designer..."
-                className="flex-grow py-2 px-2 bg-transparent border-none focus:ring-0 resize-none min-h-[24px] max-h-[80px] text-sm"
+                className="flex-grow py-2 px-2 bg-transparent border-none focus:ring-0 resize-none min-h-[48px] max-h-[160px] text-base"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
                     handleSubmit(e);
                   }
                 }}
+                style={{ height: "48px" }}
               />
 
               <div className="flex-shrink-0 flex">
