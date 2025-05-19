@@ -16,24 +16,18 @@ export default function Header() {
   return (
     <header className="border-b border-gray-200">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link href="/">
-          <a className="flex items-center space-x-2">
+        <Link href="/" className="flex items-center space-x-2">
             <FlashlightOff className="h-5 w-5 text-purple-500" />
             <h1 className="text-xl font-bold">Instant Website</h1>
-          </a>
         </Link>
         <div className="flex items-center space-x-4">
-          <Link href="/history">
-            <a className="hidden md:flex items-center space-x-1 text-sm text-gray-600 hover:text-purple-500 transition">
-              <HistoryIcon className="h-4 w-4" />
-              <span>History</span>
-            </a>
+          <Link href="/history" className="hidden md:flex items-center space-x-1 text-sm text-gray-600 hover:text-purple-500 transition">
+            <HistoryIcon className="h-4 w-4" />
+            <span>History</span>
           </Link>
-          <Link href="/help">
-            <a className="hidden md:flex items-center space-x-1 text-sm text-gray-600 hover:text-purple-500 transition">
-              <HelpCircleIcon className="h-4 w-4" />
-              <span>Help</span>
-            </a>
+          <Link href="/help" className="hidden md:flex items-center space-x-1 text-sm text-gray-600 hover:text-purple-500 transition">
+            <HelpCircleIcon className="h-4 w-4" />
+            <span>Help</span>
           </Link>
           <Button
             onClick={handleSignIn}
