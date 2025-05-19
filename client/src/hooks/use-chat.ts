@@ -63,8 +63,8 @@ export function useChat(initialWebsiteId: number = 1) {
       setIsLoading(true);
 
       try {
-        // Send message to API
-        const response = await sendChatMessage(initialWebsiteId, content);
+        // Send message to API including uploaded images
+        const response = await sendChatMessage(initialWebsiteId, content, 'user', uploadedImages);
 
         // Update messages
         setMessages(prev => {

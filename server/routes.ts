@@ -145,7 +145,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const websiteId = parseInt(req.params.id);
       const messages = await storage.getMessagesByWebsiteId(websiteId);
-      res.json(messages);
+      const images = await storage.getImagesByWebsiteId(websiteId);
+      
+      // Add images to user messages if they exist
+      const messagesWithImages = messages.map(msg => {
+        if (msg.role === 'user') {
+          // Find images created right before this message (within 5 seconds)
+          const messageImages = images.filter(img => {
+            const imgTime = new Date(img.createdAt).getTime();
+            const msgTime = new Date(msg.createdAt).getTime();
+            const timeDiff = Math.abs(msgTime - imgTime);
+            return timeDiff < 5000; // 5 seconds
+          });
+          
+          if (messageImages.length > 0) {
+            return {
+              ...msg,
+              images: messageImages
+            };
+          }
+        }
+        return msg;
+      });
+      
+      res.json(messagesWithImages);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -155,7 +178,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/websites/:id/messages", async (req: Request, res: Response) => {
     try {
       const websiteId = parseInt(req.params.id);
-      const { content, role } = req.body;
+      const { content, role, images } = req.body;
+      
+      console.log("Received message with images:", images?.length || 0);
       
       // Validate message data
       const validatedData = insertMessageSchema.parse({
@@ -184,9 +209,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         role: "assistant",
       });
       
+      // Add images to user message if provided
+      let userMessageWithImages = savedMessage;
+      if (images && images.length > 0) {
+        userMessageWithImages = {
+          ...savedMessage,
+          images: images
+        };
+      }
+      
       // Return both messages
       res.status(201).json({
-        userMessage: savedMessage,
+        userMessage: userMessageWithImages,
         aiMessage,
       });
     } catch (error: any) {
