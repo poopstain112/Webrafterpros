@@ -129,7 +129,7 @@ export default function ImageUpload({
                       className="relative min-w-0 flex-[0_0_100%] h-48"
                     >
                       <img
-                        src={image.url.startsWith('/') ? image.url : `/${image.url}`}
+                        src={image.url}
                         alt={`Uploaded ${index + 1}`}
                         className="w-full h-full object-contain"
                         onError={(e) => {

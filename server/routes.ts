@@ -104,7 +104,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const filesWithAnalysis = await Promise.all(
         files.map(async (file) => {
-          // Use a clean relative URL that will work for both server and client
+          // Use a relative URL path for the image that will work in browser
           const fileUrl = `/uploads/${file.filename}`;
           console.log("Processing file:", file.filename, "URL:", fileUrl);
           
