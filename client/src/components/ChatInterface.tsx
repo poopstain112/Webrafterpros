@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Image as ImageIcon } from "lucide-react";
+import { Send, Image as ImageIcon, X, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Message, UploadedImage } from "@/types";
@@ -28,19 +28,23 @@ export default function ChatInterface({
   const [message, setMessage] = useState("");
   const [isUploadVisible, setIsUploadVisible] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    
     if (message.trim()) {
       onSendMessage(message);
       setMessage("");
       setIsUploadVisible(false);
+      setIsFullscreen(false);
     }
   };
 
@@ -52,8 +56,77 @@ export default function ChatInterface({
     }
   };
 
+  // Render fullscreen input mode
+  if (isFullscreen) {
+    return (
+      <div className="fixed inset-0 bg-white z-50 flex flex-col">
+        {/* Header */}
+        <div className="p-3 border-b border-gray-200 flex items-center justify-between">
+          <Button
+            type="button"
+            onClick={() => setIsFullscreen(false)}
+            variant="ghost"
+            className="rounded-full w-10 h-10 flex items-center justify-center"
+            size="icon"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div className="font-medium">Compose Message</div>
+          <Button
+            type="button"
+            onClick={() => handleSubmit()}
+            disabled={!message.trim() || isLoading}
+            className="rounded-full px-4 py-1 bg-blue-500 text-white"
+          >
+            Send
+          </Button>
+        </div>
+        
+        {/* Body */}
+        <div className="flex-grow p-4">
+          <Textarea
+            ref={textareaRef}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type your message here..."
+            className="w-full h-full p-0 bg-transparent border-none focus:ring-0 resize-none text-base"
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit();
+              }
+            }}
+          />
+        </div>
+        
+        {/* Footer */}
+        <div className="p-3 border-t border-gray-200 flex justify-between">
+          <Button
+            type="button"
+            onClick={() => {
+              setIsUploadVisible(!isUploadVisible);
+              setIsFullscreenMode(false);
+            }}
+            variant="ghost"
+            className="text-blue-600 flex items-center"
+          >
+            <ImageIcon className="h-5 w-5 mr-1" />
+            Add Photos
+          </Button>
+          
+          <div className="text-xs text-gray-500">
+            {message.length} characters
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Regular chat interface
   return (
     <div className="flex flex-col h-full bg-gradient-to-br from-gray-50 to-blue-50">
+      {/* Header */}
       <div className="p-4 border-b border-gray-200 bg-white shadow-sm flex items-center">
         <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-white flex-shrink-0 mr-3">
           <svg
@@ -93,6 +166,7 @@ export default function ChatInterface({
         </div>
       </div>
       
+      {/* Guide Panel */}
       {showGuide && (
         <div className="p-3 bg-blue-50 border-b border-blue-100 text-sm">
           <h3 className="font-medium mb-2 text-blue-800">Website Description Guide</h3>
@@ -246,50 +320,45 @@ export default function ChatInterface({
             </div>
           )}
           
-          <div className="flex flex-col gap-2">
-            {/* Action buttons above the text area */}
-            <div className="flex items-center justify-between mb-1 px-1">
+          {/* Mobile-friendly input area */}
+          <div 
+            className="flex items-center justify-between gap-2 bg-gray-50 rounded-full py-2 px-4 border border-gray-200"
+            onClick={() => setIsFullscreenMode(true)}
+          >
+            <div className="flex-grow py-2 text-gray-500 cursor-text truncate">
+              {message ? message : "Message Website Designer..."}
+            </div>
+            
+            <div className="flex gap-2">
               <Button
                 type="button"
-                onClick={() => setIsUploadVisible(!isUploadVisible)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsUploadVisible(!isUploadVisible);
+                }}
                 variant="ghost"
-                className="flex items-center text-sm text-blue-600 hover:bg-blue-50 rounded-lg py-1 px-2"
-                size="sm"
+                className="rounded-full w-10 h-10 flex items-center justify-center hover:bg-gray-200"
+                size="icon"
               >
-                <ImageIcon className="h-4 w-4 mr-1" />
-                {isUploadVisible ? "Hide Images" : "Add Photos"}
+                <ImageIcon className="h-5 w-5 text-gray-500" />
               </Button>
               
               {message.trim().length > 0 && (
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 rounded-lg shadow-sm py-1 px-3 text-sm"
+                  className="rounded-full w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 text-white flex items-center justify-center"
+                  size="icon"
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <Send className="h-4 w-4 mr-1" /> Send
+                  <Send className="h-5 w-5" />
                 </Button>
               )}
             </div>
-            
-            {/* Text input area */}
-            <div className="relative bg-gray-50 rounded-2xl p-3 border border-gray-200">
-              <Textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Message Website Designer..."
-                className="flex-grow py-3 px-3 bg-transparent border-none focus:ring-0 resize-none min-h-[120px] max-h-[240px] text-base"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSubmit(e);
-                  }
-                }}
-                style={{ height: "120px" }}
-              />
-            </div>
-
-            {/* Website generation button that can go below the screen */}
-            {message.toLowerCase().includes("website") && 
+          </div>
+          
+          {/* Website generation button */}
+          {message.toLowerCase().includes("website") && 
             message.toLowerCase().includes("creat") && (
               <Button
                 type="button"
@@ -298,8 +367,7 @@ export default function ChatInterface({
               >
                 ✨ Generate Website
               </Button>
-            )}
-          </div>
+          )}
         </form>
       </div>
     </div>
