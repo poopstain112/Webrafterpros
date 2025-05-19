@@ -180,7 +180,7 @@ export default function ChatInterface({
       </div>
 
       {/* Chat Input */}
-      <div className="p-3 bg-white border-t border-gray-200 shadow-sm relative z-50">
+      <div className="p-3 bg-white border-t border-gray-200 shadow-sm sticky bottom-0 left-0 right-0">
         <form onSubmit={handleSubmit} className="relative">
           {isUploadVisible && (
             <div className="mb-3 bg-gray-50 rounded-xl p-3 border border-gray-200">
@@ -195,17 +195,8 @@ export default function ChatInterface({
           )}
           
           <div className="flex flex-col gap-2">
-            <div className="flex items-end gap-2 bg-gray-50 rounded-full p-1 pl-3 border border-gray-200">
-              <Button
-                type="button"
-                onClick={() => setIsUploadVisible(!isUploadVisible)}
-                variant="ghost"
-                className="rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors flex-shrink-0"
-                size="icon"
-              >
-                <ImageIcon className="h-5 w-5 text-gray-500" />
-              </Button>
-
+            {/* Always visible input area */}
+            <div className="relative flex items-end gap-2 bg-gray-50 rounded-full p-1 pl-3 border border-gray-200">
               <Textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -217,25 +208,31 @@ export default function ChatInterface({
                     handleSubmit(e);
                   }
                 }}
-                style={{ 
-                  position: 'relative',
-                  zIndex: 20,
-                  overflow: 'auto',
-                  // Ensures it stays visible when keyboard appears
-                  transform: 'translateZ(0)'
-                }}
               />
 
-              <Button
-                type="submit"
-                disabled={isLoading || !message.trim()}
-                className="rounded-full w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-sm flex items-center justify-center flex-shrink-0"
-                size="icon"
-              >
-                <Send className="h-5 w-5" />
-              </Button>
+              <div className="flex-shrink-0 flex">
+                <Button
+                  type="button"
+                  onClick={() => setIsUploadVisible(!isUploadVisible)}
+                  variant="ghost"
+                  className="rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors mr-1"
+                  size="icon"
+                >
+                  <ImageIcon className="h-5 w-5 text-gray-500" />
+                </Button>
+
+                <Button
+                  type="submit"
+                  disabled={isLoading || !message.trim()}
+                  className="rounded-full w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-sm flex items-center justify-center"
+                  size="icon"
+                >
+                  <Send className="h-5 w-5" />
+                </Button>
+              </div>
             </div>
 
+            {/* Website generation button that can go below the screen */}
             {message.toLowerCase().includes("website") && 
             message.toLowerCase().includes("creat") && (
               <Button
@@ -246,10 +243,6 @@ export default function ChatInterface({
                 ✨ Generate Website
               </Button>
             )}
-          </div>
-          
-          <div className="mt-2 text-xs text-center text-gray-400 pb-1">
-            Describe your website or upload images
           </div>
         </form>
       </div>
