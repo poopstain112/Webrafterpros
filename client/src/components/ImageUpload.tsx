@@ -50,61 +50,72 @@ export default function ImageUpload({
 
   return (
     <div className="w-full">
-      <Button
-        type="button"
-        onClick={onToggleVisible}
-        variant="ghost"
-        className="text-gray-400 hover:text-blue-500 transition"
-        size="icon"
-      >
-        <ImageIcon className="h-5 w-5" />
-      </Button>
-
-      {isVisible && (
+      {!isVisible ? (
+        <Button
+          type="button"
+          onClick={onToggleVisible}
+          variant="ghost"
+          className="text-gray-400 hover:text-blue-500 transition rounded-full"
+          size="icon"
+        >
+          <ImageIcon className="h-5 w-5" />
+        </Button>
+      ) : (
         <div
           {...getRootProps()}
-          className={`mt-3 border-2 border-dashed rounded-lg p-4 text-center transition cursor-pointer ${
+          className={`border-2 border-dashed rounded-xl p-6 text-center transition cursor-pointer ${
             isDragActive
               ? "border-blue-500 bg-blue-50"
-              : "border-gray-300 hover:border-blue-500"
+              : "border-gray-200 hover:border-blue-400 hover:bg-blue-50/50"
           }`}
         >
           <input {...getInputProps()} />
-          <ImageIcon className="h-6 w-6 mx-auto text-gray-400" />
-          <p className="text-sm text-gray-500 mt-1">
+          <div className="mb-3 mx-auto w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center">
+            <ImageIcon className="h-7 w-7 text-blue-500" />
+          </div>
+          <p className="text-sm font-medium text-gray-700">
             {isDragActive
-              ? "Drop the images here"
-              : "Drop images here or click to browse"}
+              ? "Drop images here"
+              : "Add photos to your website"}
+          </p>
+          <p className="text-xs text-gray-500 mt-1">
+            Drag and drop or click to browse
           </p>
           <p className="text-xs text-gray-400 mt-1">
-            Max 5MB per image, JPEG, PNG, GIF, WEBP
+            Max 5MB per image • JPEG, PNG, GIF, WEBP
           </p>
         </div>
       )}
 
       {uploadedImages.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-2">
-          {uploadedImages.map((image, index) => (
-            <div
-              key={index}
-              className="relative group w-16 h-16 rounded-md overflow-hidden border border-gray-200"
-            >
-              <img
-                src={image.url}
-                alt={`Uploaded ${index + 1}`}
-                className="w-full h-full object-cover"
-              />
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRemoveImage(index);
-                }}
-                className="absolute top-0 right-0 bg-red-500 text-white rounded-bl-md opacity-0 group-hover:opacity-100 transition p-0.5"
+        <div className="mt-4">
+          <div className="text-xs font-medium text-gray-500 mb-2">Uploaded images</div>
+          <div className="flex flex-wrap gap-3">
+            {uploadedImages.map((image, index) => (
+              <div
+                key={index}
+                className="relative group rounded-lg overflow-hidden border border-gray-200 shadow-sm bg-white"
+                style={{ width: "80px", height: "80px" }}
               >
-                <X className="h-3 w-3" />
-              </button>
-            </div>
-          ))}
+                <img
+                  src={image.url}
+                  alt={`Uploaded ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRemoveImage(index);
+                    }}
+                    className="bg-white text-red-500 rounded-full p-1 shadow-md hover:bg-red-50 transition"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
