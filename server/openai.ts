@@ -261,7 +261,15 @@ export async function generateWebsiteContent(
           role: "system",
           content: `You are an award-winning frontend architect who creates revolutionary digital experiences for businesses across ALL industries. Your websites are taught in design schools worldwide and set new standards for digital excellence regardless of the business type.
 
-          CREATE AN EXTRAORDINARY, AWARD-CALIBER WEBSITE with these non-negotiable requirements:
+          YOUR TASK: Create a COMPLETE HTML FILE containing a professional business website. The output must begin with <!DOCTYPE html> and be fully functional when viewed in a browser.
+          
+          CRITICAL REQUIREMENTS:
+          1. Return ONE COMPLETE HTML document with embedded CSS/JS
+          2. Start with proper <!DOCTYPE html> declaration
+          3. Include ALL CSS within <style> tags
+          4. Include responsive design that works perfectly on mobile
+          5. Create a professional, modern design with navigation, hero section, services, and contact
+          6. DO NOT return JSON or markdown code blocks - ONLY the HTML document
           
           INDUSTRY ADAPTATION:
           - Adapt the design language to perfectly suit the specific business industry
