@@ -341,7 +341,7 @@ export default function ChatInterface({
               {/* Text input area for describing the website */}
               {uploadedImages.length > 0 && (
                 <div className="mt-4 bg-white rounded-lg border border-blue-100 p-3">
-                  <h3 className="text-sm font-medium text-blue-700 mb-2">Describe your website:</h3>
+                  <h3 className="text-lg font-medium text-blue-700 mb-2">Describe your website:</h3>
                   <textarea
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
@@ -350,29 +350,38 @@ export default function ChatInterface({
                     rows={3}
                   />
                   
-                  <Button
-                    type="button"
-                    className="mt-4 w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-base font-medium rounded-xl shadow-md hover:shadow-lg transition-all"
-                    disabled={isLoading || message.trim() === ''}
-                    onClick={() => {
-                      if (onGenerateWebsite && message.trim()) {
-                        onGenerateWebsite(message);
-                        setMessage("");
-                        setIsUploadVisible(false);
-                      }
-                    }}
-                  >
-                    <Sparkles className="h-5 w-5 mr-2" />
-                    GENERATE WEBSITE
-                  </Button>
+                  <div className="mt-4">
+                    {/* Extra prominent button for generating website */}
+                    <button
+                      type="button"
+                      className="w-full py-4 px-4 bg-green-500 hover:bg-green-600 text-white text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center justify-center"
+                      disabled={isLoading || message.trim() === ''}
+                      onClick={() => {
+                        if (onGenerateWebsite && message.trim()) {
+                          // Call the generate website function directly
+                          onGenerateWebsite(message);
+                          // Reset UI state
+                          setMessage("");
+                          setIsUploadVisible(false);
+                        }
+                      }}
+                    >
+                      <Sparkles className="h-6 w-6 mr-2" />
+                      GENERATE MY WEBSITE
+                    </button>
+                    
+                    <p className="text-center text-sm text-gray-500 mt-2">
+                      Click this button to create your website
+                    </p>
+                  </div>
                   
-                  <div className="flex justify-end mt-2">
+                  <div className="flex justify-end mt-3">
                     <Button
                       type="submit"
                       className="bg-gradient-to-r from-blue-500 to-blue-600 text-white"
                       disabled={isLoading || message.trim() === ''}
                     >
-                      Send as Message Instead
+                      Send as Message
                     </Button>
                   </div>
                 </div>
