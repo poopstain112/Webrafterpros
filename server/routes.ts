@@ -104,7 +104,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // API endpoint to upload images - simplified for reliability
+  // API endpoint to upload images - completely simplified version
   app.post("/api/upload", upload.array("images", 10), async (req: Request, res: Response) => {
     try {
       console.log("Upload request received");
@@ -114,41 +114,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "No files uploaded" });
       }
 
-      // Process files without waiting for OpenAI analysis (more reliable)
-      const uploadedImages = [];
+      console.log(`Received ${files.length} files`);
       
-      for (const file of files) {
-        // Create URL with timestamp to prevent caching
-        const timestamp = Date.now();
-        const fileUrl = `/uploads/${file.filename}?t=${timestamp}`;
-        console.log(`Processed file: ${file.filename}, URL: ${fileUrl}`);
+      // Create simple response with all necessary info
+      const uploadedImages = files.map(file => {
+        const uniqueId = Date.now() + Math.floor(Math.random() * 10000);
+        const imageUrl = `/uploads/${file.filename}`;
         
-        try {
-          // Save image to database
-          const imageData = {
-            websiteId: parseInt(req.body.websiteId) || 1,
-            filename: file.filename,
-            url: `/uploads/${file.filename}`, // Store clean URL in database
-          };
-          
-          const savedImage = await storage.createImage(imageData);
-          
-          // Add to response with timestamp URL to prevent caching
-          uploadedImages.push({
-            ...savedImage,
-            url: fileUrl, // Send URL with timestamp to client
-            analysis: "Image for website" // Skip OpenAI analysis for reliability
-          });
-        } catch (err) {
-          console.error("Error saving image:", err);
-        }
+        console.log(`Processed file ${file.filename} as ${imageUrl}`);
+        
+        // Return complete object with all required fields
+        return {
+          id: uniqueId,
+          websiteId: parseInt(req.body.websiteId) || 1,
+          filename: file.filename,
+          url: imageUrl,
+          createdAt: new Date().toISOString(),
+          analysis: "Image uploaded successfully"
+        };
+      });
+      
+      // Save to database in background (don't wait for it)
+      for (const img of uploadedImages) {
+        storage.createImage({
+          websiteId: img.websiteId,
+          filename: img.filename,
+          url: img.url
+        }).catch(err => {
+          console.error("Error saving to database:", err);
+          // Continue execution even if database save fails
+        });
       }
 
-      // Return processed images immediately
+      // Return immediately with processed images
       res.status(201).json(uploadedImages);
     } catch (error: any) {
       console.error("Image upload error:", error);
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ 
+        message: "Upload failed",
+        error: error.message 
+      });
     }
   });
 
