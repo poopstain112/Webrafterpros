@@ -36,6 +36,8 @@ export async function sendChatMessage(
   images?: UploadedImage[]
 ): Promise<{ userMessage: Message; aiMessage: Message }> {
   try {
+    console.log(`Sending message to website ID: ${websiteId}`, { content, role });
+    
     const response = await fetch(`/api/websites/${websiteId}/messages`, {
       method: 'POST',
       headers: {
@@ -45,6 +47,7 @@ export async function sendChatMessage(
     });
 
     if (!response.ok) {
+      console.error(`API error: ${response.status} ${response.statusText}`);
       try {
         const error = await response.json();
         throw new Error(error.message || 'Failed to send message');
@@ -54,7 +57,9 @@ export async function sendChatMessage(
       }
     }
 
-    return await response.json();
+    const result = await response.json();
+    console.log('Received response:', result);
+    return result;
   } catch (error) {
     console.error('Error sending chat message:', error);
     throw error;
@@ -102,17 +107,25 @@ export async function uploadImages(
 // Get all chat messages for a website
 export async function getChatMessages(websiteId: number): Promise<Message[]> {
   try {
+    console.log(`Fetching messages for website ID: ${websiteId}`);
     const response = await fetch(`/api/websites/${websiteId}/messages`);
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Failed to fetch messages');
+      console.error(`API error: ${response.status} ${response.statusText}`);
+      try {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to fetch messages');
+      } catch (jsonError) {
+        throw new Error(`Failed to fetch messages: ${response.statusText}`);
+      }
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log(`Received ${data.length} messages from API`);
+    return data;
   } catch (error) {
     console.error('Error fetching chat messages:', error);
-    throw error;
+    return []; // Return empty array instead of throwing to prevent app crashes
   }
 }
 
