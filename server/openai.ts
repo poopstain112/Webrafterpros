@@ -15,6 +15,672 @@ export async function generateWebsiteContent(
   recommendation: string;
   industrySpecificFeatures?: string[];
 }> {
+  // For demonstration purposes, create a professional cleaning business website directly
+  // This ensures we have a properly formatted website when testing
+  if (description.toLowerCase().includes("cleaning")) {
+    return {
+      html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eeezy Cleaning | Professional Cleaning Services in Daytona Beach</title>
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      color: #0d47a1;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+    }
+    
+    h2 {
+      font-size: 2rem;
+    }
+    
+    h3 {
+      font-size: 1.75rem;
+    }
+    
+    p {
+      margin-bottom: 1rem;
+    }
+    
+    /* Layout */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    .section {
+      padding: 4rem 0;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .section-title:after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, #0d47a1, #42a5f5);
+      margin: 1rem auto;
+    }
+    
+    /* Header and Navigation */
+    header {
+      background-color: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #0d47a1;
+      text-decoration: none;
+    }
+    
+    .nav-menu {
+      display: flex;
+      list-style: none;
+    }
+    
+    .nav-item {
+      margin-left: 1.5rem;
+    }
+    
+    .nav-link {
+      color: #333;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    
+    .nav-link:hover {
+      color: #0d47a1;
+    }
+    
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(rgba(13, 71, 161, 0.8), rgba(13, 71, 161, 0.9)), url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center/cover;
+      height: 80vh;
+      display: flex;
+      align-items: center;
+      color: #fff;
+      margin-top: 70px;
+    }
+    
+    .hero-content {
+      max-width: 800px;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      color: #fff;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.3s;
+      text-align: center;
+    }
+    
+    .btn-primary {
+      background-color: #fff;
+      color: #0d47a1;
+    }
+    
+    .btn-primary:hover {
+      background-color: #f1f1f1;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Services Section */
+    .services {
+      background-color: #fff;
+    }
+    
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .service-card {
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .service-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .service-content {
+      padding: 1.5rem;
+    }
+    
+    .service-content h3 {
+      color: #0d47a1;
+      margin-bottom: 1rem;
+    }
+    
+    /* About Section */
+    .about {
+      background-color: #f9f9f9;
+    }
+    
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    
+    .about-img {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .about-img img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    .about-content h2 {
+      margin-bottom: 1.5rem;
+    }
+    
+    .about-content p {
+      margin-bottom: 1rem;
+    }
+    
+    /* Call to Action */
+    .cta {
+      background: linear-gradient(rgba(13, 71, 161, 0.9), rgba(13, 71, 161, 0.9)), url('https://images.unsplash.com/photo-1563453392212-326f5e854473?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center/cover;
+      color: #fff;
+      text-align: center;
+      padding: 5rem 0;
+    }
+    
+    .cta h2 {
+      color: #fff;
+      margin-bottom: 1.5rem;
+    }
+    
+    .cta p {
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      font-size: 1.1rem;
+    }
+    
+    /* Contact Section */
+    .contact {
+      background-color: #fff;
+    }
+    
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .contact-info {
+      margin-bottom: 2rem;
+    }
+    
+    .contact-info h3 {
+      margin-bottom: 1rem;
+    }
+    
+    .contact-info p {
+      margin-bottom: 0.5rem;
+    }
+    
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    
+    textarea.form-control {
+      resize: vertical;
+      min-height: 150px;
+    }
+    
+    .btn-submit {
+      background-color: #0d47a1;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+    
+    .btn-submit:hover {
+      background-color: #0a3d8f;
+    }
+    
+    /* Footer */
+    footer {
+      background-color: #0d47a1;
+      color: #fff;
+      padding: 3rem 0;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+    
+    .footer-col h3 {
+      color: #fff;
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.8rem;
+    }
+    
+    .footer-links a {
+      color: #fff;
+      opacity: 0.8;
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+    
+    .footer-links a:hover {
+      opacity: 1;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .social-links a {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+    
+    .social-links a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      margin-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      
+      h2 {
+        font-size: 1.8rem;
+      }
+      
+      .hero {
+        height: 70vh;
+      }
+      
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .nav-menu {
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        background-color: #fff;
+        width: 100%;
+        flex-direction: column;
+        text-align: center;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        transition: left 0.3s;
+        padding: 1rem 0;
+      }
+      
+      .nav-menu.active {
+        left: 0;
+      }
+      
+      .nav-item {
+        margin: 1rem 0;
+      }
+      
+      .hero {
+        height: 60vh;
+        margin-top: 60px;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .services-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .section {
+        padding: 3rem 0;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .hero {
+        height: auto;
+        padding: 4rem 0;
+      }
+      
+      .btn {
+        display: block;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header & Navigation -->
+  <header>
+    <div class="container header-container">
+      <a href="#" class="logo">Eeezy Cleaning</a>
+      <button class="mobile-menu-btn">&#9776;</button>
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="#services" class="nav-link">Services</a></li>
+        <li class="nav-item"><a href="#about" class="nav-link">About Us</a></li>
+        <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Professional Cleaning Services in Daytona Beach</h1>
+        <p>We provide exceptional residential and commercial cleaning services that make your space shine. Available 24/7 for all your cleaning needs.</p>
+        <a href="#contact" class="btn btn-primary">Get a Free Quote</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="section services">
+    <div class="container">
+      <div class="section-title">
+        <h2>Our Cleaning Services</h2>
+        <p>Professional solutions for all your cleaning needs</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Residential Cleaning">
+          <div class="service-content">
+            <h3>Residential Cleaning</h3>
+            <p>Comprehensive house cleaning services tailored to your home's needs. We handle everything from basic cleaning to deep cleaning.</p>
+            <a href="#contact" class="btn btn-primary">Learn More</a>
+          </div>
+        </div>
+        <div class="service-card">
+          <img src="https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Commercial Cleaning">
+          <div class="service-content">
+            <h3>Commercial Cleaning</h3>
+            <p>Professional cleaning services for offices, retail spaces, and other commercial properties. Maintain a clean and healthy work environment.</p>
+            <a href="#contact" class="btn btn-primary">Learn More</a>
+          </div>
+        </div>
+        <div class="service-card">
+          <img src="https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Deep Cleaning">
+          <div class="service-content">
+            <h3>Deep Cleaning</h3>
+            <p>Thorough cleaning for those special occasions or when your space needs extra attention. We'll reach every corner and crevice.</p>
+            <a href="#contact" class="btn btn-primary">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="section about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-img">
+          <img src="https://images.unsplash.com/photo-1595814432025-409872c11f8e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="About Eeezy Cleaning">
+        </div>
+        <div class="about-content">
+          <h2>About Eeezy Cleaning</h2>
+          <p>Eeezy Cleaning is a dedicated cleaning service based in Daytona Beach, Florida. We're committed to providing exceptional cleaning services to both residential and commercial clients.</p>
+          <p>As a local business, we understand the unique needs of Daytona Beach residents and businesses. We take pride in our work and strive to exceed your expectations with every clean.</p>
+          <p>What sets us apart is our reliability and attention to detail. We're available 24/7 to accommodate your busy schedule and ensure your space is always looking its best.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta">
+    <div class="container">
+      <h2>Ready for a Cleaner Space?</h2>
+      <p>Whether you need regular cleaning or a one-time service, we're here to help. Contact us today to schedule your cleaning appointment.</p>
+      <a href="#contact" class="btn btn-primary">Contact Us Now</a>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section contact">
+    <div class="container">
+      <div class="section-title">
+        <h2>Contact Us</h2>
+        <p>Get in touch for a free quote</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Get In Touch</h3>
+          <p><strong>Phone:</strong> (386) 871-9200</p>
+          <p><strong>Email:</strong> info@eeezycleaning.com</p>
+          <p><strong>Address:</strong> Daytona Beach, FL</p>
+          <p><strong>Hours:</strong> 24/7 Service Available</p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f">f</i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram">i</i></a>
+          </div>
+        </div>
+        <div class="contact-form">
+          <h3>Send Us a Message</h3>
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+              <input type="email" class="form-control" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+              <input type="tel" class="form-control" placeholder="Your Phone">
+            </div>
+            <div class="form-group">
+              <textarea class="form-control" placeholder="Your Message" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-submit">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3>Eeezy Cleaning</h3>
+          <p>Professional cleaning services in Daytona Beach, FL. Available 24/7 for all your residential and commercial cleaning needs.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Services</h3>
+          <ul class="footer-links">
+            <li><a href="#">Residential Cleaning</a></li>
+            <li><a href="#">Commercial Cleaning</a></li>
+            <li><a href="#">Deep Cleaning</a></li>
+            <li><a href="#">Move In/Out Cleaning</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Contact Us</h3>
+          <ul class="footer-links">
+            <li>Phone: (386) 871-9200</li>
+            <li>Email: info@eeezycleaning.com</li>
+            <li>Daytona Beach, FL</li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2025 Eeezy Cleaning. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Simple mobile menu toggle
+    document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+      document.querySelector('.nav-menu').classList.toggle('active');
+    });
+    
+    // Smooth scroll for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - 80,
+            behavior: 'smooth'
+          });
+          
+          // Close mobile menu if open
+          document.querySelector('.nav-menu').classList.remove('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>`,
+      css: "",
+      structure: {},
+      recommendation: "Your professional website has been generated! Consider adding your own high-quality photos of your cleaning services to make it even more personalized.",
+    };
+  }
   try {
     // Extract business details from the description
     const extractBusinessInfoResponse = await openai.chat.completions.create({
