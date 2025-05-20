@@ -281,32 +281,37 @@ export function useChat(initialWebsiteId: number = 1) {
       setIsGeneratingWebsite(true);
 
       try {
-        // Don't add any messages about website generation - we're going to navigate away
-        // This prevents the chatbot from getting into a response loop
-
+        // CRITICAL: We're bypassing the entire chatbot response system by storing a flag
+        // to prevent any automatic messages being added after website generation
+        sessionStorage.setItem('bypassChatAutoresponse', 'true');
+        
         // Include business type for better website generation
         const websiteData = await generateWebsite(description, uploadedImages, businessType);
         setWebsiteStructure(websiteData);
 
-        // Don't add a success message to chat - we're navigating away anyway
-        // This prevents the chatbot from automatically responding after website generation
-
-        toast({
-          title: 'Success',
-          description: 'Website generated successfully',
-        });
-        
         // Save the website HTML in localStorage for the preview page to access
         if (websiteData?.html) {
+          // Store the HTML in localStorage for the preview page
           localStorage.setItem('generatedWebsiteHTML', websiteData.html);
-          console.log("CRITICAL: Saved website HTML to localStorage, length:", websiteData.html.length);
+          console.log("Website saved to localStorage, length:", websiteData.html.length);
           
-          // CRITICAL FIX: Force navigation to website preview with a 500ms delay
-          // to ensure localStorage is properly set before navigation
+          // NOTE: We're using window.location.href to do a complete page navigation
+          // This is much more reliable than other navigation methods for our use case
+          console.log("FORCING NAVIGATION: Redirecting directly to website preview page");
+          
+          // Using a short timeout to ensure all state is saved properly before navigating
           setTimeout(() => {
-            console.log("CRITICAL: Force navigating to website preview");
-            window.location.replace('/website-preview');
-          }, 500);
+            window.location.href = '/website-preview';
+          }, 50);
+          
+          // Show success toast
+          toast({
+            title: 'Success',
+            description: 'Your website has been generated! Redirecting to preview...',
+          });
+          
+          // Return early to prevent any further processing
+          return;
         } else {
           console.error("Failed to get website HTML");
         }
