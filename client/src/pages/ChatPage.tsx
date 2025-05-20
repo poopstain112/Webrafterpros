@@ -156,6 +156,17 @@ export default function ChatPage() {
 
       {/* Chat Input */}
       <div className="p-3 bg-white border-t border-gray-200">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-xs text-gray-500">Answer the question or skip it</span>
+          <button
+            type="button" 
+            onClick={handleSkip}
+            className="text-sm bg-gray-200 text-gray-800 px-3 py-1 rounded-full hover:bg-gray-300"
+          >
+            Skip →
+          </button>
+        </div>
+        
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <Button
             type="button"
@@ -174,15 +185,6 @@ export default function ChatPage() {
             placeholder="Describe your business website..."
             className="flex-grow bg-gray-100 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"
           />
-          
-          {/* Make the Skip button much more visible as a button */}
-          <button
-            type="button" 
-            onClick={handleSkip} 
-            className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors flex-shrink-0"
-          >
-            Skip
-          </button>
           
           <Button
             type="submit"
