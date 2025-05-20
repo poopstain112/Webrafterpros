@@ -107,43 +107,47 @@ ${websiteStructure.html}
 
   return (
     <div className="flex flex-col h-screen">
-      {/* Header */}
-      <header className="p-4 border-b border-gray-200 flex items-center">
+      {/* Modern Header - 2025 Style */}
+      <header className="p-3 flex items-center justify-between bg-white/95 backdrop-blur-sm shadow-sm z-10 sticky top-0">
         <div className="flex items-center">
           {currentScreen === "preview" && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="mr-2"
+            <button
+              className="mr-2 w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
               onClick={() => setCurrentScreen("chat")}
             >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
+              <ArrowLeft className="h-5 w-5 text-gray-700" />
+            </button>
           )}
-          <h1 className="text-xl font-bold text-blue-600">Instant Website</h1>
+          <h1 className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-blue-400 text-transparent bg-clip-text">
+            Instant Website
+          </h1>
         </div>
 
         {currentScreen === "chat" && (
           <>
             {uploadedImages.length > 0 && (
-              <Button
-                className="ml-auto bg-blue-500 text-white"
+              <button
+                className="rounded-full px-4 py-2 font-medium text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm hover:shadow-md transition-all"
                 onClick={handleGenerateWebsite}
               >
                 Create Website
-              </Button>
+              </button>
             )}
           </>
         )}
 
         {currentScreen === "preview" && (
-          <Button
-            className="ml-auto bg-green-500 text-white"
+          <button
+            className={`rounded-full px-4 py-2 font-medium text-sm transition-all ${
+              !websiteStructure || isGeneratingWebsite
+                ? "bg-gray-200 text-gray-400"
+                : "bg-gradient-to-r from-green-500 to-teal-500 text-white shadow-sm hover:shadow-md"
+            }`}
             onClick={handleDownloadWebsite}
             disabled={!websiteStructure || isGeneratingWebsite}
           >
             Download Website
-          </Button>
+          </button>
         )}
       </header>
 
@@ -206,52 +210,53 @@ ${websiteStructure.html}
               )}
             </div>
 
-            {/* Input Area */}
-            <div className="p-3 bg-white border-t border-gray-200">
+            {/* Modern 2025 Input Area */}
+            <div className="p-3 bg-white border-t border-gray-100 shadow-sm">
               <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-full"
+                <button
+                  className="w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center transition-colors"
                   onClick={handleUploadClick}
                 >
                   <Image className="h-5 w-5 text-blue-500" />
-                </Button>
+                </button>
 
-                <input
-                  type="text"
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  placeholder="Describe your business website..."
-                  className="flex-1 py-2 px-3 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter") handleSendMessage();
-                  }}
-                />
-
-                <Button
-                  variant="default"
-                  size="icon"
-                  className="rounded-full bg-blue-500"
-                  onClick={handleSendMessage}
-                  disabled={!inputMessage.trim()}
-                >
-                  <Send className="h-5 w-5" />
-                </Button>
+                <div className="flex-1 relative">
+                  <input
+                    type="text"
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    placeholder="Describe your business website..."
+                    className="w-full py-2.5 px-4 bg-gray-50 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") handleSendMessage();
+                    }}
+                  />
+                  
+                  {inputMessage.trim() && (
+                    <button
+                      className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white shadow-sm"
+                      onClick={handleSendMessage}
+                    >
+                      <Send className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
               </div>
 
-              {/* Uploaded Images Preview */}
+              {/* Modern Uploaded Images Preview */}
               {uploadedImages.length > 0 && (
-                <div className="mt-2 flex overflow-x-auto gap-2 py-1">
+                <div className="mt-2 flex overflow-x-auto gap-2 py-1 scrollbar-hide">
                   {uploadedImages.map((img, index) => (
-                    <div key={index} className="relative">
-                      <img
-                        src={img.url}
-                        alt={`Uploaded ${index + 1}`}
-                        className="h-12 w-12 object-cover rounded"
-                      />
+                    <div key={index} className="relative group">
+                      <div className="h-14 w-14 rounded-xl overflow-hidden shadow-sm border border-gray-100">
+                        <img
+                          src={img.url}
+                          alt={`Uploaded ${index + 1}`}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
                       <button
-                        className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center"
+                        className="absolute -top-1.5 -right-1.5 bg-white shadow-md text-red-500 rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                         onClick={() => {
                           const newImages = [...uploadedImages];
                           newImages.splice(index, 1);
@@ -311,27 +316,48 @@ ${websiteStructure.html}
         )}
       </div>
 
-      {/* Bottom Navigation */}
-      <div className="border-t border-gray-200 bg-white px-4 py-2 flex justify-around">
-        <Button
-          variant={currentScreen === "chat" ? "default" : "ghost"}
-          className="flex flex-col items-center rounded-none w-full mx-1"
-          onClick={() => setCurrentScreen("chat")}
-        >
-          <MessageSquare className="h-5 w-5 mb-1" />
-          <span className="text-xs">Chat</span>
-        </Button>
+      {/* Modern Bottom Navigation - 2025 Style */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-100 p-2 z-30 backdrop-blur-md bg-white/90">
+        <div className="max-w-md mx-auto flex items-center justify-around">
+          <button
+            className={`relative flex items-center justify-center h-12 w-20 rounded-2xl transition-all duration-200 ${
+              currentScreen === "chat" 
+                ? "bg-blue-500 text-white" 
+                : "text-gray-500 hover:bg-gray-100"
+            }`}
+            onClick={() => setCurrentScreen("chat")}
+          >
+            <div className="flex flex-col items-center">
+              <MessageSquare className={`h-5 w-5 ${currentScreen === "chat" ? "text-white" : ""}`} />
+              <span className="text-xs font-medium mt-1">Chat</span>
+            </div>
+            {currentScreen === "chat" && (
+              <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-10 h-1 bg-white rounded-full"></div>
+            )}
+          </button>
 
-        <Button
-          variant={currentScreen === "preview" ? "default" : "ghost"}
-          className="flex flex-col items-center rounded-none w-full mx-1"
-          onClick={() => setCurrentScreen("preview")}
-          disabled={!websiteStructure && !isGeneratingWebsite}
-        >
-          <Image className="h-5 w-5 mb-1" />
-          <span className="text-xs">Website</span>
-        </Button>
+          <button
+            className={`relative flex items-center justify-center h-12 w-20 rounded-2xl transition-all duration-200 ${
+              currentScreen === "preview" 
+                ? "bg-blue-500 text-white" 
+                : websiteStructure || isGeneratingWebsite ? "text-gray-500 hover:bg-gray-100" : "text-gray-300"
+            }`}
+            onClick={() => (websiteStructure || isGeneratingWebsite) && setCurrentScreen("preview")}
+            disabled={!websiteStructure && !isGeneratingWebsite}
+          >
+            <div className="flex flex-col items-center">
+              <Image className={`h-5 w-5 ${currentScreen === "preview" ? "text-white" : ""}`} />
+              <span className="text-xs font-medium mt-1">Website</span>
+            </div>
+            {currentScreen === "preview" && (
+              <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-10 h-1 bg-white rounded-full"></div>
+            )}
+          </button>
+        </div>
       </div>
+      
+      {/* Add padding at the bottom to accommodate the fixed navigation */}
+      <div className="h-16"></div>
     </div>
   );
 }
