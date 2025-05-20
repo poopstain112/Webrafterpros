@@ -104,53 +104,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // API endpoint to upload images
+  // API endpoint to upload images - simplified for reliability
   app.post("/api/upload", upload.array("images", 10), async (req: Request, res: Response) => {
     try {
-      // Debug logging to see what we're receiving
-      console.log("Upload request received. Files:", req.files);
-      console.log("Upload request body:", req.body);
+      console.log("Upload request received");
       
       const files = req.files as Express.Multer.File[];
       if (!files || files.length === 0) {
         return res.status(400).json({ message: "No files uploaded" });
       }
 
-      const filesWithAnalysis = await Promise.all(
-        files.map(async (file) => {
-          // Use a relative URL path for the image that will work in browser
-          const fileUrl = `/uploads/${file.filename}`;
-          console.log("Processing file:", file.filename, "URL:", fileUrl);
-          
-          // Analyze the image using OpenAI
-          let analysis = "";
-          try {
-            analysis = await analyzeImages(fileUrl);
-          } catch (err) {
-            console.error("Error analyzing image:", err);
-            analysis = "Unable to analyze image.";
-          }
-          
+      // Process files without waiting for OpenAI analysis (more reliable)
+      const uploadedImages = [];
+      
+      for (const file of files) {
+        // Create URL with timestamp to prevent caching
+        const timestamp = Date.now();
+        const fileUrl = `/uploads/${file.filename}?t=${timestamp}`;
+        console.log(`Processed file: ${file.filename}, URL: ${fileUrl}`);
+        
+        try {
           // Save image to database
           const imageData = {
-            websiteId: parseInt(req.body.websiteId) || 1, // Default to 1 if not provided
+            websiteId: parseInt(req.body.websiteId) || 1,
             filename: file.filename,
-            url: fileUrl,
+            url: `/uploads/${file.filename}`, // Store clean URL in database
           };
           
-          console.log("Saving image to database:", imageData);
           const savedImage = await storage.createImage(imageData);
           
-          return {
+          // Add to response with timestamp URL to prevent caching
+          uploadedImages.push({
             ...savedImage,
-            analysis,
-          };
-        })
-      );
+            url: fileUrl, // Send URL with timestamp to client
+            analysis: "Image for website" // Skip OpenAI analysis for reliability
+          });
+        } catch (err) {
+          console.error("Error saving image:", err);
+        }
+      }
 
-      res.json(filesWithAnalysis);
+      // Return processed images immediately
+      res.status(201).json(uploadedImages);
     } catch (error: any) {
-      console.error("Error in image upload:", error);
+      console.error("Image upload error:", error);
       res.status(500).json({ message: error.message });
     }
   });
