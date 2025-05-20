@@ -222,17 +222,16 @@ ${websiteStructure.html}
                   pullMoveY.current = e.touches[0].clientY - pullStartY.current;
                   // Force UI update
                   if (pullMoveY.current > 0) {
-                    e.currentTarget.style.overflow = 'hidden';
-                    refreshAreaRef.current?.style.setProperty(
-                      'transform', 
-                      `translateY(${Math.min(pullMoveY.current * 0.4, 60)}px)`
-                    );
+                    if (e.currentTarget) {
+                      e.currentTarget.style.overflow = 'hidden';
+                    }
+                    // Force state update to re-render pull indicator
+                    setIsRefreshing(false);
                   }
                 }
               }}
               onTouchEnd={(e) => {
                 // Trigger refresh if pulled far enough
-                const messageContainer = e.currentTarget;
                 if (pullMoveY.current > distanceThreshold && !isRefreshingRef.current) {
                   isRefreshingRef.current = true;
                   setIsRefreshing(true);
@@ -245,7 +244,11 @@ ${websiteStructure.html}
                         pullStartY.current = 0;
                         pullMoveY.current = 0;
                         isRefreshingRef.current = false;
-                        e.currentTarget.style.overflow = 'auto';
+                        
+                        if (e.currentTarget) {
+                          e.currentTarget.style.overflow = 'auto';
+                        }
+                        
                         toast({
                           title: "Refreshed!",
                           description: "Chat content has been updated"
@@ -256,8 +259,10 @@ ${websiteStructure.html}
                   // Reset if not pulled far enough
                   pullStartY.current = 0;
                   pullMoveY.current = 0;
-                  e.currentTarget.style.overflow = 'auto';
-                  refreshAreaRef.current?.style.setProperty('transform', 'translateY(-100%)');
+                  
+                  if (e.currentTarget) {
+                    e.currentTarget.style.overflow = 'auto';
+                  }
                 }
               }}
             >
