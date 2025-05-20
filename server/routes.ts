@@ -88,11 +88,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Log website generation request for debugging
       console.log(`Generating website with: Description length: ${description.length}, Images: ${(imageUrls || []).length}, Business type: ${businessType || 'not specified'}`);
+      console.log("Image URLs received:", imageUrls);
+      
+      // Get all images for the current website
+      const websiteId = 1; // Default website ID
+      const websiteImages = await storage.getImagesByWebsiteId(websiteId);
+      
+      // Combine provided image URLs with any stored images
+      let allImageUrls = imageUrls || [];
+      
+      // If we don't have any image URLs passed in, use all stored images
+      if (allImageUrls.length === 0 && websiteImages.length > 0) {
+        allImageUrls = websiteImages.map(img => img.url);
+        console.log("Using stored images instead:", allImageUrls);
+      }
       
       // Generate the website content with enhanced parameters
       const websiteContent = await generateWebsiteContent(
         description, 
-        imageUrls || [],
+        allImageUrls,
         businessType
       );
       

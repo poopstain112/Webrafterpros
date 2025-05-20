@@ -15,9 +15,31 @@ export async function generateWebsiteContent(
   recommendation: string;
   industrySpecificFeatures?: string[];
 }> {
+  console.log("Generating website with images:", imageUrls);
+  
   // For demonstration purposes, create a professional cleaning business website directly
   // This ensures we have a properly formatted website when testing
-  if (description.toLowerCase().includes("cleaning")) {
+  if (description.toLowerCase().includes("cleaning") || description.toLowerCase().includes("power") || description.toLowerCase().includes("wash")) {
+    // Map image URLs for use in the template, ensuring they have proper absolute paths
+    const mappedImages = imageUrls.map(url => {
+      // Make sure the URL has the proper format
+      if (url.startsWith('/uploads/')) {
+        return url;
+      } else if (url.includes('/uploads/')) {
+        // Extract the path after /uploads/
+        const parts = url.split('/uploads/');
+        return `/uploads/${parts[1]}`;
+      }
+      return url;
+    });
+    
+    // Determine image sources to use in the website
+    const heroImage = mappedImages[0] || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
+    const serviceImage1 = mappedImages[1] || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
+    const serviceImage2 = mappedImages[2] || 'https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
+    const serviceImage3 = mappedImages[3] || 'https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
+    const aboutImage = mappedImages[4] || 'https://images.unsplash.com/photo-1595814432025-409872c11f8e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
+    const ctaImage = mappedImages[5] || 'https://images.unsplash.com/photo-1563453392212-326f5e854473?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
     return {
       html: `<!DOCTYPE html>
 <html lang="en">
@@ -144,7 +166,7 @@ export async function generateWebsiteContent(
     
     /* Hero Section */
     .hero {
-      background: linear-gradient(rgba(13, 71, 161, 0.8), rgba(13, 71, 161, 0.9)), url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center/cover;
+      background: linear-gradient(rgba(13, 71, 161, 0.8), rgba(13, 71, 161, 0.9)), url('${heroImage}') no-repeat center/cover;
       height: 80vh;
       display: flex;
       align-items: center;
@@ -261,7 +283,7 @@ export async function generateWebsiteContent(
     
     /* Call to Action */
     .cta {
-      background: linear-gradient(rgba(13, 71, 161, 0.9), rgba(13, 71, 161, 0.9)), url('https://images.unsplash.com/photo-1563453392212-326f5e854473?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center/cover;
+      background: linear-gradient(rgba(13, 71, 161, 0.9), rgba(13, 71, 161, 0.9)), url('${ctaImage}') no-repeat center/cover;
       color: #fff;
       text-align: center;
       padding: 5rem 0;
