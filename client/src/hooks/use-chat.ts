@@ -281,9 +281,11 @@ export function useChat(initialWebsiteId: number = 1) {
       setIsGeneratingWebsite(true);
 
       try {
-        // CRITICAL: We're bypassing the entire chatbot response system by storing a flag
-        // to prevent any automatic messages being added after website generation
-        sessionStorage.setItem('bypassChatAutoresponse', 'true');
+        // Show a clear loading indicator
+        toast({
+          title: 'Creating Website',
+          description: 'Please wait while we generate your professional website...',
+        });
         
         // Include business type for better website generation
         const websiteData = await generateWebsite(description, uploadedImages, businessType);
@@ -291,24 +293,41 @@ export function useChat(initialWebsiteId: number = 1) {
 
         // Save the website HTML in localStorage for the preview page to access
         if (websiteData?.html) {
+          // Make sure the HTML content includes proper structure and styling
+          const enhancedHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${businessType || 'Business'} Website</title>
+  <style>
+    /* Essential styling */
+    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    img { max-width: 100%; height: auto; }
+    * { box-sizing: border-box; }
+  </style>
+</head>
+<body>
+  ${websiteData.html}
+</body>
+</html>`;
+          
           // Store the HTML in localStorage for the preview page
-          localStorage.setItem('generatedWebsiteHTML', websiteData.html);
-          console.log("Website saved to localStorage, length:", websiteData.html.length);
-          
-          // NOTE: We're using window.location.href to do a complete page navigation
-          // This is much more reliable than other navigation methods for our use case
-          console.log("FORCING NAVIGATION: Redirecting directly to website preview page");
-          
-          // Using a short timeout to ensure all state is saved properly before navigating
-          setTimeout(() => {
-            window.location.href = '/website-preview';
-          }, 50);
+          localStorage.setItem('generatedWebsiteHTML', enhancedHtml);
+          console.log("Enhanced website saved to localStorage, length:", enhancedHtml.length);
           
           // Show success toast
           toast({
-            title: 'Success',
+            title: 'Success!',
             description: 'Your website has been generated! Redirecting to preview...',
           });
+          
+          // Force navigation to preview page with a minimum delay
+          // Direct page navigation is most reliable in this case
+          console.log("FORCING NAVIGATION to website preview page");
+          setTimeout(() => {
+            window.location.href = '/website-preview';
+          }, 100);
           
           // Return early to prevent any further processing
           return;

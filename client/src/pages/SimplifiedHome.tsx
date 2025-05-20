@@ -327,6 +327,12 @@ export default function SimplifiedHome() {
       setShowLoadingScreen(true);
       setIsGeneratingWebsite(true);
       
+      // Show a clear loading indicator toast
+      toast({
+        title: "Creating Your Website",
+        description: "Please wait while we generate your professional website (about 60 seconds)...",
+      });
+      
       const businessInfo = extractBusinessInfo(messages);
       const description = createDetailedDescription(messages, businessInfo);
       

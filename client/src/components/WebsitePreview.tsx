@@ -45,20 +45,40 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
     }
   }, [websiteStructure, html]);
 
-  // Create a combined HTML document with the CSS included
-  const fullHtml = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <style>${cssContent}</style>
-    </head>
-    <body>
-      ${htmlContent}
-    </body>
-    </html>
-  `;
+  // Create a combined HTML document with the CSS included and ensure it's properly formatted
+  const fullHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    ${cssContent}
+    /* Add essential styles to ensure proper display */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    header, nav, section, footer {
+      width: 100%;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  ${htmlContent || '<div class="container"><h1>Website Preview</h1><p>Loading content...</p></div>'}
+</body>
+</html>`;
   
   // Handle submitting edit instructions
   const handleSubmitEdit = () => {
@@ -168,7 +188,17 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
             srcDoc={fullHtml}
             title="Website Preview"
             className="w-full h-full border-none"
-            sandbox="allow-same-origin"
+            sandbox="allow-same-origin allow-scripts"
+            style={{minHeight: "600px"}}
+            onLoad={(e) => {
+              // Force iframe content refresh
+              const iframe = e.target as HTMLIFrameElement;
+              if (iframe.contentWindow) {
+                setTimeout(() => {
+                  iframe.contentWindow!.location.reload();
+                }, 100);
+              }
+            }}
           />
         </div>
       )}

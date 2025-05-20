@@ -81,7 +81,11 @@ const WebsitePreviewScreen = () => {
       
       {/* Website Preview */}
       <div className="flex-1 overflow-auto bg-gray-100">
-        <WebsitePreview html={websiteHtml} />
+        {/* Key prop forces iframe to reload on component mount */}
+        <WebsitePreview 
+          key={`preview-${Date.now()}`}
+          html={websiteHtml} 
+        />
       </div>
     </div>
   );
