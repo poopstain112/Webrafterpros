@@ -57,8 +57,29 @@ export default function SimpleChat() {
     setInputMessage("");
   };
 
-  // Handle file upload
+  // Image upload and review handling
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  
+  // Add a quick way to switch between modes
+  const switchMode = (mode: "chat" | "review") => {
+    setUploadMode(mode);
+    if (mode === "review" && uploadedImages.length > 0) {
+      // Persist the fact that we've seen the images review screen in session storage
+      sessionStorage.setItem("hasSeenImagesReview", "true");
+    }
+  };
+  
+  // Initialize with previous state if available
+  useEffect(() => {
+    if (uploadedImages.length > 0 && !websiteStructure) {
+      // If we have uploaded images but no website structure, check if we need to show review screen
+      const hasSeenReview = sessionStorage.getItem("hasSeenImagesReview");
+      if (!hasSeenReview) {
+        switchMode("review");
+      }
+    }
+  }, [uploadedImages.length, websiteStructure]);
   
   const handleUploadClick = () => {
     const fileInput = document.createElement("input");
@@ -69,28 +90,45 @@ export default function SimpleChat() {
       const files = Array.from((e.target as HTMLInputElement).files || []);
       if (files.length > 0) {
         try {
-          // Show loading state
+          // Show loading state and switch to review mode
           setIsUploading(true);
+          setUploadProgress(0);
+          switchMode("review");
           
-          // Switch to review mode immediately when user selects files
-          setUploadMode("review");
+          // Use a timeout to set incremental progress for better UX
+          const progressInterval = setInterval(() => {
+            setUploadProgress(prev => {
+              const newProgress = prev + 5;
+              return newProgress > 90 ? 90 : newProgress; // Cap at 90% until actually complete
+            });
+          }, 500);
           
           // Process the upload
           const uploadedFiles = await handleImageUpload(files);
-          console.log("Successfully uploaded images:", uploadedFiles);
           
-          // Make sure we're still in review mode with loading complete
-          setIsUploading(false);
-          setUploadMode("review");
+          // Clear interval and finalize progress
+          clearInterval(progressInterval);
+          setUploadProgress(100);
+          
+          // Log success and save state
+          console.log("Images uploaded successfully:", uploadedFiles?.length || 0);
+          sessionStorage.setItem("hasUploadedImages", "true");
+          
+          // Small delay to show 100% complete before removing progress bar
+          setTimeout(() => {
+            setIsUploading(false);
+            switchMode("review");
+          }, 500);
           
         } catch (error) {
           console.error("Error during upload:", error);
           setIsUploading(false);
-          setUploadMode("chat"); // Return to chat if there's an error
           
+          // Stay in review mode to allow retry
+          // But show error message
           toast({
-            title: "Error",
-            description: "Failed to upload images. Please try again.",
+            title: "Upload Error",
+            description: "Some images failed to upload. You can try again or continue with any successfully uploaded images.",
             variant: "destructive"
           });
         }
@@ -217,60 +255,97 @@ export default function SimpleChat() {
             <h1 className="text-xl font-bold">Your Uploaded Images</h1>
           </div>
           
-          <div className="flex-1 p-4 overflow-y-auto">
+          <div className="flex-1 p-4 overflow-y-auto pb-24">
             {isUploading ? (
               <div className="h-full flex flex-col items-center justify-center">
-                <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                <p className="text-gray-600">Uploading your images...</p>
+                {/* Progress bar */}
+                <div className="w-full max-w-md mb-8">
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div 
+                      className="bg-blue-500 h-2.5 rounded-full transition-all duration-300 ease-out"
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-gray-600 mt-2 text-center">
+                    {uploadProgress < 100 ? 'Uploading your images...' : 'Upload complete!'}
+                  </p>
+                </div>
               </div>
             ) : uploadedImages.length > 0 ? (
               <>
-                <p className="text-gray-600 mb-4">
-                  Review your images below. When you're ready, click "Create Website" to generate your website.
-                </p>
+                <div className="mb-8">
+                  <h2 className="text-xl font-semibold text-gray-800 mb-2">Your Uploaded Images</h2>
+                  <p className="text-gray-600">
+                    Review your images below. When you're ready, click "Create Website" to generate your website.
+                  </p>
+                </div>
                 
-                <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="grid grid-cols-2 gap-4 mb-24">
                   {uploadedImages.map((image, index) => (
-                    <div key={index} className="aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
+                    <div 
+                      key={index} 
+                      className="aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm bg-gray-50 relative"
+                    >
                       <img 
-                        src={image.url} 
+                        src={`${image.url}?t=${Date.now()}`} 
                         alt={`Uploaded ${index + 1}`}
                         className="w-full h-full object-cover"
                         loading="eager"
                         onError={(e) => {
-                          // Retry loading the image with a timestamp to bypass cache
-                          e.currentTarget.src = `${image.url}?t=${Date.now()}`;
+                          // Retry loading with a new timestamp
+                          const target = e.currentTarget;
+                          setTimeout(() => {
+                            target.src = `${image.url}?t=${Date.now()}`;
+                          }, 500);
                         }}
                       />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 opacity-0 hover:opacity-100 transition-opacity">
+                        <span className="text-white text-sm">{image.filename || `Image ${index + 1}`}</span>
+                      </div>
                     </div>
                   ))}
-                </div>
-                
-                <div className="p-4 border-t fixed bottom-0 left-0 right-0 bg-white">
-                  <Button
-                    onClick={() => {
-                      generateWebsiteContent("Generate a website based on our conversation");
-                      setUploadMode("chat");
-                    }}
-                    disabled={isGenerating}
-                    className="w-full bg-blue-500 hover:bg-blue-600 py-3 text-lg"
-                  >
-                    {isGenerating ? "Creating Website..." : "Create Website"}
-                  </Button>
                 </div>
               </>
             ) : (
               <div className="h-full flex flex-col items-center justify-center">
-                <p className="text-gray-600 mb-4">No images have been uploaded yet.</p>
+                <p className="text-gray-600 mb-6 text-center">
+                  No images have been uploaded yet.<br />
+                  Upload some images to create your website.
+                </p>
                 <Button
                   onClick={handleUploadClick}
-                  className="bg-blue-500 hover:bg-blue-600"
+                  className="bg-blue-500 hover:bg-blue-600 px-6 py-3 text-lg"
                 >
                   Upload Images
                 </Button>
               </div>
             )}
           </div>
+          
+          {/* Fixed bottom button bar */}
+          {uploadedImages.length > 0 && !isUploading && (
+            <div className="p-4 border-t fixed bottom-0 left-0 right-0 bg-white shadow-md">
+              <div className="flex space-x-3">
+                <Button
+                  onClick={handleUploadClick}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Upload More
+                </Button>
+                <Button
+                  onClick={() => {
+                    generateWebsiteContent("Generate a website based on our conversation");
+                    switchMode("chat");
+                  }}
+                  disabled={isGenerating}
+                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-base"
+                >
+                  {isGenerating ? "Creating Website..." : "Create Website"}
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       )}
       
