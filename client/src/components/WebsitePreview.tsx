@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { X } from 'lucide-react';
+import { X, ArrowLeft } from 'lucide-react';
+import { useLocation } from 'wouter';
 
 interface WebsitePreviewProps {
   websiteStructure?: {
@@ -9,22 +10,28 @@ interface WebsitePreviewProps {
     structure: any;
     recommendation?: string;
   };
-  onClose: () => void;
-  onEdit: (instructions?: string) => void;
+  onClose?: () => void;
+  onEdit?: (instructions?: string) => void;
+  html?: string;
 }
 
-export default function WebsitePreview({ websiteStructure, onClose, onEdit }: WebsitePreviewProps) {
+export default function WebsitePreview({ websiteStructure, onClose, onEdit, html }: WebsitePreviewProps) {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editInstructions, setEditInstructions] = useState("");
   const [showRecommendation, setShowRecommendation] = useState(true);
   const [htmlContent, setHtmlContent] = useState('');
   const [cssContent, setCssContent] = useState('');
   const [recommendationText, setRecommendationText] = useState('');
+  const [, setLocation] = useLocation();
   
   // Load website content from props or localStorage
   useEffect(() => {
-    if (websiteStructure) {
-      // Use passed props if available
+    if (html) {
+      // If direct HTML is provided
+      setHtmlContent(html);
+      setCssContent('');
+    } else if (websiteStructure) {
+      // Use passed website structure if available
       setHtmlContent(websiteStructure.html || '');
       setCssContent(websiteStructure.css || '');
       setRecommendationText(websiteStructure.recommendation || '');
@@ -36,7 +43,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit }: We
         setCssContent(''); // No CSS in localStorage version
       }
     }
-  }, [websiteStructure]);
+  }, [websiteStructure, html]);
 
   // Create a combined HTML document with the CSS included
   const fullHtml = `
@@ -55,34 +62,68 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit }: We
   
   // Handle submitting edit instructions
   const handleSubmitEdit = () => {
-    if (editInstructions.trim()) {
+    if (editInstructions.trim() && onEdit) {
       onEdit(editInstructions);
       setIsEditMode(false);
       setEditInstructions("");
     }
   };
+  
+  // Handle close preview
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      // If no onClose handler, navigate back to chat
+      setLocation('/');
+    }
+  };
+
+  // Check if this is standalone mode (from WebsitePreviewScreen)
+  const isStandalone = !onClose;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex flex-col">
-      <div className="bg-white p-4 shadow-md flex items-center justify-between">
-        <h2 className="text-xl font-bold">Website Preview</h2>
+    <div className={`${isStandalone ? '' : 'fixed inset-0 bg-black/50 z-50'} flex flex-col h-full`}>
+      <div className="bg-blue-600 text-white p-3 shadow-md flex items-center justify-between">
+        <div className="flex items-center">
+          <h2 className="text-lg font-semibold">Website Preview</h2>
+        </div>
         <div className="flex space-x-2">
           {!isEditMode ? (
             <>
               <Button 
                 onClick={() => setIsEditMode(true)} 
                 variant="outline"
+                className="text-white border-white hover:bg-blue-700"
               >
                 Edit Website
               </Button>
-              <Button onClick={onClose}>Close Preview</Button>
+              {!isStandalone && (
+                <Button 
+                  onClick={handleClose}
+                  className="bg-white text-blue-600 hover:bg-blue-50"
+                >
+                  Close
+                </Button>
+              )}
             </>
           ) : (
             <>
-              <Button onClick={() => setIsEditMode(false)} variant="outline">
-                Cancel Edit
+              <Button 
+                onClick={() => setIsEditMode(false)} 
+                variant="outline"
+                className="text-white border-white hover:bg-blue-700"
+              >
+                Cancel
               </Button>
-              <Button onClick={onClose}>Close Preview</Button>
+              {!isStandalone && (
+                <Button 
+                  onClick={handleClose}
+                  className="bg-white text-blue-600 hover:bg-blue-50"
+                >
+                  Close
+                </Button>
+              )}
             </>
           )}
         </div>

@@ -94,13 +94,14 @@ export default function SimpleChat() {
   useEffect(() => {
     const generatedHTML = localStorage.getItem('generatedWebsiteHTML');
     if (generatedHTML) {
-      // Show the website preview
-      setShowWebsitePreview(true);
-      
       // Add a message about the successful generation if there isn't one already
       if (!messages.some(m => m.content?.includes('website has been generated'))) {
         send('Your website has been generated! Take a look at the preview and let me know if you\'d like to make any changes.');
       }
+      
+      // Let user see website by swiping
+      // We'll keep the preview modal option too for convenience
+      setShowWebsitePreview(true);
     }
   }, []);
   
