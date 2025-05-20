@@ -16,8 +16,8 @@ function extractBusinessInfo(messages: Message[]) {
     description?: string;
   } = {};
   
-  // Match questions to answers
-  const questionMap: Record<string, string> = {
+  // Match questions to answers with proper typing
+  const questionMap: {[key: string]: keyof typeof businessInfo} = {
     "What's the name of your business?": "businessName",
     "Where is your business located?": "location",
     "What products or services do you offer?": "services"
@@ -40,7 +40,7 @@ function extractBusinessInfo(messages: Message[]) {
         if (question.includes(q) && answer.trim()) {
           if (field === 'services') {
             businessInfo[field] = answer.split(',').map(s => s.trim());
-          } else {
+          } else if (field === 'businessName' || field === 'location' || field === 'description' || field === 'contactInfo') {
             businessInfo[field] = answer.trim();
           }
         }
@@ -142,6 +142,36 @@ export default function SimplifiedHome() {
     if (inputMessage.trim()) {
       sendMessage(inputMessage);
       setInputMessage("");
+      
+      // Check if we should update the website after sending this message
+      // This triggers only if we've previously generated a website
+      if (localStorage.getItem('websiteGenerated') === 'true' && 
+          (inputMessage.toLowerCase().includes('update') || 
+           inputMessage.toLowerCase().includes('change') ||
+           inputMessage.toLowerCase().includes('modify') ||
+           inputMessage.toLowerCase().includes('add'))) {
+        
+        // We'll update the website after a brief delay to allow the AI response
+        setTimeout(() => {
+          // Extract business information from updated messages
+          const businessInfo = extractBusinessInfo(messages);
+          
+          // Create a more detailed description based on latest chat history
+          const description = createDetailedDescription(messages, businessInfo);
+          
+          // Generate updated website with all the latest information
+          generateWebsiteContent(
+            description,
+            businessInfo.businessType
+          );
+          
+          // Notify user
+          toast({
+            title: "Website updated",
+            description: "Your website has been updated based on your changes",
+          });
+        }, 2000);
+      }
     }
   };
 
@@ -187,6 +217,9 @@ export default function SimplifiedHome() {
       businessInfo.businessType
     );
     setCurrentScreen("preview");
+    
+    // Save the fact that we've generated a website to localStorage
+    localStorage.setItem('websiteGenerated', 'true');
   };
 
   // Handle downloading the website
@@ -200,7 +233,7 @@ export default function SimplifiedHome() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Generated Website</title>
+    <title>${extractBusinessInfo(messages).businessName || 'Your Generated Website'}</title>
     <style>
 ${websiteStructure.css}
     </style>
@@ -211,20 +244,66 @@ ${websiteStructure.html}
 </html>
     `;
 
-    // Create a blob and download link
-    const blob = new Blob([fullHtml], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "my-website.html";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    try {
+      // Create a blob with the website content
+      const blob = new Blob([fullHtml], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      
+      // Create and trigger a download link
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${extractBusinessInfo(messages).businessName || 'my-website'}.html`;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      
+      // Trigger the download with a slight delay to ensure it works
+      setTimeout(() => {
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
 
+      toast({
+        title: "Website downloading",
+        description: "Your website file is being downloaded to your device",
+      });
+    } catch (error) {
+      console.error('Download error:', error);
+      toast({
+        title: "Download failed",
+        description: "Unable to download the website. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+  
+  // Handle manually updating the website based on latest chat
+  const handleUpdateWebsite = () => {
+    if (messages.length === 0) {
+      toast({
+        title: "No chat history",
+        description: "Please chat with the assistant first to provide business details",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Extract business information from chat messages
+    const businessInfo = extractBusinessInfo(messages);
+    
+    // Create a comprehensive description based on chat history
+    const description = createDetailedDescription(messages, businessInfo);
+    
+    // Generate updated website
+    generateWebsiteContent(
+      description,
+      businessInfo.businessType
+    );
+    
+    setCurrentScreen("preview");
     toast({
-      title: "Website downloaded",
-      description: "Your website has been downloaded as an HTML file",
+      title: "Website updated",
+      description: "Your website has been updated with the latest information",
     });
   };
 
@@ -276,17 +355,30 @@ ${websiteStructure.html}
           )}
 
           {currentScreen === "preview" && (
-            <button
-              className={`rounded-full px-4 py-2 font-medium text-sm transition-all ${
-                !websiteStructure || isGeneratingWebsite
-                  ? "bg-gray-200 text-gray-400"
-                  : "bg-gradient-to-r from-green-500 to-teal-500 text-white shadow-sm hover:shadow-md"
-              }`}
-              onClick={handleDownloadWebsite}
-              disabled={!websiteStructure || isGeneratingWebsite}
-            >
-              Download Website
-            </button>
+            <div className="flex gap-2">
+              <button
+                className={`rounded-full px-4 py-2 font-medium text-sm transition-all ${
+                  !websiteStructure || isGeneratingWebsite
+                    ? "bg-gray-200 text-gray-400"
+                    : "bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-sm hover:shadow-md"
+                }`}
+                onClick={handleUpdateWebsite}
+                disabled={!websiteStructure || isGeneratingWebsite}
+              >
+                Update Website
+              </button>
+              <button
+                className={`rounded-full px-4 py-2 font-medium text-sm transition-all ${
+                  !websiteStructure || isGeneratingWebsite
+                    ? "bg-gray-200 text-gray-400"
+                    : "bg-gradient-to-r from-green-500 to-teal-500 text-white shadow-sm hover:shadow-md"
+                }`}
+                onClick={handleDownloadWebsite}
+                disabled={!websiteStructure || isGeneratingWebsite}
+              >
+                Download Website
+              </button>
+            </div>
           )}
         </div>
       </header>
