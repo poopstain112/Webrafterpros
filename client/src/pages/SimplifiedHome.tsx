@@ -3,8 +3,8 @@ import { MessageSquare, Settings, Image, Send, ArrowLeft, RefreshCw } from "luci
 import { Button } from "@/components/ui/button";
 import { useChat } from "@/hooks/use-chat";
 import { useToast } from "@/hooks/use-toast";
-import { Message } from "@/types";
-import { resetChat } from "@/lib/openai";
+import { Message, UploadedImage } from "@/types";
+import { resetChat, uploadImages } from "@/lib/openai";
 
 // Helper function to extract business info from messages
 function extractBusinessInfo(messages: Message[]) {
@@ -193,17 +193,7 @@ export default function SimplifiedHome() {
           });
           
           // Upload images and handle the response
-          const uploadedImageList = await uploadImages(initialWebsiteId, files);
-          console.log("Upload success, received images:", uploadedImageList);
-          
-          // Force clear any previous URL cache - important for image loading
-          uploadedImageList.forEach(img => {
-            const imgElement = new Image();
-            imgElement.src = img.url + '?timestamp=' + new Date().getTime();
-          });
-          
-          // Update the state with the new images
-          setUploadedImages([...uploadedImages, ...uploadedImageList]);
+          const newImages = await handleImageUpload(files);
           
           // Success toast
           toast({

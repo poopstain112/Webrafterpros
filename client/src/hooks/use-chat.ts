@@ -117,12 +117,33 @@ export function useChat(initialWebsiteId: number = 1) {
       if (files.length === 0) return;
 
       try {
+        // Display loading toast
+        toast({
+          title: 'Uploading images',
+          description: 'Please wait while your images are being uploaded...',
+        });
+        
+        // Upload images to server
         const imageList = await uploadImages(initialWebsiteId, files);
-        setUploadedImages(prev => [...prev, ...imageList]);
+        console.log('Server returned images:', imageList);
+        
+        // Add timestamp to image URLs to prevent caching issues
+        const processedImages = imageList.map(img => ({
+          ...img,
+          url: `${img.url}?t=${Date.now()}`
+        }));
+        
+        // Update state with new images
+        setUploadedImages(prev => [...prev, ...processedImages]);
+        
+        // Show success message
         toast({
           title: 'Success',
           description: `Uploaded ${files.length} image${files.length > 1 ? 's' : ''}`,
         });
+        
+        // Return the processed images for any additional handling
+        return processedImages;
       } catch (error) {
         console.error('Error uploading images:', error);
         toast({
@@ -130,6 +151,7 @@ export function useChat(initialWebsiteId: number = 1) {
           description: 'Failed to upload images',
           variant: 'destructive',
         });
+        throw error;
       }
     },
     [initialWebsiteId, toast]
