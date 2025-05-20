@@ -573,9 +573,9 @@ ${websiteStructure.html}
               )}
             </div>
 
-            {/* Modern 2025 Input Area - Fixed Positioning */}
-            <div className="p-3 bg-white border-t border-gray-100 shadow-md fixed bottom-0 left-0 right-0 z-20">
-              <div className="flex items-center gap-2 max-w-lg mx-auto">
+            {/* Simple Input Area - Basic Design */}
+            <div className="p-3 bg-white border-t border-gray-200">
+              <div className="flex items-center gap-2">
                 <button
                   className="w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center transition-colors"
                   onClick={handleUploadClick}
@@ -584,24 +584,17 @@ ${websiteStructure.html}
                 </button>
 
                 <div className="flex-1 relative">
-                  <textarea
+                  <input
+                    type="text"
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
                     placeholder="Describe your business website..."
-                    className="w-full py-2.5 px-4 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10 resize-none overflow-hidden"
+                    className="w-full py-2.5 px-4 bg-gray-50 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
+                      if (e.key === "Enter") {
                         e.preventDefault();
                         handleSendMessage();
                       }
-                    }}
-                    rows={1}
-                    style={{ minHeight: "40px", maxHeight: "80px" }}
-                    onInput={(e) => {
-                      // Auto-resize textarea
-                      const target = e.target as HTMLTextAreaElement;
-                      target.style.height = "40px";
-                      target.style.height = `${Math.min(80, target.scrollHeight)}px`;
                     }}
                   />
                   
