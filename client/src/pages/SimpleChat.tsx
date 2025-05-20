@@ -26,6 +26,13 @@ export default function SimpleChat() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+  
+  // Show website preview when website is generated
+  useEffect(() => {
+    if (websiteStructure) {
+      setShowWebsitePreview(true);
+    }
+  }, [websiteStructure]);
 
   // Handle sending a message
   const handleSendMessage = () => {
@@ -49,8 +56,22 @@ export default function SimpleChat() {
     fileInput.click();
   };
 
+  // Handle website editing - this will be expanded later
+  const handleEditWebsite = () => {
+    setShowWebsitePreview(false);
+    // Will add more functionality here in the future
+  };
+
   return (
     <div className="h-full flex flex-col">
+      {websiteStructure && showWebsitePreview && (
+        <WebsitePreview 
+          websiteStructure={websiteStructure}
+          onClose={() => setShowWebsitePreview(false)}
+          onEdit={handleEditWebsite}
+        />
+      )}
+      
       <div className="bg-blue-500 text-white py-4 px-4 fixed top-0 left-0 right-0 z-10">
         <h1 className="text-xl font-bold">Instant Website</h1>
       </div>
@@ -111,16 +132,25 @@ export default function SimpleChat() {
         </div>
       )}
       
-      {/* Website generation button - fixed above input when needed */}
-      {messages.length > 5 && !websiteStructure && (
+      {/* Website generation or preview button - fixed above input when needed */}
+      {messages.length > 5 && (
         <div className="fixed bottom-16 left-0 right-0 bg-blue-50 p-3 border-t border-blue-100 z-10">
-          <Button
-            onClick={() => generateWebsiteContent("Generate a website based on our conversation")}
-            disabled={isGenerating}
-            className="w-full bg-blue-500 hover:bg-blue-600"
-          >
-            {isGenerating ? "Creating Website..." : "Create Website"}
-          </Button>
+          {!websiteStructure ? (
+            <Button
+              onClick={() => generateWebsiteContent("Generate a website based on our conversation")}
+              disabled={isGenerating}
+              className="w-full bg-blue-500 hover:bg-blue-600"
+            >
+              {isGenerating ? "Creating Website..." : "Create Website"}
+            </Button>
+          ) : (
+            <Button
+              onClick={() => setShowWebsitePreview(true)}
+              className="w-full bg-green-500 hover:bg-green-600"
+            >
+              View Your Website
+            </Button>
+          )}
         </div>
       )}
       

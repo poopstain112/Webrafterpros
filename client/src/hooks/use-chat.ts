@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Message, UploadedImage, WebsiteStructure } from '@/types';
 import { sendChatMessage, uploadImages, generateWebsite, getChatMessages } from '@/lib/openai';
 import { useToast } from '@/hooks/use-toast';
+import { Message, UploadedImage, WebsiteStructure } from '../types';
 
 export function useChat(initialWebsiteId: number = 1) {
   const [messages, setMessages] = useState<Message[]>([]);

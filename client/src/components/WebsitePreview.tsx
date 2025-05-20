@@ -6,7 +6,7 @@ interface WebsitePreviewProps {
     html: string;
     css: string;
     structure: any;
-    recommendation: string;
+    recommendation?: string;
   };
   onClose: () => void;
   onEdit: () => void;
