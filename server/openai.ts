@@ -20,7 +20,7 @@ export async function generateWebsiteContent(
       messages: [
         {
           role: "system",
-          content: `You are a branding strategist specializing in extracting and enhancing business details for premium website creation. Your task is to analyze a conversation about a business and extract comprehensive structured information.
+          content: `You are a branding strategist specializing in extracting and enhancing business details for premium website creation. Your task is to analyze a conversation about ANY type of business and extract comprehensive structured information.
 
           PRIMARY GOAL: Extract ONLY factual information that was explicitly provided in the conversation. When information is ambiguous or missing, use null or empty arrays as appropriate.
           
@@ -29,9 +29,11 @@ export async function generateWebsiteContent(
           Return a JSON object with the following structure:
           {
             "businessName": "The exact business name as provided",
-            "businessType": "Boat rental company / Restaurant / Service business / etc.",
+            "businessType": "The type of business (Restaurant, E-commerce, Professional Services, etc.)",
+            "industry": "The specific industry the business operates in",
             "location": "The specific business location",
             "services": ["Service 1", "Service 2"],
+            "products": ["Product 1", "Product 2"],
             "uniqueSellingPoints": ["Enhanced USP 1", "Enhanced USP 2"],
             "businessDescription": "A comprehensive, well-crafted description based solely on the information provided. This should read like professional marketing copy while maintaining perfect factual accuracy.",
             "targetCustomers": "Enhanced description of ideal customers",
@@ -50,7 +52,7 @@ export async function generateWebsiteContent(
           1. NEVER invent core facts, services, or contact information not explicitly mentioned
           2. Only enhance language and presentation, never the underlying facts
           3. If the business name lacks "proper noun capitalization", apply standard capitalization rules
-          4. For vague descriptions like "clean boats", you may enhance to "Meticulously maintained and sanitized vessels"
+          4. This must work for ANY type of business (retail, service, tech, healthcare, etc.)
           5. Be precise and thorough in your extraction - if it wasn't mentioned, don't include it`
         },
         {
@@ -72,33 +74,40 @@ export async function generateWebsiteContent(
       messages: [
         {
           role: "system",
-          content: `You are the world's most prestigious luxury brand designer who creates custom visual identities for elite clients willing to pay $100,000+ for a complete brand system. Your color palettes are featured in design annuals and win international awards. Your expertise in color psychology, typography, and visual harmony creates immersive brand experiences that elevate businesses to iconic status.
+          content: `You are the world's most prestigious brand designer who creates custom visual identities for elite clients across ANY industry. Your color palettes are featured in design annuals and win international awards. Your expertise in color psychology, typography, and visual harmony creates immersive brand experiences that elevate businesses to iconic status.
 
           ESSENTIAL REQUIREMENTS:
-          - Create a sophisticated, harmonious color system that conveys premium quality
-          - Design a palette that feels uniquely crafted for THIS specific business type and name
+          - Create a sophisticated, harmonious color system appropriate for the specific industry and business type
+          - Design a palette that feels uniquely crafted for the specific business based on its attributes
           - Select colors with perfect color theory relationships (complementary, analogous, etc.)
-          - Choose typography that creates an unmistakable luxury voice
+          - Choose typography that creates an unmistakable professional voice appropriate to the industry
           - Develop a cohesive visual language that works across digital and print applications
           - Consider the emotional and psychological impact of each color choice
           - Ensure the palette communicates the intended brand positioning and personality
           
-          For a boat rental company named after Poseidon (Greek god of the sea), create a sophisticated palette like:
+          THE THEME MUST:
+          - Be versatile enough to apply to any business type (retail, tech, healthcare, services, etc.)
+          - Include a custom-tailored color palette based on industry best practices and brand psychology
+          - Feature a carefully selected typography system appropriate to the specific business
+          - Include thoughtful gradient combinations for modern design elements
+          - Create a distinctive visual identity that enhances the business's unique attributes
           
-          PRIMARY PALETTE:
-          - Primary: #0D5C63 (deep teal) - A rich, commanding blue-green conveying maritime authority and trust
-          - Secondary: #44A1A0 (aqua verde) - An elegant middle-tone teal suggesting pristine waters
-          - Tertiary: #FCFAF9 (sea foam white) - A warm off-white creating breathing room and lightness
+          EXAMPLES BY INDUSTRY:
           
-          ACCENT PALETTE:
-          - Accent 1: #F9C784 (golden hour) - A sophisticated golden tone evoking sunset reflections on water
-          - Accent 2: #247BA0 (deep horizon) - A profound blue suggesting open water and endless possibilities
-          - Accent 3: #2E3532 (carbon) - A near-black with subtle warmth for sophisticated text and details
+          For a luxury fashion brand:
+          - Palette: Sophisticated blacks, whites, and gold accents
+          - Typography: Elegant serifs and refined sans-serifs
+          - Mood: Exclusive, aspirational, refined
           
-          TYPOGRAPHY SYSTEM:
-          - Display: "Cormorant Garamond" - A regal, sophisticated serif with nautical heritage references
-          - Headlines: "Montserrat" (medium/semibold) - Contemporary, authoritative sans-serif
-          - Body: "Source Sans Pro" - Highly legible, elegant sans-serif for extended reading
+          For a tech startup:
+          - Palette: Vibrant primary with complementary accents
+          - Typography: Modern, clean sans-serifs
+          - Mood: Innovative, energetic, forward-thinking
+          
+          For a healthcare provider:
+          - Palette: Calming blues and greens with warm accents
+          - Typography: Approachable, clear, balanced type system
+          - Mood: Trustworthy, reassuring, expert
           
           Return your response as a JSON object with the following structure:
           {
@@ -122,7 +131,7 @@ export async function generateWebsiteContent(
               "accentFont": "Optional accent font"
             },
             "mood": "The specific emotional quality this palette evokes",
-            "rationale": "In-depth explanation of how this palette embodies the brand's essence",
+            "rationale": "In-depth explanation of how this palette fits the business type and industry",
             "designNotes": "Strategic application guidelines for this palette"
           }`
         },
@@ -136,17 +145,17 @@ export async function generateWebsiteContent(
 
     const themeInfo = JSON.parse(themeResponse.choices[0].message.content || "{}");
     
-    // Generate content for website sections
+    // Generate content for website sections for ANY business type
     const contentResponse = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
           role: "system",
-          content: `You are the world's best luxury copywriter responsible for creating exceptional, award-winning content for elite websites. Your words create immersive brand narratives that win design awards and captivate high-value audiences. Your task is to craft extraordinary copy that would be suitable for a $50,000+ premium website.
+          content: `You are the world's most versatile copywriter responsible for creating exceptional, award-winning content for any type of business website. Your words create immersive brand narratives that captivate target audiences across industries. You craft extraordinary copy that would be suitable for premium websites across all sectors.
 
           IMPORTANT REQUIREMENTS:
-          - Create content that feels custom-crafted specifically for THIS unique business
-          - Develop a distinctive brand voice that reflects the elite nature of the business
+          - Create content that feels custom-crafted specifically for the unique business based on its industry and attributes
+          - Develop a distinctive brand voice that aligns with the business's industry and target audience
           - Craft compelling, emotionally resonant headlines that capture attention immediately
           - Write body copy with perfect rhythm, pacing, and flow
           - Include specific details from the business information to create authentic, personalized content
@@ -155,14 +164,26 @@ export async function generateWebsiteContent(
           - Balance aspirational language with concrete details
           - Use literary techniques (metaphor, alliteration, etc.) thoughtfully
           
+          YOU MUST ADAPT TO ANY BUSINESS TYPE:
+          - Retail/E-commerce: Focus on product quality, selection, and customer experience
+          - Professional Services: Emphasize expertise, process, and client outcomes
+          - Healthcare: Highlight care quality, patient experience, and wellness outcomes
+          - Technology: Showcase innovation, efficiency, and competitive advantages
+          - Hospitality: Describe experiences, amenities, and ambiance
+          - Education: Feature learning outcomes, teaching approach, and student success
+          
           CRITICALLY IMPORTANT:
           - DO NOT use generic statements like "high-quality service" or "customer satisfaction"
           - DO NOT write bland, interchangeable copy that could apply to any business
           - INSTEAD, write content that could ONLY apply to THIS SPECIFIC business
-          - BE SPECIFIC about their unique offerings, location, and customer experience
+          - BE SPECIFIC about their unique offerings and customer experience
+          - ADAPT the tone and style to the business's industry and target audience
           
-          For a boat rental company, instead of generic copy like "We offer boat rentals", write rich, evocative content like:
-          "Navigate the pristine waterways of Port Orange aboard Poseidon's fleet of immaculately maintained vessels. Each craft in our collection represents the pinnacle of maritime comfort—sumptuous seating, state-of-the-art navigation systems, and thoughtful amenities transform an ordinary day on Florida's waters into an extraordinary aquatic adventure."
+          For example, a tech company might need crisp, forward-thinking language:
+          "Transform your digital infrastructure with CloudSync's revolutionary edge computing platform. Our proprietary algorithms reduce latency by 75% while enhancing security protocols, giving your enterprise the competitive advantage in today's data-driven marketplace."
+          
+          While a bakery might need warm, sensory-rich descriptions:
+          "Each morning at Wheatfield Bakery begins at 3 AM, when our artisans hand-mix organic heritage grains into doughs that will rise slowly, developing complex flavors and that perfect contrast between crackling crust and pillowy interior that only traditional methods can achieve."
           
           Return your content as a JSON object with the following structure:
           {
@@ -173,24 +194,24 @@ export async function generateWebsiteContent(
             },
             "about": {
               "headline": "Distinctive about section headline",
-              "content": "Storytelling narrative about the business (200-250 words, include specific details about location, services, and unique attributes)"
+              "content": "Storytelling narrative about the business (200-250 words, include specific details about the business's unique attributes)"
             },
-            "services": {
-              "headline": "Evocative services section headline",
+            "offerings": {
+              "headline": "Industry-appropriate headline for services/products",
               "intro": "Captivating introduction (2-3 sentences)",
-              "servicesList": [
+              "offeringsList": [
                 {
-                  "name": "Distinctively named service",
-                  "description": "Richly detailed description with sensory elements and specific benefits (100-150 words)"
+                  "name": "Distinctively named offering",
+                  "description": "Richly detailed description with specific benefits (100-150 words)"
                 }
               ]
             },
             "experience": {
-              "headline": "Customer experience headline",
+              "headline": "Customer/client experience headline",
               "content": "Vivid description of what customers will experience (150-200 words)",
-              "featuresList": [
+              "benefitsList": [
                 {
-                  "name": "Distinctive feature/benefit name",
+                  "name": "Distinctive benefit name",
                   "description": "Emotionally resonant description with specific details (30-40 words)"
                 }
               ]
@@ -230,15 +251,22 @@ export async function generateWebsiteContent(
 
     const contentInfo = JSON.parse(contentResponse.choices[0].message.content || "{}");
     
-    // Generate complete award-winning website HTML and CSS
+    // Generate complete award-winning website HTML and CSS for ANY industry
     const websiteResponse = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
           role: "system",
-          content: `You are an award-winning frontend architect who creates revolutionary digital experiences that have been featured in Awwwards, Communication Arts, and The FWA. Your websites are taught in design schools worldwide and set new standards for digital excellence.
+          content: `You are an award-winning frontend architect who creates revolutionary digital experiences for businesses across ALL industries. Your websites are taught in design schools worldwide and set new standards for digital excellence regardless of the business type.
 
           CREATE AN EXTRAORDINARY, AWARD-CALIBER WEBSITE with these non-negotiable requirements:
+          
+          INDUSTRY ADAPTATION:
+          - Adapt the design language to perfectly suit the specific business industry
+          - Create layouts appropriate for the business type (e-commerce, services, healthcare, etc.)
+          - Implement industry-specific components and interaction patterns
+          - Ensure the visual design aligns with industry expectations while being innovative
+          - Use design patterns that best showcase the specific business's offerings
           
           TECHNICAL EXCELLENCE:
           - Craft pixel-perfect, semantically flawless HTML5
@@ -249,16 +277,15 @@ export async function generateWebsiteContent(
           - Include meta tags for perfect SEO and social sharing
           
           VISUAL PERFECTION:
-          - Create a design that would win international design competitions
+          - Create a design that perfectly matches the business's brand identity
           - Implement sophisticated micro-interactions and motion design
           - Utilize advanced CSS techniques (variable fonts, backdrop-filter, etc.)
           - Create a distinctive visual language unique to this business
           - Implement perfect visual hierarchy and typography
           - Use layered design elements to create depth and dimension
-          - Create custom interaction patterns that feel bespoke and premium
           
           REVOLUTIONARY UX:
-          - Design innovative navigation patterns that feel intuitive yet novel
+          - Design intuitive navigation patterns optimized for the business's content structure
           - Implement sophisticated scroll-based interactions
           - Create memorable moments that surprise and delight users
           - Ensure the entire experience feels cohesive and intentional
@@ -267,42 +294,36 @@ export async function generateWebsiteContent(
           CRITICAL MOBILE REQUIREMENTS:
           - Design a perfect mobile experience first
           - Ensure all interactive elements are perfectly sized for touch
-          - Create unique mobile-specific interactions
-          - Ensure perfect readability and usability on small screens
-          - Design adaptive layouts that maximize each screen size
+          - Create adaptive layouts that maximize each screen size
+          - Design mobile-specific interactions appropriate to the business type
           
-          ELEVATED TYPOGRAPHY:
-          - Implement perfect typographic scale and rhythm
-          - Use sophisticated font loading techniques
-          - Create custom typographic animations and effects
-          - Design unique heading treatments with CSS
-          - Implement proper kerning, leading, and text treatments
-          
-          SOPHISTICATED IMAGERY:
-          - Create advanced image treatments and effects
-          - Implement perfect responsive image handling
-          - Design custom image layouts that showcase the content
-          - Add subtle animations to imagery on scroll/hover
-          - Create a cohesive visual language for all images
+          BUSINESS-SPECIFIC ADAPTATIONS:
+          - For retail/e-commerce: Create product showcases, galleries, and shopping features
+          - For services: Emphasize process, benefits, and client outcomes
+          - For healthcare: Focus on care quality, accessibility, and patient experience
+          - For hospitality: Showcase experiences, amenities, and booking capabilities
+          - For technology: Demonstrate innovation, efficiency, and technical excellence
+          - For education: Feature learning outcomes, programs, and institutional values
           
           RETURN A JSON OBJECT with the following structure:
           {
             "html": "Complete HTML code",
             "css": "Complete CSS code",
             "structure": {
-              "header": { "title": "Website Title", "navigation": ["Home", "About", "Services", "Gallery", "Contact"] },
+              "header": { "title": "Website Title", "navigation": ["Home", "About", "Services/Products", "Gallery", "Contact"] },
               "sections": [
                 {"id": "hero", "type": "hero", "title": "Main Headline", "subtitle": "Supporting text"},
                 {"id": "about", "type": "about", "title": "About Us", "content": "Company description"},
-                {"id": "services", "type": "services", "title": "Our Services"},
-                {"id": "gallery", "type": "gallery", "title": "Our Work", "images": [image paths]},
+                {"id": "offerings", "type": "offerings", "title": "Our Services/Products"},
+                {"id": "gallery", "type": "gallery", "title": "Gallery", "images": [image paths]},
+                {"id": "experience", "type": "experience", "title": "Customer Experience"},
                 {"id": "cta", "type": "cta", "title": "Call to Action"},
-                {"id": "testimonials", "type": "testimonials", "title": "What Clients Say"},
+                {"id": "testimonials", "type": "testimonials", "title": "Testimonials"},
                 {"id": "contact", "type": "contact", "title": "Contact Us"}
               ],
               "footer": { "columns": [{"title": "About", "links": ["Our Story", "Team"]}, {"title": "Contact", "contact_info": {}}] }
             },
-            "features": ["List of advanced features implemented"],
+            "industrySpecificFeatures": ["List of industry-specific features implemented"],
             "recommendation": "Recommendations for elevating the website even further"
           }`
         },
