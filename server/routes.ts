@@ -221,22 +221,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
         "Do you have any social media accounts to link on the website?"
       ];
       
-      // Count assistant messages to determine current question
-      const assistantMessages = allMessages.filter(m => m.role === "assistant");
+      // Get all message pairs to determine where we are in the conversation
+      const messagePairs = [];
       
-      // The next question index is equal to the number of assistant messages
-      // For first question (index 0), we have 0 assistant messages
-      // After first answer, we have 1 assistant message, so next question is index 1, etc.
-      const questionIndex = assistantMessages.length;
+      // Match each user message with its corresponding assistant reply
+      for (let i = 0; i < allMessages.length - 1; i++) {
+        if (allMessages[i].role === "user" && allMessages[i+1].role === "assistant") {
+          messagePairs.push({
+            user: allMessages[i],
+            assistant: allMessages[i+1]
+          });
+        }
+      }
+      
+      // The number of completed exchanges determines which question to ask next
+      const completedExchanges = messagePairs.length;
+      
+      // Next question index is simply the number of completed exchanges
+      const nextQuestionIndex = completedExchanges;
+      
+      // Print helpful debug information
+      console.log("All messages:", allMessages.map(m => ({ role: m.role, content: m.content.substring(0, 30) })));
+      console.log("Completed exchanges:", completedExchanges, "Next question index:", nextQuestionIndex);
       
       // Determine the AI response - ONLY use the exact questions, nothing else
       let aiResponse;
       
-      // Simple question-only approach - use the question index to get the next question
-      if (questionIndex >= 0 && questionIndex < BUSINESS_QUESTIONS.length) {
+      // Simple question-only approach
+      if (nextQuestionIndex >= 0 && nextQuestionIndex < BUSINESS_QUESTIONS.length) {
         // Get the next question directly from the array
-        aiResponse = BUSINESS_QUESTIONS[questionIndex];
-      } else if (questionIndex === BUSINESS_QUESTIONS.length) {
+        aiResponse = BUSINESS_QUESTIONS[nextQuestionIndex];
+      } else if (nextQuestionIndex === BUSINESS_QUESTIONS.length) {
         // After final question, prompt for image upload - simple prompt only
         aiResponse = "Please upload images for your website.";
       } else {
