@@ -578,7 +578,7 @@ export async function generateWebsiteContent(
     <div class="container">
       <div class="about-grid">
         <div class="about-img">
-          <img src="${aboutImage}" alt="About Eeezy Cleaning">
+          <img src="${aboutImage}" alt="About Eeezy Cleaning" onerror="this.src='https://images.unsplash.com/photo-1595814432025-409872c11f8e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
         </div>
         <div class="about-content">
           <h2>About Eeezy Cleaning</h2>
