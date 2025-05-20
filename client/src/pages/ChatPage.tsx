@@ -105,28 +105,41 @@ export default function ChatPage() {
                 key={index}
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div
-                  className={`rounded-lg p-3 max-w-[80%] ${
-                    msg.role === 'user'
-                      ? 'bg-blue-500 text-white rounded-br-none'
-                      : 'bg-white border border-gray-200 rounded-bl-none'
-                  }`}
-                >
-                  {msg.content}
+                <div className="flex flex-col items-start">
+                  <div
+                    className={`rounded-lg p-3 max-w-[80%] ${
+                      msg.role === 'user'
+                        ? 'bg-blue-500 text-white rounded-br-none'
+                        : 'bg-white border border-gray-200 rounded-bl-none'
+                    }`}
+                  >
+                    {msg.content}
+                    
+                    {/* Display uploaded images */}
+                    {msg.images && msg.images.length > 0 && (
+                      <div className="mt-2 space-y-2">
+                        {msg.images.map((img, imgIndex) => (
+                          <div key={imgIndex} className="rounded-md overflow-hidden border border-gray-200">
+                            <img 
+                              src={img.url} 
+                              alt={`Uploaded ${imgIndex + 1}`}
+                              className="max-w-full h-auto"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                   
-                  {/* Display uploaded images */}
-                  {msg.images && msg.images.length > 0 && (
-                    <div className="mt-2 space-y-2">
-                      {msg.images.map((img, imgIndex) => (
-                        <div key={imgIndex} className="rounded-md overflow-hidden border border-gray-200">
-                          <img 
-                            src={img.url} 
-                            alt={`Uploaded ${imgIndex + 1}`}
-                            className="max-w-full h-auto"
-                          />
-                        </div>
-                      ))}
-                    </div>
+                  {/* Skip button right under assistant message */}
+                  {msg.role === 'assistant' && index === messages.length - 1 && (
+                    <button 
+                      type="button"
+                      onClick={handleSkip}
+                      className="mt-2 ml-2 text-sm text-gray-500 hover:text-blue-500 bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors"
+                    >
+                      Skip this question →
+                    </button>
                   )}
                 </div>
               </div>
@@ -202,18 +215,7 @@ export default function ChatPage() {
         )}
       </div>
       
-      {/* Skip Question Button - always show it */}
-      {messages.length > 0 && messages[messages.length - 1].role === 'assistant' && (
-        <div className="flex justify-center mb-3 mt-1">
-          <button 
-            type="button"
-            onClick={handleSkip}
-            className="text-xs text-gray-500 hover:text-blue-500 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full transition-colors"
-          >
-            Skip this question
-          </button>
-        </div>
-      )}
+      {/* Skip button is now directly under each message */}
       
       {/* Generate Website Button - only show after images are uploaded */}
       {uploadedImages.length > 0 && (
