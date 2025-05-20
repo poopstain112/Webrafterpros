@@ -66,6 +66,10 @@ export default function ImageUpload({
       "image/*": [".png", ".jpg", ".jpeg", ".gif", ".webp"],
     },
     maxSize: 5 * 1024 * 1024, // 5MB
+    // Prevent camera capture to avoid black screen freezing on mobile
+    preventDropOnDocument: true,
+    useFsAccessApi: false,
+    multiple: true
   });
 
   return (
@@ -81,29 +85,56 @@ export default function ImageUpload({
           <ImageIcon className="h-5 w-5" />
         </Button>
       ) : (
-        <div
-          {...getRootProps()}
-          className={`border-2 border-dashed rounded-xl p-6 text-center transition cursor-pointer ${
-            isDragActive
-              ? "border-blue-500 bg-blue-50"
-              : "border-gray-200 hover:border-blue-400 hover:bg-blue-50/50"
-          }`}
-        >
-          <input {...getInputProps()} />
-          <div className="mb-3 mx-auto w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center">
-            <ImageIcon className="h-7 w-7 text-blue-500" />
+        <div className="space-y-4">
+          {/* Close button */}
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              onClick={onToggleVisible}
+              variant="ghost"
+              size="sm"
+              className="text-gray-500"
+            >
+              <X className="h-4 w-4 mr-1" />
+              Close
+            </Button>
           </div>
-          <p className="text-sm font-medium text-gray-700">
-            {isDragActive
-              ? "Drop images here"
-              : "Add photos to your website"}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            Drag and drop or click to browse
-          </p>
-          <p className="text-xs text-gray-400 mt-1">
-            Max 5MB per image • JPEG, PNG, GIF, WEBP
-          </p>
+          
+          {/* Upload button */}
+          <Button
+            type="button"
+            onClick={() => {
+              // Create a file input and trigger it instead of using react-dropzone
+              const input = document.createElement('input');
+              input.type = 'file';
+              input.multiple = true;
+              input.accept = 'image/jpeg,image/png,image/gif,image/webp';
+              input.onchange = (e) => {
+                const files = Array.from((e.target as HTMLInputElement).files || []);
+                const validFiles = files.filter(
+                  file => file.size <= 5 * 1024 * 1024
+                );
+                if (validFiles.length > 0) {
+                  onUpload(validFiles);
+                }
+              };
+              input.click();
+            }}
+            className="w-full py-6 h-auto flex flex-col items-center justify-center rounded-xl bg-blue-50 hover:bg-blue-100 border-2 border-blue-200 text-center"
+          >
+            <div className="mb-3 w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center">
+              <ImageIcon className="h-7 w-7 text-blue-500" />
+            </div>
+            <p className="text-sm font-medium text-blue-700">
+              Select photos from gallery
+            </p>
+            <p className="text-xs text-blue-500 mt-1">
+              Tap to browse your files
+            </p>
+            <p className="text-xs text-blue-400 mt-1">
+              Max 5MB per image • JPEG, PNG, GIF, WEBP
+            </p>
+          </Button>
         </div>
       )}
 
