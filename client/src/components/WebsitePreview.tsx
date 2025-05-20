@@ -216,6 +216,30 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
       ) : (
         <div className="flex-1 bg-gray-100 overflow-y-auto" style={{ position: 'relative' }}>
           <iframe 
+            ref={(iframe) => {
+              // Add listener to prevent navigation from opening in the same iframe
+              if (iframe) {
+                iframe.onload = () => {
+                  try {
+                    const iframeDocument = iframe.contentDocument || iframe.contentWindow?.document;
+                    if (iframeDocument) {
+                      const links = iframeDocument.getElementsByTagName('a');
+                      
+                      // Prevent default navigation and stop event propagation for all links
+                      for (let i = 0; i < links.length; i++) {
+                        links[i].addEventListener('click', (e) => {
+                          e.preventDefault();
+                          // Either prevent navigation entirely or handle it in a specific way
+                          console.log('Link clicked, navigation prevented');
+                        });
+                      }
+                    }
+                  } catch (e) {
+                    console.error('Error adding navigation handlers:', e);
+                  }
+                };
+              }
+            }}
             srcDoc={fullHtml}
             title="Website Preview"
             className="w-full h-full border-none"
