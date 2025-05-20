@@ -111,50 +111,98 @@ export function useChat(initialWebsiteId: number = 1) {
     [initialWebsiteId, uploadedImages, toast]
   );
 
-  // Handle image uploads
+  // Handle image uploads with better error handling
   const handleImageUpload = useCallback(
     async (files: File[]) => {
-      if (files.length === 0) return;
+      if (files.length === 0) return [];
 
+      // Validate file sizes before uploading to prevent server rejection
+      const maxFileSize = 10 * 1024 * 1024; // 10MB (less than server's 15MB limit)
+      const oversizedFiles = files.filter(file => file.size > maxFileSize);
+      
+      if (oversizedFiles.length > 0) {
+        const errorMsg = `${oversizedFiles.length} file(s) exceed the 10MB size limit`;
+        console.error(errorMsg, oversizedFiles.map(f => `${f.name}: ${(f.size / (1024 * 1024)).toFixed(1)}MB`));
+        
+        toast({
+          title: 'Files too large',
+          description: `${errorMsg}. Please resize your images before uploading.`,
+          variant: 'destructive',
+        });
+        
+        // Return early if any files are too large
+        if (oversizedFiles.length === files.length) {
+          throw new Error("All files exceed size limit");
+        }
+        
+        // Continue with only valid files
+        const validFiles = files.filter(file => file.size <= maxFileSize);
+        console.log(`Proceeding with ${validFiles.length} valid files out of ${files.length} total`);
+        return handleImageUpload(validFiles);
+      }
+      
       try {
         // Display loading toast
         toast({
           title: 'Uploading images',
-          description: 'Please wait while your images are being uploaded...',
+          description: `Uploading ${files.length} image${files.length > 1 ? 's' : ''}...`,
         });
         
         // Upload images to server
         const imageList = await uploadImages(initialWebsiteId, files);
         console.log('Server returned images:', imageList);
         
-        // Add a timestamp to ensure images load properly
+        if (!imageList || imageList.length === 0) {
+          throw new Error("Server returned empty image list");
+        }
+        
+        // Process images with proper timestamps and URLs
         const processedImages = imageList.map(img => ({
           ...img,
           url: `${img.url}?t=${Date.now()}`
         }));
         
         // Update state with new images
-        setUploadedImages(prev => [...prev, ...processedImages]);
+        setUploadedImages(prev => {
+          // Create a map of existing image IDs to prevent duplicates
+          const existingIds = new Set(prev.map(img => img.id));
+          
+          // Filter out any duplicates from the new images
+          const uniqueNewImages = processedImages.filter(img => !existingIds.has(img.id));
+          
+          return [...prev, ...uniqueNewImages];
+        });
         
         // Show success message
         toast({
-          title: 'Success',
-          description: `Uploaded ${files.length} image${files.length > 1 ? 's' : ''}`,
+          title: 'Upload Complete',
+          description: `Successfully uploaded ${imageList.length} image${imageList.length > 1 ? 's' : ''}`,
         });
         
         // Return the processed images for any additional handling
         return processedImages;
       } catch (error) {
         console.error('Error uploading images:', error);
+        
+        // More specific error message based on the error
+        let errorMessage = 'Failed to upload images. Please try again.';
+        
+        if (error.response && error.response.status === 413) {
+          errorMessage = 'Images are too large. Please resize them before uploading.';
+        } else if (error.response && error.response.status === 500) {
+          errorMessage = 'Server error during upload. Please try smaller or fewer images.';
+        }
+        
         toast({
-          title: 'Error',
-          description: 'Failed to upload images',
+          title: 'Upload Error',
+          description: errorMessage,
           variant: 'destructive',
         });
+        
         throw error;
       }
     },
-    [initialWebsiteId, toast]
+    [initialWebsiteId, toast, setUploadedImages]
   );
 
   // Edit the generated website based on user instructions

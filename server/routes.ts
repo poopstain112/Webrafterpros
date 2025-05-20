@@ -26,7 +26,10 @@ const storage2 = multer.diskStorage({
 
 const upload = multer({
   storage: storage2,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  limits: { 
+    fileSize: 15 * 1024 * 1024, // 15MB limit - increased from 5MB
+    files: 20 // Allow up to 20 files per upload
+  },
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|gif|webp/;
     const mimetype = filetypes.test(file.mimetype);
@@ -105,7 +108,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // API endpoint to upload images - completely simplified version
-  app.post("/api/upload", upload.array("images", 10), async (req: Request, res: Response) => {
+  app.post("/api/upload", upload.array("images", 20), async (req: Request, res: Response) => {
     try {
       console.log("Upload request received");
       
