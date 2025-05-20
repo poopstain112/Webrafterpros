@@ -255,15 +255,22 @@ export default function SimplifiedHome() {
   // Handle website generation
   const handleGenerateWebsite = async () => {
     try {
-      // Show the dedicated loading screen first
+      console.log("Generate Website clicked - showing loading screen");
+      
+      // First set state to show loading screen
       setShowLoadingScreen(true);
       setIsGeneratingWebsite(true);
+      
+      // Force a state update before continuing
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       const businessInfo = extractBusinessInfo(messages);
       const description = createDetailedDescription(messages, businessInfo);
       
+      console.log("Starting website generation API call");
       await generateWebsiteFromChat(description, businessType);
     } catch (error) {
+      console.error("Website generation failed:", error);
       setShowLoadingScreen(false);
       setIsGeneratingWebsite(false);
       toast({
@@ -481,7 +488,12 @@ export default function SimplifiedHome() {
                   <Button 
                     size="sm" 
                     className="bg-blue-500 hover:bg-blue-600 text-xs"
-                    onClick={handleGenerateWebsite}
+                    onClick={() => {
+                      // Show loading screen immediately
+                      setShowLoadingScreen(true);
+                      // Then start the generation process
+                      setTimeout(handleGenerateWebsite, 100);
+                    }}
                   >
                     View All & Create Website
                   </Button>
