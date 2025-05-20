@@ -356,16 +356,20 @@ export default function ChatInterface({
           
           {/* Separate website generation button that's always visible when images are uploaded */}
           {uploadedImages.length > 0 && (
-            <div className="fixed bottom-20 left-0 right-0 mx-4 z-50 bg-green-50 p-4 rounded-xl border-4 border-green-400 shadow-lg">
-              <h2 className="text-center text-xl font-bold text-green-700 mb-3">Create Your Website Now!</h2>
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-5/6 bg-green-100 p-5 rounded-xl border-4 border-green-500 shadow-2xl animate-pulse">
+              <div className="bg-white rounded-lg p-3 mb-3">
+                <h2 className="text-center text-2xl font-bold text-green-700 mb-2">Generate Website</h2>
+                <p className="text-center font-medium text-gray-700">Your images are ready!</p>
+              </div>
               <button
                 type="button"
-                className="w-full py-5 px-4 bg-green-500 hover:bg-green-600 text-white text-2xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
-                disabled={isLoading || message.trim() === ''}
+                className="w-full py-6 px-4 bg-green-500 hover:bg-green-600 text-white text-2xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+                disabled={false}
                 onClick={() => {
-                  if (onGenerateWebsite && message.trim()) {
-                    // Call the generate website function directly
-                    onGenerateWebsite(message);
+                  // Call the generate website function with a default message if empty
+                  const websiteDescription = message.trim() || "Create a website using these uploaded images. Include all necessary sections like home, about, services, gallery and contact.";
+                  if (onGenerateWebsite) {
+                    onGenerateWebsite(websiteDescription);
                     // Reset UI state
                     setMessage("");
                     setIsUploadVisible(false);
@@ -373,7 +377,7 @@ export default function ChatInterface({
                 }}
               >
                 <Sparkles className="h-8 w-8 mr-2" />
-                GENERATE MY WEBSITE
+                CLICK HERE TO GENERATE
               </button>
             </div>
           )}
