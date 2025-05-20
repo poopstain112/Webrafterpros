@@ -8,6 +8,7 @@ import WebsitePreview from "@/components/WebsitePreview";
 export default function SimpleChat() {
   const [inputMessage, setInputMessage] = useState("");
   const [showWebsitePreview, setShowWebsitePreview] = useState(false);
+  const [showImagesReview, setShowImagesReview] = useState(false);
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
@@ -129,40 +130,89 @@ export default function SimpleChat() {
         </div>
       </div>
       
-      {/* Uploaded images - fixed above input */}
+      {/* Images Review Screen - appears after uploading images */}
+      {uploadedImages.length > 0 && messages.length > 5 && !websiteStructure && showImagesReview && (
+        <div className="fixed inset-0 bg-white z-30 flex flex-col">
+          <div className="bg-blue-500 text-white py-4 px-4 flex items-center">
+            <button 
+              onClick={() => setShowImagesReview(false)} 
+              className="mr-2 rounded-full w-8 h-8 flex items-center justify-center bg-blue-600"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <h1 className="text-xl font-bold">Your Uploaded Images</h1>
+          </div>
+          
+          <div className="flex-1 p-4 overflow-y-auto">
+            <p className="text-gray-600 mb-4">
+              Review your images below. When you're ready, click "Create Website" to generate your website.
+            </p>
+            
+            <div className="grid grid-cols-2 gap-3">
+              {uploadedImages.map((image, index) => (
+                <div key={index} className="aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+                  <img 
+                    src={image.url} 
+                    alt={`Uploaded ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = `${image.url}?t=${Date.now()}`;
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="p-4 border-t">
+            <Button
+              onClick={() => generateWebsiteContent("Generate a website based on our conversation")}
+              disabled={isGenerating}
+              className="w-full bg-blue-500 hover:bg-blue-600 py-3 text-lg"
+            >
+              {isGenerating ? "Creating Website..." : "Create Website"}
+            </Button>
+          </div>
+        </div>
+      )}
+      
+      {/* Small thumbnail indicator of uploaded images at the bottom of chat */}
       {uploadedImages.length > 0 && (
         <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-10">
-          <div className="text-xs text-gray-500 mb-1">{uploadedImages.length} image(s) uploaded</div>
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-xs text-gray-500">{uploadedImages.length} image(s) uploaded</span>
+            
+            {/* View Images Button */}
+            {messages.length > 5 && !websiteStructure && (
+              <button 
+                className="text-xs text-blue-500 font-medium" 
+                onClick={() => setShowImagesReview(true)}
+              >
+                View All & Create Website
+              </button>
+            )}
+          </div>
           <div className="flex overflow-x-auto space-x-2 pb-1">
-            {uploadedImages.map((image, index) => (
+            {uploadedImages.slice(0, 5).map((image, index) => (
               <div key={index} className="w-12 h-12 flex-shrink-0 rounded overflow-hidden border border-gray-200">
                 <img 
                   src={image.url} 
                   alt={`Uploaded ${index + 1}`}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    // Retry with timestamp
                     e.currentTarget.src = `${image.url}?t=${Date.now()}`;
                   }}
                 />
               </div>
             ))}
+            {uploadedImages.length > 5 && (
+              <div className="w-12 h-12 flex-shrink-0 rounded overflow-hidden border border-gray-200 bg-gray-100 flex items-center justify-center text-xs text-gray-500">
+                +{uploadedImages.length - 5}
+              </div>
+            )}
           </div>
-        </div>
-      )}
-      
-      {/* Removed the floating Create Website button */}
-      
-      {/* When images are uploaded, show the website button with images */}
-      {messages.length > 5 && !websiteStructure && uploadedImages.length > 0 && (
-        <div className="fixed bottom-24 left-0 right-0 bg-white border-t border-gray-200 p-2 z-10">
-          <Button
-            onClick={() => generateWebsiteContent("Generate a website based on our conversation")}
-            disabled={isGenerating}
-            className="w-full bg-blue-500 hover:bg-blue-600"
-          >
-            {isGenerating ? "Creating Website..." : "Create Website"}
-          </Button>
         </div>
       )}
       
