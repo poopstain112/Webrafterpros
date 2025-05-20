@@ -197,20 +197,57 @@ ${websiteHtml}
               </p>
               
               <button
-                onClick={() => {
-                  const description = "Create a beautiful website using the uploaded images. Include home, about, services, gallery, and contact sections.";
-                  // Show a toast notification since we're bypassing the normal flow
-                  toast({
-                    title: "Generating your website!",
-                    description: "We're creating your website based on the uploaded images. This may take a moment...",
-                  });
-                  
-                  setTimeout(() => {
-                    window.scrollTo({
-                      top: 0,
-                      behavior: 'smooth'
+                onClick={async () => {
+                  try {
+                    const description = "Create a beautiful website using the uploaded images. Include home, about, services, gallery, and contact sections.";
+                    
+                    // Show a toast notification
+                    toast({
+                      title: "Generating your website!",
+                      description: "We're creating your website based on the uploaded images. This may take a moment...",
                     });
-                  }, 500);
+                    
+                    // Set loading state
+                    setIsGenerating(true);
+                    
+                    // Make direct API call
+                    const response = await fetch('/api/generate-website', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({ 
+                        description, 
+                        imageUrls: [] // Server will use the uploaded images
+                      })
+                    });
+                    
+                    if (!response.ok) {
+                      throw new Error('Failed to generate website');
+                    }
+                    
+                    // Get the response data
+                    const websiteData = await response.json();
+                    
+                    // Update state with new website data
+                    setWebsiteHtml(websiteData.html);
+                    setWebsiteCss(websiteData.css);
+                    
+                    // Success notification
+                    toast({
+                      title: "Website generated!",
+                      description: "Your website has been created successfully.",
+                    });
+                  } catch (error) {
+                    console.error('Error generating website:', error);
+                    toast({
+                      title: "Error",
+                      description: "There was a problem generating your website. Please try again.",
+                      variant: "destructive"
+                    });
+                  } finally {
+                    setIsGenerating(false);
+                  }
                 }}
                 className="w-full py-4 px-4 bg-green-500 hover:bg-green-600 text-white text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
               >
