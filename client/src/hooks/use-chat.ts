@@ -127,10 +127,10 @@ export function useChat(initialWebsiteId: number = 1) {
         const imageList = await uploadImages(initialWebsiteId, files);
         console.log('Server returned images:', imageList);
         
-        // Add timestamp to image URLs to prevent caching issues
+        // Use the display URL if it exists, otherwise add a timestamp
         const processedImages = imageList.map(img => ({
           ...img,
-          url: `${img.url}?t=${Date.now()}`
+          url: img.displayUrl || `${img.url}?t=${Date.now()}`
         }));
         
         // Update state with new images

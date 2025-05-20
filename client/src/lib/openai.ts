@@ -99,29 +99,45 @@ export async function uploadImages(
     const formData = new FormData();
     formData.append('websiteId', websiteId.toString());
     
-    // Use the same field name as specified in the multer setup on the server
+    // Add each file to the form data
     files.forEach(file => {
       formData.append('images', file);
     });
     
-    // Log the files being uploaded in a more stable way
+    // Log what we're uploading
     console.log('Uploading images with formData:', {
       websiteId,
       fileCount: files.length,
       fileNames: files.map(f => f.name)
     });
 
+    // Send the POST request to upload images
     const response = await fetch('/api/upload', {
       method: 'POST',
       body: formData,
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Failed to upload images');
+      console.error('Upload failed with status:', response.status);
+      throw new Error('Failed to upload images');
     }
 
-    return await response.json();
+    // Get the response data
+    const data = await response.json();
+    
+    // Process the response data - add displayUrl property with timestamp
+    const timestamp = Date.now();
+    const processedImages = data.map((img: any) => ({
+      ...img,
+      // Add a display URL with timestamp to prevent browser caching
+      displayUrl: `${img.url}?t=${timestamp}`,
+      // Make sure we have a valid URL
+      url: img.url || `/uploads/${img.filename}`
+    }));
+    
+    console.log('Processed uploaded images:', processedImages);
+    
+    return processedImages;
   } catch (error) {
     console.error('Error uploading images:', error);
     throw error;
