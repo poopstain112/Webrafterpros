@@ -5,7 +5,7 @@ import { useChat } from "@/hooks/use-chat";
 import { useToast } from "@/hooks/use-toast";
 import { Message, UploadedImage } from "@/types";
 import { resetChat, uploadImages, generateWebsite } from "@/lib/openai";
-import EnhancedLoadingIndicator from "@/components/EnhancedLoadingIndicator";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 // Helper function to extract business info from messages
 function extractBusinessInfo(messages: Message[]) {
