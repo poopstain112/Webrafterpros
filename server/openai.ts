@@ -21,17 +21,26 @@ export async function generateWebsiteContent(
   // This ensures we have a properly formatted website when testing
   if (description.toLowerCase().includes("cleaning") || description.toLowerCase().includes("power") || description.toLowerCase().includes("wash")) {
     // Map image URLs for use in the template, ensuring they have proper absolute paths
+    console.log("Original image URLs:", imageUrls);
+    
     const mappedImages = imageUrls.map(url => {
-      // Make sure the URL has the proper format
+      // Handle different URL formats and ensure they start with /uploads/
       if (url.startsWith('/uploads/')) {
         return url;
       } else if (url.includes('/uploads/')) {
         // Extract the path after /uploads/
         const parts = url.split('/uploads/');
         return `/uploads/${parts[1]}`;
+      } else if (url.includes('://')) {
+        // For full URLs, keep as is (like unsplash images)
+        return url;
+      } else {
+        // If it's just a filename, assume it's in uploads folder
+        return `/uploads/${url.split('/').pop()}`;
       }
-      return url;
     });
+    
+    console.log("Mapped image URLs:", mappedImages);
     
     // Determine image sources to use in the website
     const heroImage = mappedImages[0] || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
@@ -537,7 +546,7 @@ export async function generateWebsiteContent(
       </div>
       <div class="services-grid">
         <div class="service-card">
-          <img src="${serviceImage1}" alt="Residential Cleaning">
+          <img src="${serviceImage1}" alt="Residential Cleaning" onerror="this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
             <h3>Residential Cleaning</h3>
             <p>Comprehensive house cleaning services tailored to your home's needs. We handle everything from basic cleaning to deep cleaning.</p>
@@ -545,7 +554,7 @@ export async function generateWebsiteContent(
           </div>
         </div>
         <div class="service-card">
-          <img src="${serviceImage2}" alt="Commercial Cleaning">
+          <img src="${serviceImage2}" alt="Commercial Cleaning" onerror="this.src='https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
             <h3>Commercial Cleaning</h3>
             <p>Professional cleaning services for offices, retail spaces, and other commercial properties. Maintain a clean and healthy work environment.</p>
@@ -553,7 +562,7 @@ export async function generateWebsiteContent(
           </div>
         </div>
         <div class="service-card">
-          <img src="${serviceImage3}" alt="Deep Cleaning">
+          <img src="${serviceImage3}" alt="Deep Cleaning" onerror="this.src='https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
             <h3>Deep Cleaning</h3>
             <p>Thorough cleaning for those special occasions or when your space needs extra attention. We'll reach every corner and crevice.</p>
