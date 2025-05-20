@@ -281,14 +281,8 @@ export function useChat(initialWebsiteId: number = 1) {
       setIsGeneratingWebsite(true);
 
       try {
-        // Add a message indicating website generation
-        setMessages(prev => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: 'Generating your professional website based on your description. This may take a moment...',
-          },
-        ]);
+        // Don't add any messages about website generation - we're going to navigate away
+        // This prevents the chatbot from getting into a response loop
 
         // Include business type for better website generation
         const websiteData = await generateWebsite(description, uploadedImages, businessType);
