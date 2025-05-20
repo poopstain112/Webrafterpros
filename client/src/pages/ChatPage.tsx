@@ -137,23 +137,7 @@ export default function ChatPage() {
           )}
           <div ref={messagesEndRef} />
           
-          {/* Fixed Skip Button */}
-          {messages.length > 0 && 
-           messages[messages.length - 1].role === 'assistant' && 
-           !messages[messages.length - 1].content.includes("upload images") && (
-            <div className="fixed bottom-20 left-0 right-0 flex justify-center z-10">
-              <button 
-                type="button"
-                onClick={handleSkip}
-                className="bg-white shadow-lg border border-gray-200 text-gray-700 font-medium px-4 py-2 rounded-full hover:bg-gray-100 transition-colors flex items-center gap-1"
-              >
-                Skip this question
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </button>
-            </div>
-          )}
+          {/* Remove the fixed skip button since we'll put it by the send button */}
         </div>
       </div>
 
@@ -190,6 +174,21 @@ export default function ChatPage() {
             placeholder="Describe your business website..."
             className="flex-grow bg-gray-100 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"
           />
+          
+          {/* Skip button like "Have feedback?" style */}
+          {messages.length > 0 && 
+           messages[messages.length - 1].role === 'assistant' && 
+           !messages[messages.length - 1].content.includes("upload images") && (
+            <div className="flex items-center text-xs text-gray-500 mx-1">
+              <button
+                type="button" 
+                onClick={handleSkip} 
+                className="text-gray-500 hover:text-blue-500 transition-colors"
+              >
+                Skip?
+              </button>
+            </div>
+          )}
           
           <Button
             type="submit"
