@@ -252,8 +252,8 @@ export default function ChatInterface({
                             {msg.images.map((img, imgIndex) => (
                                 <div
                                   key={imgIndex}
-                                  className="relative flex-shrink-0 w-full h-40 snap-center"
-                                  style={{ minWidth: "240px" }}
+                                  className="relative flex-shrink-0 w-full h-64 snap-center"
+                                  style={{ minWidth: "280px" }}
                                 >
                                   <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg overflow-hidden">
                                     <img
