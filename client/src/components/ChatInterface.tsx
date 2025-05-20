@@ -356,11 +356,11 @@ export default function ChatInterface({
           
           {/* Separate website generation button that's always visible when images are uploaded */}
           {uploadedImages.length > 0 && (
-            <div className="bg-green-50 mt-3 mb-3 p-4 rounded-xl border-2 border-green-200 shadow-md">
-              <h2 className="text-center text-xl font-bold text-green-700 mb-2">Ready to create your website?</h2>
+            <div className="fixed bottom-20 left-0 right-0 mx-4 z-50 bg-green-50 p-4 rounded-xl border-4 border-green-400 shadow-lg">
+              <h2 className="text-center text-xl font-bold text-green-700 mb-3">Create Your Website Now!</h2>
               <button
                 type="button"
-                className="w-full py-4 px-4 bg-green-500 hover:bg-green-600 text-white text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+                className="w-full py-5 px-4 bg-green-500 hover:bg-green-600 text-white text-2xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
                 disabled={isLoading || message.trim() === ''}
                 onClick={() => {
                   if (onGenerateWebsite && message.trim()) {
@@ -372,12 +372,9 @@ export default function ChatInterface({
                   }
                 }}
               >
-                <Sparkles className="h-7 w-7 mr-2" />
+                <Sparkles className="h-8 w-8 mr-2" />
                 GENERATE MY WEBSITE
               </button>
-              <p className="text-center text-sm text-green-700 font-medium mt-2">
-                Click to create your website based on your images and description
-              </p>
             </div>
           )}
           
