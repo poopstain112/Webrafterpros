@@ -3,9 +3,11 @@ import { Send, Image as ImageIcon } from "lucide-react";
 import { useChat } from "@/hooks/use-chat";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import WebsitePreview from "@/components/WebsitePreview";
 
 export default function SimpleChat() {
   const [inputMessage, setInputMessage] = useState("");
+  const [showWebsitePreview, setShowWebsitePreview] = useState(false);
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
