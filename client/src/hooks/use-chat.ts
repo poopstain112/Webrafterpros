@@ -61,7 +61,7 @@ export function useChat(initialWebsiteId: number = 1) {
   // Handle sending a new message
   const sendMessage = useCallback(
     async (content: string) => {
-      if (!content.trim()) return;
+      if (!content || (typeof content === 'string' && !content.trim())) return;
 
       // Optimistically add user message to UI
       const userMessage: Message = {
