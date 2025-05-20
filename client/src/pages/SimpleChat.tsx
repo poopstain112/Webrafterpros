@@ -204,14 +204,14 @@ export default function SimpleChat() {
               }}
             />
             
-            {inputMessage.trim() && (
-              <button
-                onClick={handleSendMessage}
-                className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white"
-              >
-                <Send className="h-4 w-4" />
-              </button>
-            )}
+            <button
+              onClick={handleSendMessage}
+              disabled={!inputMessage.trim()}
+              className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-white"
+              style={{ backgroundColor: inputMessage.trim() ? '#3b82f6' : '#d1d5db' }}
+            >
+              <Send className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </div>
