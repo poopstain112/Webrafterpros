@@ -94,19 +94,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const websiteId = 1; // Default website ID
       const websiteImages = await storage.getImagesByWebsiteId(websiteId);
       
-      // Combine provided image URLs with any stored images
-      let allImageUrls = imageUrls || [];
+      console.log("Retrieved website images from storage:", websiteImages);
       
-      // If we don't have any image URLs passed in, use all stored images
-      if (allImageUrls.length === 0 && websiteImages.length > 0) {
-        allImageUrls = websiteImages.map(img => img.url);
-        console.log("Using stored images instead:", allImageUrls);
-      }
+      // Use the most recent uploaded images for the website
+      // Sort images by ID to get the most recent ones
+      websiteImages.sort((a, b) => b.id - a.id);
+      
+      // Take the 5 most recent images
+      const recentImages = websiteImages.slice(0, 5);
+      console.log("Using these recent images:", recentImages);
+      
+      // Generate full URLs with host
+      const fullImageUrls = recentImages.map(img => {
+        // Extract just the filename from the URL path
+        const filename = img.url.split('/').pop();
+        // Construct absolute URL
+        return `/uploads/${filename}`;
+      });
+      
+      console.log("Full image URLs for website:", fullImageUrls);
       
       // Generate the website content with enhanced parameters
       const websiteContent = await generateWebsiteContent(
         description, 
-        allImageUrls,
+        fullImageUrls,
         businessType
       );
       

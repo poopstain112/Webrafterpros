@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { X, ArrowLeft } from 'lucide-react';
+import { X, ArrowLeft, RefreshCw } from 'lucide-react';
 import { useLocation } from 'wouter';
 
 interface WebsitePreviewProps {
@@ -22,7 +22,9 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
   const [htmlContent, setHtmlContent] = useState('');
   const [cssContent, setCssContent] = useState('');
   const [recommendationText, setRecommendationText] = useState('');
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [, setLocation] = useLocation();
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   
   // Load website content from props or localStorage
   useEffect(() => {
@@ -45,6 +47,22 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
     }
   }, [websiteStructure, html]);
 
+  // Function to handle refresh
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    
+    // Re-fetch content from localStorage
+    const storedHtml = localStorage.getItem('generatedWebsiteHTML');
+    if (storedHtml) {
+      setHtmlContent(storedHtml);
+    }
+    
+    // Simulate loading time
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 1000);
+  };
+  
   // Process HTML content - if it's already a full HTML document, use it as is
   const processHtmlContent = () => {
     // If the content already has DOCTYPE or <html> tag, it's likely a complete document
@@ -167,9 +185,18 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
         </div>
       )}
       
-      {/* Show Edit button in standalone mode (when on the dedicated preview page) */}
+      {/* Show Refresh and Edit buttons in standalone mode (when on the dedicated preview page) */}
       {isStandalone && !isEditMode && (
-        <div className="absolute top-3 right-3 z-10">
+        <div className="absolute top-3 right-3 z-10 flex gap-2">
+          <Button 
+            onClick={handleRefresh} 
+            variant="outline"
+            className="bg-white hover:bg-gray-100 text-blue-600 font-medium shadow-md flex items-center gap-1"
+            disabled={isRefreshing}
+          >
+            <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            {isRefreshing ? 'Refreshing...' : 'Refresh'}
+          </Button>
           <Button 
             onClick={() => setIsEditMode(true)} 
             variant="default"

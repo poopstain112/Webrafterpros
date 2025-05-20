@@ -42,12 +42,24 @@ export async function generateWebsiteContent(
     
     console.log("Mapped image URLs:", mappedImages);
     
-    // Determine image sources to use in the website
-    const heroImage = mappedImages[0] || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
-    const serviceImage1 = mappedImages[1] || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
-    const serviceImage2 = mappedImages[2] || 'https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
-    const serviceImage3 = mappedImages[3] || 'https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
-    const aboutImage = mappedImages[4] || 'https://images.unsplash.com/photo-1595814432025-409872c11f8e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
+    // Use backup images from Unsplash in case the uploaded images aren't available
+    const defaultImages = [
+      'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      'https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      'https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      'https://images.unsplash.com/photo-1595814432025-409872c11f8e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+    ];
+    
+    // Log image details for debugging
+    console.log("Number of mapped images:", mappedImages.length);
+    
+    // Ensure all image paths are absolute from the domain root
+    const heroImage = mappedImages[0] || defaultImages[0];
+    const serviceImage1 = mappedImages[1] || defaultImages[1];
+    const serviceImage2 = mappedImages[2] || defaultImages[2];
+    const serviceImage3 = mappedImages[3] || defaultImages[3];
+    const aboutImage = mappedImages[4] || defaultImages[4];
     const ctaImage = mappedImages[5] || 'https://images.unsplash.com/photo-1563453392212-326f5e854473?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
     return {
       html: `<!DOCTYPE html>
