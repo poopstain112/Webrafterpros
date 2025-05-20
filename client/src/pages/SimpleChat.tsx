@@ -23,10 +23,29 @@ export default function SimpleChat() {
     editWebsiteContent
   } = useChat();
   
-  // Scroll to bottom of messages whenever messages change
+  // Improved scroll handling for a smoother experience
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Use a slight delay to ensure DOM is updated before scrolling
+    const timer = setTimeout(() => {
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'end'
+        });
+      }
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, [messages]);
+  
+  // Add event listener for manual scrolling
+  useEffect(() => {
+    const messageContainer = document.querySelector('.message-container') as HTMLElement;
+    if (messageContainer) {
+      // Enable momentum scrolling on iOS
+      messageContainer.style.WebkitOverflowScrolling = 'touch';
+    }
+  }, []);
   
   // Show website preview when website is generated
   useEffect(() => {
@@ -80,7 +99,7 @@ export default function SimpleChat() {
       </div>
       
       {/* Messages area - with padding to account for fixed header and input */}
-      <div className="flex-1 bg-gray-50 overflow-y-auto pt-16 pb-20">
+      <div className="flex-1 bg-gray-50 overflow-y-auto pt-16 pb-20 overscroll-contain -webkit-overflow-scrolling-touch message-container">
         <div className="space-y-4 p-4">
           {messages.map((message, index) => (
             <div key={index} className={`flex ${message.role === 'assistant' ? 'justify-start' : 'justify-end'}`}>
