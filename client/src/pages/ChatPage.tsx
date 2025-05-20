@@ -189,9 +189,9 @@ export default function ChatPage() {
         </form>
         
         {uploadedImages.length > 0 && (
-          <div className="flex mt-2 overflow-x-auto custom-scrollbar py-1">
+          <div className="flex flex-wrap mt-2 gap-2 max-h-24 overflow-y-auto custom-scrollbar py-1 px-1">
             {uploadedImages.map((image, index) => (
-              <div key={index} className="relative flex-shrink-0 mr-2">
+              <div key={index} className="relative flex-shrink-0">
                 <img
                   src={image.url}
                   alt={`Uploaded ${index + 1}`}
