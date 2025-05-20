@@ -175,20 +175,14 @@ export default function ChatPage() {
             className="flex-grow bg-gray-100 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"
           />
           
-          {/* Skip button like "Have feedback?" style */}
-          {messages.length > 0 && 
-           messages[messages.length - 1].role === 'assistant' && 
-           !messages[messages.length - 1].content.includes("upload images") && (
-            <div className="flex items-center text-xs text-gray-500 mx-1">
-              <button
-                type="button" 
-                onClick={handleSkip} 
-                className="text-gray-500 hover:text-blue-500 transition-colors"
-              >
-                Skip?
-              </button>
-            </div>
-          )}
+          {/* Make the Skip button much more visible as a button */}
+          <button
+            type="button" 
+            onClick={handleSkip} 
+            className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors flex-shrink-0"
+          >
+            Skip
+          </button>
           
           <Button
             type="submit"
