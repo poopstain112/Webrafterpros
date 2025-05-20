@@ -189,23 +189,25 @@ export default function ChatPage() {
         </form>
         
         {uploadedImages.length > 0 && (
-          <div className="flex flex-wrap mt-2 gap-2 max-h-24 overflow-y-auto custom-scrollbar py-1 px-1">
-            {uploadedImages.map((image, index) => (
-              <div key={index} className="relative flex-shrink-0">
-                <img
-                  src={image.url}
-                  alt={`Uploaded ${index + 1}`}
-                  className="h-12 w-12 object-cover rounded"
-                />
-                <button
-                  onClick={() => handleRemoveImage(index)}
-                  className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs"
-                  aria-label="Remove image"
-                >
-                  &times;
-                </button>
-              </div>
-            ))}
+          <div className="mt-2 py-1 px-1 w-full overflow-hidden">
+            <div className="flex overflow-x-auto pb-2 no-scrollbar" style={{ WebkitOverflowScrolling: 'touch' }}>
+              {uploadedImages.map((image, index) => (
+                <div key={index} className="relative flex-shrink-0 mr-2">
+                  <img
+                    src={image.url}
+                    alt={`Uploaded ${index + 1}`}
+                    className="h-12 w-12 object-cover rounded"
+                  />
+                  <button
+                    onClick={() => handleRemoveImage(index)}
+                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs"
+                    aria-label="Remove image"
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
