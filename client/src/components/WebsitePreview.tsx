@@ -119,13 +119,14 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
 
   return (
     <div className={`${isStandalone ? '' : 'fixed inset-0 bg-black/50 z-50'} flex flex-col h-full`}>
-      <div className="bg-blue-600 text-white p-3 shadow-md flex items-center justify-between">
-        <div className="flex items-center">
-          <h2 className="text-lg font-semibold">Website Preview</h2>
-        </div>
-        <div className="flex space-x-2">
-          {!isEditMode ? (
-            <>
+      {/* Only show header in popup mode, not in the dedicated preview screen */}
+      {!isStandalone && (
+        <div className="bg-blue-600 text-white p-3 shadow-md flex items-center justify-between">
+          <div className="flex items-center">
+            <h2 className="text-lg font-semibold">Website Preview</h2>
+          </div>
+          <div className="flex space-x-2">
+            {!isEditMode ? (
               <Button 
                 onClick={() => setIsEditMode(true)} 
                 variant="outline"
@@ -133,17 +134,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
               >
                 Edit Website
               </Button>
-              {!isStandalone && (
-                <Button 
-                  onClick={handleClose}
-                  className="bg-white text-blue-600 hover:bg-blue-50"
-                >
-                  Close
-                </Button>
-              )}
-            </>
-          ) : (
-            <>
+            ) : (
               <Button 
                 onClick={() => setIsEditMode(false)} 
                 variant="outline"
@@ -151,18 +142,29 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
               >
                 Cancel
               </Button>
-              {!isStandalone && (
-                <Button 
-                  onClick={handleClose}
-                  className="bg-white text-blue-600 hover:bg-blue-50"
-                >
-                  Close
-                </Button>
-              )}
-            </>
-          )}
+            )}
+            <Button 
+              onClick={handleClose}
+              className="bg-white text-blue-600 hover:bg-blue-50"
+            >
+              Close
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
+      
+      {/* Show Edit button in standalone mode (when on the dedicated preview page) */}
+      {isStandalone && !isEditMode && (
+        <div className="absolute top-3 right-3 z-10">
+          <Button 
+            onClick={() => setIsEditMode(true)} 
+            variant="default"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-md"
+          >
+            Edit Website
+          </Button>
+        </div>
+      )}
       
       {isEditMode ? (
         <div className="flex-1 flex flex-col bg-gray-100 p-4">

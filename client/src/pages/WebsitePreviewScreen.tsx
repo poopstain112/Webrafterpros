@@ -52,7 +52,7 @@ const WebsitePreviewScreen = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      {/* Header */}
+      {/* Header - Streamlined */}
       <div className="flex items-center justify-between bg-blue-600 text-white p-3 shadow-md">
         <div className="flex items-center">
           <Button 
@@ -63,20 +63,18 @@ const WebsitePreviewScreen = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-lg font-medium">Website Preview</h1>
+          <h1 className="text-xl font-semibold">Website Preview</h1>
         </div>
         
-        <div className="flex space-x-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={handleBackToChat}
-            className="text-white border-white hover:bg-blue-700"
-          >
-            <Home className="h-4 w-4 mr-1" />
-            Return to Chat
-          </Button>
-        </div>
+        <Button 
+          variant="outline" 
+          size="sm"
+          onClick={handleBackToChat}
+          className="text-white border-white hover:bg-blue-700"
+        >
+          <Home className="h-4 w-4 mr-1" />
+          Back to Chat
+        </Button>
       </div>
       
       {/* Website Preview - fixed height container resolves flickering */}
