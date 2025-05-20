@@ -252,8 +252,8 @@ export default function ChatInterface({
                             {msg.images.map((img, imgIndex) => (
                                 <div
                                   key={imgIndex}
-                                  className="relative flex-shrink-0 w-full h-64 snap-center"
-                                  style={{ minWidth: "280px" }}
+                                  className="relative flex-shrink-0 w-full h-80 snap-center"
+                                  style={{ minWidth: "300px" }}
                                 >
                                   <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg overflow-hidden">
                                     <img
@@ -349,29 +349,30 @@ export default function ChatInterface({
                     className="w-full rounded-lg border border-gray-200 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     rows={3}
                   />
-                  <div className="flex justify-between mt-2">
-                    <Button
-                      type="button"
-                      className="bg-gradient-to-r from-green-500 to-emerald-500 text-white"
-                      disabled={isLoading || message.trim() === ''}
-                      onClick={() => {
-                        if (onGenerateWebsite && message.trim()) {
-                          onGenerateWebsite(message);
-                          setMessage("");
-                          setIsUploadVisible(false);
-                        }
-                      }}
-                    >
-                      <Sparkles className="h-4 w-4 mr-1" />
-                      Generate Website
-                    </Button>
-                    
+                  
+                  <Button
+                    type="button"
+                    className="mt-4 w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-base font-medium rounded-xl shadow-md hover:shadow-lg transition-all"
+                    disabled={isLoading || message.trim() === ''}
+                    onClick={() => {
+                      if (onGenerateWebsite && message.trim()) {
+                        onGenerateWebsite(message);
+                        setMessage("");
+                        setIsUploadVisible(false);
+                      }
+                    }}
+                  >
+                    <Sparkles className="h-5 w-5 mr-2" />
+                    GENERATE WEBSITE
+                  </Button>
+                  
+                  <div className="flex justify-end mt-2">
                     <Button
                       type="submit"
                       className="bg-gradient-to-r from-blue-500 to-blue-600 text-white"
                       disabled={isLoading || message.trim() === ''}
                     >
-                      Send Message
+                      Send as Message Instead
                     </Button>
                   </div>
                 </div>
