@@ -51,9 +51,9 @@ const WebsitePreviewScreen = () => {
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between bg-blue-600 text-white p-3">
+      <div className="flex items-center justify-between bg-blue-600 text-white p-3 shadow-md">
         <div className="flex items-center">
           <Button 
             variant="ghost" 
@@ -79,13 +79,18 @@ const WebsitePreviewScreen = () => {
         </div>
       </div>
       
-      {/* Website Preview */}
-      <div className="flex-1 overflow-auto bg-gray-100">
-        {/* Key prop forces iframe to reload on component mount */}
-        <WebsitePreview 
-          key={`preview-${Date.now()}`}
-          html={websiteHtml} 
-        />
+      {/* Website Preview - fixed height container resolves flickering */}
+      <div className="flex-1 bg-gray-100" style={{ height: 'calc(100vh - 56px)' }}>
+        {websiteHtml ? (
+          <WebsitePreview html={websiteHtml} />
+        ) : (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center p-8">
+              <div className="w-16 h-16 border-4 border-t-blue-500 border-blue-200 rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading website preview...</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
