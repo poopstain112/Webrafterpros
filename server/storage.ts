@@ -20,6 +20,7 @@ export interface IStorage {
   // Message methods
   getMessagesByWebsiteId(websiteId: number): Promise<Message[]>;
   createMessage(message: InsertMessage): Promise<Message>;
+  deleteMessagesByWebsiteId(websiteId: number): Promise<void>;
   
   // Image methods
   getImagesByWebsiteId(websiteId: number): Promise<Image[]>;
