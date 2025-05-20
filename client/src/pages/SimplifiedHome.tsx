@@ -5,7 +5,7 @@ import { useChat } from "@/hooks/use-chat";
 import { useToast } from "@/hooks/use-toast";
 import { Message, UploadedImage } from "@/types";
 import { resetChat, uploadImages, generateWebsite } from "@/lib/openai";
-import LoadingOverlay from "@/components/LoadingOverlay";
+import FullScreenLoader from "@/components/FullScreenLoader";
 
 // Helper function to extract business info from messages
 function extractBusinessInfo(messages: Message[]) {
@@ -311,7 +311,7 @@ export default function SimplifiedHome() {
   return (
     <div className="relative">
       {/* Global loading overlay - shows when website is generating */}
-      {isGeneratingWebsite && <LoadingOverlay />}
+      {isGeneratingWebsite && <FullScreenLoader />}
       
       <div className="flex flex-col h-screen">
       {/* Modern Header - 2025 Style */}
