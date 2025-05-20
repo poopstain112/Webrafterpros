@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useChat } from "@/hooks/use-chat";
 import { useToast } from "@/hooks/use-toast";
 import { Message } from "@/types";
+import { resetChat } from "@/lib/openai";
 
 // Helper function to extract business info from messages
 function extractBusinessInfo(messages: Message[]) {
@@ -329,9 +330,35 @@ ${websiteStructure.html}
           {/* Reset button */}
           <button
             className="rounded-full h-8 w-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
-            onClick={() => {
-              resetChat();
-              setCurrentScreen("chat");
+            onClick={async () => {
+              try {
+                await resetChat();
+                toast({
+                  title: "Chat reset",
+                  description: "Starting a new conversation"
+                });
+                
+                // Clear local website data and reset to initial state
+                setMessages([
+                  {
+                    role: 'assistant',
+                    content: "What's the name of your business?",
+                  },
+                ]);
+                setWebsiteStructure(null);
+                setUploadedImages([]);
+                setCurrentScreen("chat");
+                
+                // Force reload the page to reset everything cleanly
+                window.location.reload();
+              } catch (error) {
+                console.error("Error resetting chat:", error);
+                toast({
+                  title: "Error",
+                  description: "Failed to reset the chat",
+                  variant: "destructive"
+                });
+              }
             }}
             title="Start new conversation"
           >

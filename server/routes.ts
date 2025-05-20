@@ -192,9 +192,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Clean reset endpoint
   app.post("/api/reset_chat", async (req: Request, res: Response) => {
     try {
-      // In a real app, we would delete chat history from DB
-      // Since we're returning empty messages to start fresh anyway, this just acknowledges the request
-      res.json({ success: true, message: "Chat reset successful" });
+      // Actually delete all messages for website ID 1 
+      // (or req.body.websiteId if provided in a multi-website setup)
+      const websiteId = req.body.websiteId || 1;
+      await storage.deleteMessagesByWebsiteId(websiteId);
+      
+      // Clear the "websiteGenerated" flag from client
+      res.json({ 
+        success: true, 
+        message: "Chat reset successful",
+        clearLocalStorage: true
+      });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }

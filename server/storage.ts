@@ -127,6 +127,15 @@ export class MemStorage implements IStorage {
     return message;
   }
   
+  async deleteMessagesByWebsiteId(websiteId: number): Promise<void> {
+    // Find all messages for this website and remove them
+    for (const [id, message] of this.messages.entries()) {
+      if (message.websiteId === websiteId) {
+        this.messages.delete(id);
+      }
+    }
+  }
+  
   // Image methods
   async getImagesByWebsiteId(websiteId: number): Promise<Image[]> {
     return Array.from(this.images.values())

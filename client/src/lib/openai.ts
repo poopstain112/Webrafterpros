@@ -153,9 +153,39 @@ export async function getChatMessages(websiteId: number): Promise<Message[]> {
   }
 }
 
+// Reset chat messages
+export async function resetChat() {
+  try {
+    const response = await fetch('/api/reset_chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ websiteId: 1 }), // Default to website ID 1
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to reset chat');
+    }
+
+    const result = await response.json();
+    
+    // Clear localStorage if server indicates we should
+    if (result.clearLocalStorage) {
+      localStorage.removeItem('websiteGenerated');
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Error resetting chat:', error);
+    throw error;
+  }
+}
+
 export default {
   generateWebsite,
   sendChatMessage,
   uploadImages,
   getChatMessages,
+  resetChat,
 };
