@@ -48,6 +48,7 @@ export default function ChatPage() {
   
   // Function to skip the current question
   const handleSkip = () => {
+    console.log("Skip button clicked!");
     sendMessage("Skip this question");
     // Show a toast to inform the user
     toast({
@@ -131,13 +132,22 @@ export default function ChatPage() {
                       </div>
                     )}
                   </div>
+                  
+                  {/* Skip button under assistant messages */}
+                  {msg.role === 'assistant' && index === messages.length - 1 && (
+                    <button
+                      type="button"
+                      onClick={handleSkip}
+                      className="mt-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-medium hover:bg-blue-200"
+                    >
+                      Skip this question →
+                    </button>
+                  )}
                 </div>
               </div>
             ))
           )}
           <div ref={messagesEndRef} />
-          
-          {/* Remove the fixed skip button since we'll put it by the send button */}
         </div>
       </div>
 
@@ -156,16 +166,7 @@ export default function ChatPage() {
 
       {/* Chat Input */}
       <div className="p-3 bg-white border-t border-gray-200">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-xs text-gray-500">Answer the question or skip it</span>
-          <button
-            type="button" 
-            onClick={handleSkip}
-            className="text-sm bg-gray-200 text-gray-800 px-3 py-1 rounded-full hover:bg-gray-300"
-          >
-            Skip →
-          </button>
-        </div>
+
         
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <Button
