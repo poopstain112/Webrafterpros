@@ -21,6 +21,7 @@ export default function WebsitePreview({
   const [websiteCss, setWebsiteCss] = useState("");
   const [isGenerating, setIsGenerating] = useState(propIsGenerating);
   const [hasGeneratedWebsite, setHasGeneratedWebsite] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -203,75 +204,90 @@ ${websiteHtml}
                 You've uploaded images! Now click the button below to create your professional business website.
               </p>
               
-              <button
-                onClick={async () => {
-                  try {
-                    const description = "Create a professional business website using the uploaded images. Include attractive home, about, services, gallery, testimonials, and contact sections with a modern design and professional color scheme.";
-                    
-                    // Show a toast notification
-                    toast({
-                      title: "Generating your professional website!",
-                      description: "We're creating your website with a modern, professional design based on your images. This may take a moment...",
-                    });
-                    
-                    // Set loading state
-                    setIsGenerating(true);
-                    
-                    // Make direct API call
-                    const response = await fetch('/api/generate-website', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json'
-                      },
-                      body: JSON.stringify({ 
-                        description, 
-                        imageUrls: [] // Server will use the uploaded images
-                      })
-                    });
-                    
-                    if (!response.ok) {
-                      throw new Error('Failed to generate website');
+              {buttonClicked ? (
+                <div className="bg-blue-50 p-6 rounded-xl border border-blue-100 animate-pulse">
+                  <div className="loading-spinner mx-auto mb-4"></div>
+                  <h3 className="text-lg font-medium text-blue-700 mb-2">Generating Your Website</h3>
+                  <p className="text-blue-600">
+                    Please wait while we create your professional website. This may take a moment...
+                  </p>
+                </div>
+              ) : (
+                <button
+                  onClick={async () => {
+                    try {
+                      // Set button clicked state immediately
+                      setButtonClicked(true);
+                      
+                      const description = "Create a professional business website using the uploaded images. Include attractive home, about, services, gallery, testimonials, and contact sections with a modern design and professional color scheme.";
+                      
+                      // Show a toast notification
+                      toast({
+                        title: "Generating your professional website!",
+                        description: "We're creating your website with a modern, professional design based on your images. This may take a moment...",
+                      });
+                      
+                      // Set loading state
+                      setIsGenerating(true);
+                      
+                      // Make direct API call
+                      const response = await fetch('/api/generate-website', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ 
+                          description, 
+                          imageUrls: [] // Server will use the uploaded images
+                        })
+                      });
+                      
+                      if (!response.ok) {
+                        throw new Error('Failed to generate website');
+                      }
+                      
+                      // Get the response data
+                      const websiteData = await response.json();
+                      
+                      // Update state with new website data
+                      setWebsiteHtml(websiteData.html);
+                      setWebsiteCss(websiteData.css);
+                      
+                      // Mark website as generated
+                      setHasGeneratedWebsite(true);
+                      
+                      // Success notification
+                      toast({
+                        title: "Website generated!",
+                        description: "Your professional website has been created successfully. You can save or export it using the buttons above.",
+                      });
+                      
+                      // Scroll to top to show the website
+                      window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                      });
+                    } catch (error) {
+                      console.error('Error generating website:', error);
+                      toast({
+                        title: "Error",
+                        description: "There was a problem generating your website. Please try again.",
+                        variant: "destructive"
+                      });
+                      // Reset button clicked state on error
+                      setButtonClicked(false);
+                    } finally {
+                      setIsGenerating(false);
                     }
-                    
-                    // Get the response data
-                    const websiteData = await response.json();
-                    
-                    // Update state with new website data
-                    setWebsiteHtml(websiteData.html);
-                    setWebsiteCss(websiteData.css);
-                    
-                    // Mark website as generated
-                    setHasGeneratedWebsite(true);
-                    
-                    // Success notification
-                    toast({
-                      title: "Website generated!",
-                      description: "Your professional website has been created successfully. You can save or export it using the buttons above.",
-                    });
-                    
-                    // Scroll to top to show the website
-                    window.scrollTo({
-                      top: 0,
-                      behavior: 'smooth'
-                    });
-                  } catch (error) {
-                    console.error('Error generating website:', error);
-                    toast({
-                      title: "Error",
-                      description: "There was a problem generating your website. Please try again.",
-                      variant: "destructive"
-                    });
-                  } finally {
-                    setIsGenerating(false);
-                  }
-                }}
-                className="w-full py-4 px-4 bg-green-500 hover:bg-green-600 text-white text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
-              >
-                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
-                GENERATE MY WEBSITE NOW
-              </button>
+                  }}
+                  className="w-full py-4 px-4 bg-blue-500 hover:bg-blue-600 text-white text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+                >
+                  <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                  GENERATE MY WEBSITE NOW
+                </button>
+              )}
               
               <p className="text-blue-500 mt-3">
                 Click the button above to automatically create your professional website based on your uploaded images

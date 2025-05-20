@@ -66,6 +66,9 @@ export default function Home() {
     );
   };
 
+  // State to track if a website generation is in progress
+  const [isGenerationInProgress, setIsGenerationInProgress] = useState(false);
+
   // Function to render generate website panel
   const renderGeneratePanel = () => {
     return (
@@ -78,17 +81,30 @@ export default function Home() {
           <p className="text-gray-600 mb-6">
             Create a professional business website using the images you've uploaded. Our AI will design a custom website just for you!
           </p>
-          <button
-            onClick={() => {
-              generateWebsiteContent("Create a professional business website with modern design using the uploaded images");
-              setActiveTab("preview");
-            }}
-            className="w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
-            disabled={!uploadedImages || uploadedImages.length === 0}
-          >
-            <Zap className="w-5 h-5 mr-2" />
-            Generate Website
-          </button>
+          
+          {isGenerationInProgress ? (
+            <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
+              <div className="loading-spinner mx-auto mb-4"></div>
+              <h3 className="text-lg font-medium text-blue-700 mb-2">Generating Your Website</h3>
+              <p className="text-blue-600">
+                We're creating your professional website. Please wait a moment...
+              </p>
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                setIsGenerationInProgress(true);
+                generateWebsiteContent("Create a professional business website with modern design using the uploaded images");
+                setActiveTab("preview");
+              }}
+              className="w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+              disabled={!uploadedImages || uploadedImages.length === 0}
+            >
+              <Zap className="w-5 h-5 mr-2" />
+              Generate Website
+            </button>
+          )}
+          
           {(!uploadedImages || uploadedImages.length === 0) && (
             <p className="text-amber-500 text-sm mt-3">
               Please upload at least one image before generating your website
