@@ -129,24 +129,15 @@ export class MemStorage implements IStorage {
   }
   
   async deleteMessagesByWebsiteId(websiteId: number): Promise<void> {
-    console.log(`Deleting all messages for website ID: ${websiteId}`);
-    console.log(`Message count before deletion: ${this.messages.size}`);
+    console.log(`RESET: Completely clearing all messages`);
     
-    // Find all messages for this website and remove them
-    for (const [id, message] of this.messages.entries()) {
-      if (message.websiteId === websiteId) {
-        this.messages.delete(id);
-        console.log(`Deleted message ID: ${id}`);
-      }
-    }
+    // Just nuke everything and start fresh - the most reliable approach
+    this.messages = new Map();
+    console.log("RESET: Created fresh message storage");
     
-    console.log(`Message count after deletion: ${this.messages.size}`);
-    
-    // For a more aggressive approach, just clear all messages if needed
-    if (websiteId === 1) { // Default website ID is usually 1
-      this.messages.clear();
-      console.log("Cleared all messages from storage");
-    }
+    // Reset the message ID counter
+    this.messageCurrentId = 1;
+    console.log("RESET: Reset message ID counter");
   }
   
   // Image methods

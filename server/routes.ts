@@ -220,21 +220,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get the default website ID (should be 1 for most users)
       const websiteId = req.body.websiteId || 1;
       
-      console.log("RESET ALL: Deleting all messages for website ID:", websiteId);
+      console.log("===== FULL RESET REQUESTED =====");
       
-      // Delete all messages for this website - make sure this is working properly
+      // Completely reset all data in memory storage
       await storage.deleteMessagesByWebsiteId(websiteId);
-      
-      // Verify messages were deleted
-      const remainingMessages = await storage.getMessagesByWebsiteId(websiteId);
-      console.log("RESET ALL: Remaining messages after deletion:", remainingMessages.length);
-      
-      // If there are still messages, force-delete them again
-      if (remainingMessages.length > 0) {
-        console.log("RESET ALL: Forcing deletion of remaining messages");
-        // Try direct deletion from storage
-        storage.messages.clear();
-      }
       
       // Reset default initial message
       const initialMessage = {
@@ -245,9 +234,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       await storage.createMessage(initialMessage);
       
-      // Verify the reset worked
-      const newMessages = await storage.getMessagesByWebsiteId(websiteId);
-      console.log("RESET ALL: New messages count after reset:", newMessages.length);
+      console.log("===== RESET COMPLETE =====");
       
       res.status(200).json({ 
         message: "Application reset successfully",
