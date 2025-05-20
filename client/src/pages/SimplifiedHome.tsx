@@ -128,7 +128,17 @@ ${websiteStructure.html}
           {/* Reset button */}
           <button
             className="rounded-full h-8 w-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
-            onClick={resetChat}
+            onClick={() => {
+              resetChat();
+              setCurrentScreen("chat");
+              // Force a refresh of the state
+              setMessages([{
+                role: 'assistant',
+                content: "What's the name of your business?"
+              }]);
+              setUploadedImages([]);
+              setWebsiteStructure(null);
+            }}
             title="Start new conversation"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
