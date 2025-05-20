@@ -9,6 +9,7 @@ import { useWebsiteGeneration } from "../contexts/WebsiteGenerationContext";
 export default function SimpleChat() {
   const [inputMessage, setInputMessage] = useState("");
   const [showWebsitePreview, setShowWebsitePreview] = useState(false);
+  const { startGeneration } = useWebsiteGeneration();
   const [showImagesReview, setShowImagesReview] = useState(false);
   const [uploadMode, setUploadMode] = useState<"chat" | "review">("chat");
   const { toast } = useToast();
@@ -336,8 +337,15 @@ export default function SimpleChat() {
                 </Button>
                 <Button
                   onClick={() => {
-                    generateWebsiteContent("Generate a website based on our conversation");
-                    switchMode("chat");
+                    // Get all the chat content to generate a description
+                    const businessInfo = messages
+                      .filter(m => m.role === 'user')
+                      .map(m => m.content)
+                      .join("\n");
+                    
+                    // Use the WebsiteGenerationContext to navigate to loading screen
+                    const description = `${businessInfo}\n\nUploaded Images: ${uploadedImages.length}`;
+                    startGeneration(description, "cleaning"); // Setting the business type
                   }}
                   disabled={isGenerating}
                   className="flex-1 bg-blue-500 hover:bg-blue-600 text-base"
