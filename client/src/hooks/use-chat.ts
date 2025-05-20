@@ -294,14 +294,8 @@ export function useChat(initialWebsiteId: number = 1) {
         const websiteData = await generateWebsite(description, uploadedImages, businessType);
         setWebsiteStructure(websiteData);
 
-        // Add success message
-        setMessages(prev => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: 'Your website has been generated! Take a look at the preview and let me know if you\'d like to make any changes.',
-          },
-        ]);
+        // Don't add a success message to chat - we're navigating away anyway
+        // This prevents the chatbot from automatically responding after website generation
 
         toast({
           title: 'Success',
