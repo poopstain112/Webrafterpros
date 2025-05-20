@@ -192,8 +192,37 @@ export default function SimplifiedHome() {
             description: "Please wait while your images are processed",
           });
           
-          // Upload images and handle the response
-          const newImages = await handleImageUpload(files);
+          // Create FormData for the upload
+          const formData = new FormData();
+          formData.append('websiteId', '1'); // Use default website
+          
+          // Add each file to the form data
+          files.forEach(file => {
+            formData.append('images', file);
+          });
+          
+          // Upload directly to server
+          const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          
+          if (!response.ok) {
+            throw new Error("Failed to upload images");
+          }
+          
+          // Get the uploaded images from response
+          const uploadedImageList = await response.json();
+          console.log("Upload success, received images:", uploadedImageList);
+          
+          // Add timestamp to URLs to prevent caching issues
+          const timestampedImages = uploadedImageList.map((img: UploadedImage) => ({
+            ...img,
+            url: `${img.url}?t=${Date.now()}`
+          }));
+          
+          // Update the state with the new images
+          setUploadedImages([...uploadedImages, ...timestampedImages]);
           
           // Success toast
           toast({
@@ -637,9 +666,11 @@ ${websiteStructure.html}
                           <button
                             className="absolute -top-2 -right-2 bg-white shadow text-red-500 rounded-full w-6 h-6 flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity"
                             onClick={() => {
+                              // Remove this image from the array
                               const newImages = [...uploadedImages];
                               newImages.splice(index, 1);
-                              clearUploadedImages();
+                              // Update the state
+                              setUploadedImages(newImages);
                             }}
                           >
                             ×
