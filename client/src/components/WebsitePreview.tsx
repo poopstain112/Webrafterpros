@@ -120,29 +120,43 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
   return (
     <div className={`${isStandalone ? '' : 'fixed inset-0 bg-black/50 z-50'} flex flex-col h-full`}>
       {/* Only show header in popup mode, not in the dedicated preview screen */}
-      {!isStandalone && (
+      {!isStandalone && !isEditMode && (
         <div className="bg-blue-600 text-white p-3 shadow-md flex items-center justify-between">
           <div className="flex items-center">
             <h2 className="text-lg font-semibold">Website Preview</h2>
           </div>
           <div className="flex space-x-2">
-            {!isEditMode ? (
-              <Button 
-                onClick={() => setIsEditMode(true)} 
-                variant="outline"
-                className="text-white border-white hover:bg-blue-700"
-              >
-                Edit Website
-              </Button>
-            ) : (
-              <Button 
-                onClick={() => setIsEditMode(false)} 
-                variant="outline"
-                className="text-white border-white hover:bg-blue-700"
-              >
-                Cancel
-              </Button>
-            )}
+            <Button 
+              onClick={() => setIsEditMode(true)} 
+              variant="outline"
+              className="text-white border-white hover:bg-blue-700"
+            >
+              Edit Website
+            </Button>
+            <Button 
+              onClick={handleClose}
+              className="bg-white text-blue-600 hover:bg-blue-50"
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
+      
+      {/* Only show a "Back" button when in edit mode and not in standalone */}
+      {!isStandalone && isEditMode && (
+        <div className="bg-blue-600 text-white p-3 shadow-md flex items-center justify-between">
+          <div className="flex items-center">
+            <h2 className="text-lg font-semibold">Edit Website</h2>
+          </div>
+          <div className="flex space-x-2">
+            <Button 
+              onClick={() => setIsEditMode(false)} 
+              variant="outline"
+              className="text-white border-white hover:bg-blue-700"
+            >
+              Cancel
+            </Button>
             <Button 
               onClick={handleClose}
               className="bg-white text-blue-600 hover:bg-blue-50"
@@ -200,7 +214,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
           </div>
         </div>
       ) : (
-        <div className="flex-1 bg-gray-100 overflow-y-auto">
+        <div className="flex-1 bg-gray-100 overflow-y-auto" style={{ position: 'relative' }}>
           <iframe 
             srcDoc={fullHtml}
             title="Website Preview"
