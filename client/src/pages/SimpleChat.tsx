@@ -4,6 +4,7 @@ import { useChat } from "@/hooks/use-chat";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import WebsitePreview from "@/components/WebsitePreview";
+import { useWebsiteGeneration } from "../contexts/WebsiteGenerationContext";
 
 export default function SimpleChat() {
   const [inputMessage, setInputMessage] = useState("");

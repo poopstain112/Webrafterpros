@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useWebsiteGeneration } from '../contexts/WebsiteGenerationContext';
+import { useToast } from '@/hooks/use-toast';
 
-interface WebsiteLoadingScreenProps {
-  onCancel?: () => void;
-}
-
-const WebsiteLoadingScreen: React.FC<WebsiteLoadingScreenProps> = ({ onCancel }) => {
-  const [loadingProgress, setLoadingProgress] = React.useState(0);
-  const [currentStep, setCurrentStep] = React.useState(0);
+const WebsiteLoadingScreen: React.FC = () => {
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
+  const { description, businessType, cancelGeneration, finishGeneration } = useWebsiteGeneration();
+  const { toast } = useToast();
   
   const steps = [
     "Analyzing your business information...",
@@ -17,10 +17,58 @@ const WebsiteLoadingScreen: React.FC<WebsiteLoadingScreenProps> = ({ onCancel })
     "Finalizing your custom website..."
   ];
   
+  // The actual website generation API call
+  useEffect(() => {
+    const generateWebsite = async () => {
+      try {
+        console.log("Starting website generation from dedicated page");
+        
+        // Make API call to generate website
+        const response = await fetch('/api/generate-website', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            description,
+            businessType: businessType || 'unspecified',
+          }),
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to generate website');
+        }
+        
+        // Website generated successfully
+        await response.json();
+        
+        // Allow the progress animation to complete
+        setTimeout(() => {
+          toast({
+            title: 'Success!',
+            description: 'Your website has been generated successfully.',
+          });
+          finishGeneration();
+        }, 2000);
+        
+      } catch (error) {
+        console.error('Error generating website:', error);
+        toast({
+          title: 'Generation Failed',
+          description: 'Failed to generate website. Please try again.',
+          variant: 'destructive',
+        });
+        cancelGeneration();
+      }
+    };
+    
+    // Start the API call
+    generateWebsite();
+  }, [description, businessType, finishGeneration, cancelGeneration, toast]);
+  
   // Simulate loading progress
-  React.useEffect(() => {
+  useEffect(() => {
     const totalDuration = 50000; // 50 seconds total for the animation
-    const stepDuration = totalDuration / steps.length;
     const interval = 100; // Update every 100ms
     const totalSteps = totalDuration / interval;
     const incrementPerStep = 100 / totalSteps;
@@ -103,14 +151,12 @@ const WebsiteLoadingScreen: React.FC<WebsiteLoadingScreenProps> = ({ onCancel })
         </div>
         
         {/* Cancel button */}
-        {onCancel && (
-          <button 
-            onClick={onCancel}
-            className="text-gray-500 text-sm hover:text-gray-700 transition-colors"
-          >
-            Cancel and return to chat
-          </button>
-        )}
+        <button 
+          onClick={cancelGeneration}
+          className="text-gray-500 text-sm hover:text-gray-700 transition-colors"
+        >
+          Cancel and return to chat
+        </button>
       </div>
     </div>
   );
