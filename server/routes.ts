@@ -43,6 +43,8 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Serve uploaded images directly
+  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
   // API endpoint to get all websites
   app.get("/api/websites", async (req: Request, res: Response) => {
     try {
