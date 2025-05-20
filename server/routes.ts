@@ -221,28 +221,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         "Do you have any social media accounts to link on the website?"
       ];
       
-      // Get all message pairs to determine where we are in the conversation
-      const messagePairs = [];
+      // Simple solution - count the number of user messages (excluding the current one)
+      // This tells us which question to ask next
+      const userMessagesCount = allMessages.filter(msg => msg.role === "user").length;
       
-      // Match each user message with its corresponding assistant reply
-      for (let i = 0; i < allMessages.length - 1; i++) {
-        if (allMessages[i].role === "user" && allMessages[i+1].role === "assistant") {
-          messagePairs.push({
-            user: allMessages[i],
-            assistant: allMessages[i+1]
-          });
-        }
-      }
-      
-      // The number of completed exchanges determines which question to ask next
-      const completedExchanges = messagePairs.length;
-      
-      // Next question index is simply the number of completed exchanges
-      const nextQuestionIndex = completedExchanges;
+      // We're on the nth question (0-indexed), where n is the number of user messages we've seen
+      // Since we just added a user message, we want to use that index to get the next question
+      const nextQuestionIndex = userMessagesCount;
       
       // Print helpful debug information
       console.log("All messages:", allMessages.map(m => ({ role: m.role, content: m.content.substring(0, 30) })));
-      console.log("Completed exchanges:", completedExchanges, "Next question index:", nextQuestionIndex);
+      console.log("User messages count:", userMessagesCount, "Next question index:", nextQuestionIndex);
       
       // Determine the AI response - ONLY use the exact questions, nothing else
       let aiResponse;
