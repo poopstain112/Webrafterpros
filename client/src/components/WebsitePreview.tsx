@@ -17,6 +17,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit }: We
   const { html, css, structure, recommendation } = websiteStructure;
   const [isEditMode, setIsEditMode] = useState(false);
   const [editInstructions, setEditInstructions] = useState("");
+  const [showRecommendation, setShowRecommendation] = useState(true);
 
   // Create a combined HTML document with the CSS included
   const fullHtml = `
@@ -112,8 +113,15 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit }: We
         </div>
       )}
       
-      {recommendation && !isEditMode && (
-        <div className="bg-blue-50 p-4 border-t border-blue-100">
+      {recommendation && !isEditMode && showRecommendation && (
+        <div className="bg-blue-50 p-4 border-t border-blue-100 relative">
+          <button 
+            onClick={() => setShowRecommendation(false)}
+            className="absolute top-2 right-2 p-1 rounded-full hover:bg-blue-100 transition-colors"
+            aria-label="Close recommendations"
+          >
+            <X className="h-4 w-4 text-gray-500" />
+          </button>
           <h3 className="font-semibold mb-2">Recommendations</h3>
           <p className="text-sm text-gray-700">{recommendation}</p>
         </div>
