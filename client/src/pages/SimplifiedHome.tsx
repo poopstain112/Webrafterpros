@@ -584,14 +584,24 @@ ${websiteStructure.html}
                 </button>
 
                 <div className="flex-1 relative">
-                  <input
-                    type="text"
+                  <textarea
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
                     placeholder="Describe your business website..."
-                    className="w-full py-2.5 px-4 bg-gray-50 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
-                    onKeyPress={(e) => {
-                      if (e.key === "Enter") handleSendMessage();
+                    className="w-full py-2.5 px-4 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10 resize-none overflow-hidden"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage();
+                      }
+                    }}
+                    rows={1}
+                    style={{ minHeight: "40px", maxHeight: "120px" }}
+                    onInput={(e) => {
+                      // Auto-resize textarea
+                      const target = e.target as HTMLTextAreaElement;
+                      target.style.height = "40px";
+                      target.style.height = `${Math.min(120, target.scrollHeight)}px`;
                     }}
                   />
                   
