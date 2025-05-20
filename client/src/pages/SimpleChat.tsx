@@ -9,6 +9,7 @@ export default function SimpleChat() {
   const [inputMessage, setInputMessage] = useState("");
   const [showWebsitePreview, setShowWebsitePreview] = useState(false);
   const [showImagesReview, setShowImagesReview] = useState(false);
+  const [uploadMode, setUploadMode] = useState<"chat" | "review">("chat");
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
@@ -66,24 +67,22 @@ export default function SimpleChat() {
       const files = Array.from((e.target as HTMLInputElement).files || []);
       if (files.length > 0) {
         try {
-          // Log for debugging
-          console.log("Starting image upload...");
+          // Switch to review mode immediately when user selects files
+          setUploadMode("review");
           
+          // Process the upload
           await handleImageUpload(files);
           
-          // Check again after upload completes
-          console.log("Upload complete, message count:", messages.length);
+          // Make sure we're still in review mode
+          setUploadMode("review");
           
-          // Force show the images review screen since upload was successful
-          if (messages.length > 0) {
-            console.log("Setting showImagesReview to true");
-            setTimeout(() => {
-              setShowImagesReview(true);
-              console.log("Image review screen should be visible now");
-            }, 500);
-          }
         } catch (error) {
           console.error("Error during upload:", error);
+          toast({
+            title: "Error",
+            description: "Failed to upload images. Please try again.",
+            variant: "destructive"
+          });
         }
       }
     };
@@ -100,6 +99,7 @@ export default function SimpleChat() {
 
   return (
     <div className="h-full flex flex-col">
+      {/* Website Preview Screen - when a website has been generated */}
       {websiteStructure && showWebsitePreview && (
         <WebsitePreview 
           websiteStructure={websiteStructure}
@@ -108,53 +108,96 @@ export default function SimpleChat() {
         />
       )}
       
-      <div className="bg-blue-500 text-white py-4 px-4 fixed top-0 left-0 right-0 z-10">
-        <h1 className="text-xl font-bold">Instant Website</h1>
-      </div>
-      
-      {/* Messages area - using absolute positioning for better mobile scrolling */}
-      <div className="absolute top-16 bottom-16 left-0 right-0 bg-gray-50 overflow-y-scroll message-container">
-        <div className="space-y-4 p-4">
-          {messages.map((message, index) => (
-            <div key={index} className={`flex ${message.role === 'assistant' ? 'justify-start' : 'justify-end'}`}>
-              <div
-                className={`max-w-[85%] rounded-2xl p-3 ${
-                  message.role === 'assistant'
-                    ? 'bg-white border border-gray-200 text-gray-800 rounded-tl-none'
-                    : 'bg-blue-500 text-white rounded-tr-none'
-                }`}
-              >
-                <div className="whitespace-pre-wrap text-sm">{message.content}</div>
-              </div>
-            </div>
-          ))}
+      {/* CHAT MODE - Show the chat interface when in chat mode */}
+      {uploadMode === "chat" && (
+        <>
+          <div className="bg-blue-500 text-white py-4 px-4 fixed top-0 left-0 right-0 z-10">
+            <h1 className="text-xl font-bold">Instant Website</h1>
+          </div>
           
-          {isLoading && (
-            <div className="flex justify-start">
-              <div className="max-w-[85%] rounded-2xl p-3 bg-white border border-gray-200 text-gray-800 rounded-tl-none">
-                <div className="flex items-center space-x-1">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+          {/* Messages area - using absolute positioning for better mobile scrolling */}
+          <div className="absolute top-16 bottom-16 left-0 right-0 bg-gray-50 overflow-y-scroll message-container">
+            <div className="space-y-4 p-4">
+              {messages.map((message, index) => (
+                <div key={index} className={`flex ${message.role === 'assistant' ? 'justify-start' : 'justify-end'}`}>
+                  <div
+                    className={`max-w-[85%] rounded-2xl p-3 ${
+                      message.role === 'assistant'
+                        ? 'bg-white border border-gray-200 text-gray-800 rounded-tl-none'
+                        : 'bg-blue-500 text-white rounded-tr-none'
+                    }`}
+                  >
+                    <div className="whitespace-pre-wrap text-sm">{message.content}</div>
+                  </div>
                 </div>
+              ))}
+              
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="max-w-[85%] rounded-2xl p-3 bg-white border border-gray-200 text-gray-800 rounded-tl-none">
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Add extra space at bottom when website button is showing */}
+              {messages.length > 5 && <div className="h-16"></div>}
+              
+              {/* This invisible element helps us scroll to the bottom */}
+              <div ref={messagesEndRef}></div>
+            </div>
+          </div>
+          
+          {/* Small thumbnail indicator of uploaded images at the bottom of chat */}
+          {uploadedImages.length > 0 && (
+            <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-10">
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-xs text-gray-500">{uploadedImages.length} image(s) uploaded</span>
+                
+                {/* View Images Button */}
+                {messages.length > 5 && !websiteStructure && (
+                  <button 
+                    className="text-xs text-blue-500 font-medium" 
+                    onClick={() => setUploadMode("review")}
+                  >
+                    View All & Create Website
+                  </button>
+                )}
+              </div>
+              <div className="flex overflow-x-auto space-x-2 pb-1">
+                {uploadedImages.slice(0, 5).map((image, index) => (
+                  <div key={index} className="w-12 h-12 flex-shrink-0 rounded overflow-hidden border border-gray-200">
+                    <img 
+                      src={image.url} 
+                      alt={`Uploaded ${index + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = `${image.url}?t=${Date.now()}`;
+                      }}
+                    />
+                  </div>
+                ))}
+                {uploadedImages.length > 5 && (
+                  <div className="w-12 h-12 flex-shrink-0 rounded overflow-hidden border border-gray-200 bg-gray-100 flex items-center justify-center text-xs text-gray-500">
+                    +{uploadedImages.length - 5}
+                  </div>
+                )}
               </div>
             </div>
           )}
-          
-          {/* Add extra space at bottom when website button is showing */}
-          {messages.length > 5 && <div className="h-16"></div>}
-          
-          {/* This invisible element helps us scroll to the bottom */}
-          <div ref={messagesEndRef}></div>
-        </div>
-      </div>
+        </>
+      )}
       
-      {/* Images Review Screen - appears after uploading images */}
-      {uploadedImages.length > 0 && !websiteStructure && (
+      {/* REVIEW MODE - Images Review Screen */}
+      {uploadMode === "review" && uploadedImages.length > 0 && !websiteStructure && (
         <div className="fixed inset-0 bg-white z-30 flex flex-col">
           <div className="bg-blue-500 text-white py-4 px-4 flex items-center">
             <button 
-              onClick={() => setShowImagesReview(false)} 
+              onClick={() => setUploadMode("chat")} 
               className="mr-2 rounded-full w-8 h-8 flex items-center justify-center bg-blue-600"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -187,50 +230,15 @@ export default function SimpleChat() {
           
           <div className="p-4 border-t">
             <Button
-              onClick={() => generateWebsiteContent("Generate a website based on our conversation")}
+              onClick={() => {
+                generateWebsiteContent("Generate a website based on our conversation");
+                setUploadMode("chat");
+              }}
               disabled={isGenerating}
               className="w-full bg-blue-500 hover:bg-blue-600 py-3 text-lg"
             >
               {isGenerating ? "Creating Website..." : "Create Website"}
             </Button>
-          </div>
-        </div>
-      )}
-      
-      {/* Small thumbnail indicator of uploaded images at the bottom of chat */}
-      {uploadedImages.length > 0 && (
-        <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-10">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-xs text-gray-500">{uploadedImages.length} image(s) uploaded</span>
-            
-            {/* View Images Button */}
-            {messages.length > 5 && !websiteStructure && (
-              <button 
-                className="text-xs text-blue-500 font-medium" 
-                onClick={() => setShowImagesReview(true)}
-              >
-                View All & Create Website
-              </button>
-            )}
-          </div>
-          <div className="flex overflow-x-auto space-x-2 pb-1">
-            {uploadedImages.slice(0, 5).map((image, index) => (
-              <div key={index} className="w-12 h-12 flex-shrink-0 rounded overflow-hidden border border-gray-200">
-                <img 
-                  src={image.url} 
-                  alt={`Uploaded ${index + 1}`}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = `${image.url}?t=${Date.now()}`;
-                  }}
-                />
-              </div>
-            ))}
-            {uploadedImages.length > 5 && (
-              <div className="w-12 h-12 flex-shrink-0 rounded overflow-hidden border border-gray-200 bg-gray-100 flex items-center justify-center text-xs text-gray-500">
-                +{uploadedImages.length - 5}
-              </div>
-            )}
           </div>
         </div>
       )}
