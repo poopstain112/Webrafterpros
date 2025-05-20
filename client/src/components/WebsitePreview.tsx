@@ -45,10 +45,10 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit }: We
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <style>${css}</style>
+      <style>${cssContent}</style>
     </head>
     <body>
-      ${html}
+      ${htmlContent}
     </body>
     </html>
   `;
@@ -132,7 +132,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit }: We
         </div>
       )}
       
-      {recommendation && !isEditMode && showRecommendation && (
+      {recommendationText && !isEditMode && showRecommendation && (
         <div className="bg-blue-50 p-4 border-t border-blue-100 relative">
           <button 
             onClick={() => setShowRecommendation(false)}
@@ -142,7 +142,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit }: We
             <X className="h-4 w-4 text-gray-500" />
           </button>
           <h3 className="font-semibold mb-2">Recommendations</h3>
-          <p className="text-sm text-gray-700">{recommendation}</p>
+          <p className="text-sm text-gray-700">{recommendationText}</p>
         </div>
       )}
     </div>

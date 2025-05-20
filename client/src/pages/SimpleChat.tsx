@@ -47,7 +47,14 @@ export default function SimpleChat() {
   
   // Show website preview when website is generated
   useEffect(() => {
+    // Check for website structure from the API
     if (websiteStructure) {
+      setShowWebsitePreview(true);
+    }
+    
+    // Also check for stored website HTML in localStorage
+    const storedHtml = localStorage.getItem('generatedWebsiteHTML');
+    if (storedHtml) {
       setShowWebsitePreview(true);
     }
   }, [websiteStructure]);
