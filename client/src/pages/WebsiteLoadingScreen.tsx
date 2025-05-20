@@ -40,7 +40,13 @@ const WebsiteLoadingScreen: React.FC = () => {
         }
         
         // Website generated successfully
-        await response.json();
+        const websiteData = await response.json();
+        
+        // Store the website data in localStorage so it can be accessed in the chat view
+        if (websiteData && websiteData.html) {
+          localStorage.setItem('generatedWebsiteHTML', websiteData.html);
+          localStorage.setItem('websiteGeneratedAt', new Date().toISOString());
+        }
         
         // Allow the progress animation to complete
         setTimeout(() => {
@@ -48,6 +54,8 @@ const WebsiteLoadingScreen: React.FC = () => {
             title: 'Success!',
             description: 'Your website has been generated successfully.',
           });
+          
+          // Return to the chat view which will now display the website
           finishGeneration();
         }, 2000);
         

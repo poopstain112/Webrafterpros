@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 
 interface WebsitePreviewProps {
-  websiteStructure: {
+  websiteStructure?: {
     html: string;
     css: string;
     structure: any;
@@ -14,10 +14,29 @@ interface WebsitePreviewProps {
 }
 
 export default function WebsitePreview({ websiteStructure, onClose, onEdit }: WebsitePreviewProps) {
-  const { html, css, structure, recommendation } = websiteStructure;
   const [isEditMode, setIsEditMode] = useState(false);
   const [editInstructions, setEditInstructions] = useState("");
   const [showRecommendation, setShowRecommendation] = useState(true);
+  const [htmlContent, setHtmlContent] = useState('');
+  const [cssContent, setCssContent] = useState('');
+  const [recommendationText, setRecommendationText] = useState('');
+  
+  // Load website content from props or localStorage
+  useEffect(() => {
+    if (websiteStructure) {
+      // Use passed props if available
+      setHtmlContent(websiteStructure.html || '');
+      setCssContent(websiteStructure.css || '');
+      setRecommendationText(websiteStructure.recommendation || '');
+    } else {
+      // Try to load from localStorage
+      const storedHtml = localStorage.getItem('generatedWebsiteHTML');
+      if (storedHtml) {
+        setHtmlContent(storedHtml);
+        setCssContent(''); // No CSS in localStorage version
+      }
+    }
+  }, [websiteStructure]);
 
   // Create a combined HTML document with the CSS included
   const fullHtml = `
