@@ -664,10 +664,32 @@ ${websiteStructure.html}
           <div className="h-full flex flex-col">
             {isGeneratingWebsite ? (
               <div className="flex-1 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                  <h2 className="text-xl font-medium mb-2">Creating your website...</h2>
-                  <p className="text-gray-600">Please wait a moment</p>
+                <div className="text-center p-8 max-w-md mx-auto bg-white rounded-xl shadow-lg">
+                  {/* Improved loading animation */}
+                  <div className="relative w-24 h-24 mx-auto mb-6">
+                    <div className="absolute inset-0 border-8 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="absolute inset-3 border-8 border-blue-300 border-b-transparent rounded-full animate-spin animation-delay-150"></div>
+                    <div className="absolute inset-6 border-8 border-blue-100 border-l-transparent rounded-full animate-spin animation-delay-300"></div>
+                  </div>
+                  <h2 className="text-2xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-transparent bg-clip-text">
+                    Creating Your Website
+                  </h2>
+                  <p className="text-gray-600 mb-4">This typically takes 30-60 seconds. We're building a professional website based on your information.</p>
+                  
+                  {/* Animated progress bar */}
+                  <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-4">
+                    <div 
+                      className="h-full bg-blue-500 rounded-full animate-pulse"
+                      style={{ 
+                        width: '100%', 
+                        animationDuration: '1.5s'
+                      }}
+                    ></div>
+                  </div>
+                  
+                  <p className="text-sm text-gray-500 italic">
+                    We're optimizing colors, layout, and content based on your business type
+                  </p>
                 </div>
               </div>
             ) : websiteStructure ? (
