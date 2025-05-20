@@ -182,14 +182,42 @@ export default function SimplifiedHome() {
     fileInput.type = "file";
     fileInput.multiple = true;
     fileInput.accept = "image/*";
-    fileInput.onchange = (e) => {
+    fileInput.onchange = async (e) => {
       const files = Array.from((e.target as HTMLInputElement).files || []);
       if (files.length > 0) {
-        handleImageUpload(files);
-        toast({
-          title: "Images uploaded",
-          description: `${files.length} image(s) added successfully`,
-        });
+        try {
+          // Show loading toast
+          toast({
+            title: "Uploading images...",
+            description: "Please wait while your images are processed",
+          });
+          
+          // Upload images and handle the response
+          const uploadedImageList = await uploadImages(initialWebsiteId, files);
+          console.log("Upload success, received images:", uploadedImageList);
+          
+          // Force clear any previous URL cache - important for image loading
+          uploadedImageList.forEach(img => {
+            const imgElement = new Image();
+            imgElement.src = img.url + '?timestamp=' + new Date().getTime();
+          });
+          
+          // Update the state with the new images
+          setUploadedImages([...uploadedImages, ...uploadedImageList]);
+          
+          // Success toast
+          toast({
+            title: "Images uploaded",
+            description: `${files.length} image(s) added successfully`,
+          });
+        } catch (error) {
+          console.error("Failed to upload images:", error);
+          toast({
+            title: "Upload failed",
+            description: "There was a problem uploading your images. Please try again.",
+            variant: "destructive"
+          });
+        }
       }
     };
     fileInput.click();
