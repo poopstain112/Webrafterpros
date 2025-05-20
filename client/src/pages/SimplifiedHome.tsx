@@ -192,37 +192,8 @@ export default function SimplifiedHome() {
             description: "Please wait while your images are processed",
           });
           
-          // Create FormData for the upload
-          const formData = new FormData();
-          formData.append('websiteId', '1'); // Use default website
-          
-          // Add each file to the form data
-          files.forEach(file => {
-            formData.append('images', file);
-          });
-          
-          // Upload directly to server
-          const response = await fetch('/api/upload', {
-            method: 'POST',
-            body: formData,
-          });
-          
-          if (!response.ok) {
-            throw new Error("Failed to upload images");
-          }
-          
-          // Get the uploaded images from response
-          const uploadedImageList = await response.json();
-          console.log("Upload success, received images:", uploadedImageList);
-          
-          // Add timestamp to URLs to prevent caching issues
-          const timestampedImages = uploadedImageList.map((img: UploadedImage) => ({
-            ...img,
-            url: `${img.url}?t=${Date.now()}`
-          }));
-          
-          // Update the state with the new images
-          setUploadedImages([...uploadedImages, ...timestampedImages]);
+          // Use the hook's function to upload images
+          await handleImageUpload(files);
           
           // Success toast
           toast({
