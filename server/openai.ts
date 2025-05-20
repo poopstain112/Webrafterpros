@@ -202,13 +202,16 @@ export async function generateChatResponse(
 
     let responseContent = response.choices[0].message.content || "";
     
-    // For simplicity, if the user is answering questions in the sequence,
-    // we'll just directly return the next question rather than having GPT
-    // enhance their answer and then ask the next question
-    if (isRespondingToUser && userMessageCount <= BUSINESS_QUESTIONS.length) {
-      // Return just the next question without enhancement
+    // ALWAYS return just the next question with no additional commentary
+    // Completely ignore the GPT response and just send the next question directly
+    if (isRespondingToUser) {
+      // If we're within the question sequence, return the next question
       if (assistantMessageCount < BUSINESS_QUESTIONS.length) {
         return BUSINESS_QUESTIONS[assistantMessageCount];
+      } 
+      // If we've gone through all questions, prompt for images
+      else if (assistantMessageCount === BUSINESS_QUESTIONS.length) {
+        return "Please upload images for your website.";
       }
     }
 
