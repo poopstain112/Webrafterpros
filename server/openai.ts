@@ -106,13 +106,15 @@ export async function generateWebsiteContent(
 // Business questions the chatbot will ask in sequence to gather information
 const BUSINESS_QUESTIONS = [
   "What's the name of your business?",
-  "What industry or sector is your business in? (e.g., healthcare, retail, construction)",
-  "What products or services do you offer? List the main ones.",
+  "Where is your business located?",
+  "What products or services do you offer?",
   "What makes your business unique compared to competitors?",
-  "Who is your target audience or ideal customer?",
-  "What are your business values or mission?",
-  "Do you have any specific color preferences for your website?",
-  "Is there anything specific you want to highlight on your website?"
+  "Who is your ideal customer?",
+  "What's your business slogan or tagline (if you have one)?",
+  "What are your business hours?",
+  "What contact information should be on the website?",
+  "What are your primary business colors (if you have brand colors)?",
+  "Do you have any social media accounts to link on the website?"
 ];
 
 // Process user message and generate response
@@ -200,15 +202,13 @@ export async function generateChatResponse(
 
     let responseContent = response.choices[0].message.content || "";
     
-    // If we're in the question-asking phase and this is a response to a user answer,
-    // append the next question to guide the conversation forward
-    if (isRespondingToUser && userMessageCount <= BUSINESS_QUESTIONS.length && 
-        !responseContent.includes(BUSINESS_QUESTIONS[assistantMessageCount])) {
-        
-      const nextQuestionIndex = assistantMessageCount;
-      if (nextQuestionIndex < BUSINESS_QUESTIONS.length) {
-        // Only append if the response doesn't already include the next question
-        responseContent += "\n\n" + BUSINESS_QUESTIONS[nextQuestionIndex];
+    // For simplicity, if the user is answering questions in the sequence,
+    // we'll just directly return the next question rather than having GPT
+    // enhance their answer and then ask the next question
+    if (isRespondingToUser && userMessageCount <= BUSINESS_QUESTIONS.length) {
+      // Return just the next question without enhancement
+      if (assistantMessageCount < BUSINESS_QUESTIONS.length) {
+        return BUSINESS_QUESTIONS[assistantMessageCount];
       }
     }
 

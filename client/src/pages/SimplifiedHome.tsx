@@ -131,13 +131,6 @@ ${websiteStructure.html}
             onClick={() => {
               resetChat();
               setCurrentScreen("chat");
-              // Force a refresh of the state
-              setMessages([{
-                role: 'assistant',
-                content: "What's the name of your business?"
-              }]);
-              setUploadedImages([]);
-              setWebsiteStructure(null);
             }}
             title="Start new conversation"
           >
