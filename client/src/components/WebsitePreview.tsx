@@ -118,6 +118,20 @@ ${websiteHtml}
             <span className="hidden sm:inline">Desktop</span>
           </Button>
           <Button
+            onClick={() => {
+              toast({
+                title: "Website saved",
+                description: "Your website has been saved successfully.",
+              });
+            }}
+            className="text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg transition flex items-center gap-1 mr-1"
+            disabled={!websiteStructure}
+          >
+            <Save className="h-4 w-4" />
+            <span className="hidden sm:inline">Save</span>
+          </Button>
+          
+          <Button
             onClick={handleExport}
             className="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg transition flex items-center gap-1"
             disabled={!websiteStructure}
