@@ -537,7 +537,7 @@ export async function generateWebsiteContent(
       </div>
       <div class="services-grid">
         <div class="service-card">
-          <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Residential Cleaning">
+          <img src="${serviceImage1}" alt="Residential Cleaning">
           <div class="service-content">
             <h3>Residential Cleaning</h3>
             <p>Comprehensive house cleaning services tailored to your home's needs. We handle everything from basic cleaning to deep cleaning.</p>
@@ -545,7 +545,7 @@ export async function generateWebsiteContent(
           </div>
         </div>
         <div class="service-card">
-          <img src="https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Commercial Cleaning">
+          <img src="${serviceImage2}" alt="Commercial Cleaning">
           <div class="service-content">
             <h3>Commercial Cleaning</h3>
             <p>Professional cleaning services for offices, retail spaces, and other commercial properties. Maintain a clean and healthy work environment.</p>
@@ -553,7 +553,7 @@ export async function generateWebsiteContent(
           </div>
         </div>
         <div class="service-card">
-          <img src="https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Deep Cleaning">
+          <img src="${serviceImage3}" alt="Deep Cleaning">
           <div class="service-content">
             <h3>Deep Cleaning</h3>
             <p>Thorough cleaning for those special occasions or when your space needs extra attention. We'll reach every corner and crevice.</p>
@@ -569,7 +569,7 @@ export async function generateWebsiteContent(
     <div class="container">
       <div class="about-grid">
         <div class="about-img">
-          <img src="https://images.unsplash.com/photo-1595814432025-409872c11f8e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="About Eeezy Cleaning">
+          <img src="${aboutImage}" alt="About Eeezy Cleaning">
         </div>
         <div class="about-content">
           <h2>About Eeezy Cleaning</h2>
