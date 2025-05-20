@@ -1,4 +1,5 @@
-import { Switch, Route } from "wouter";
+import { useState } from "react";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -10,20 +11,20 @@ import Help from "@/pages/Help";
 import NotFound from "@/pages/not-found";
 
 function Router() {
+  const [location] = useLocation();
+  
   return (
-    <>
-      <Header />
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/history" component={History} />
-        <Route path="/help" component={Help} />
-        <Route path="/image-test" component={() => {
-          const ImageTest = require('./components/ImageTest').default;
-          return <ImageTest />;
-        }} />
-        <Route component={NotFound} />
-      </Switch>
-    </>
+    <div className="app-container">
+      <Header currentPath={location} />
+      <div className="app-content">
+        <Switch>
+          <Route path="/" component={Home} />
+          <Route path="/history" component={History} />
+          <Route path="/help" component={Help} />
+          <Route component={NotFound} />
+        </Switch>
+      </div>
+    </div>
   );
 }
 

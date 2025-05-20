@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  /* Modern fresh style with clean blue accent */
+  /* Professional design system with smooth transitions */
   --background: 210 40% 98%;
   --foreground: 222 47% 11%;
   --muted: 210 40% 96%;
@@ -24,6 +24,14 @@
   --destructive-foreground: 210 40% 98%;
   --ring: 221 83% 53%;
   --radius: 0.75rem;
+  
+  /* App theme additional colors */
+  --app-blue: 221 83% 53%;
+  --app-green: 142 76% 36%;
+  --app-red: 0 84% 60%;
+  --app-yellow: 38 92% 50%;
+  --app-purple: 262 83% 58%;
+  --app-teal: 171 77% 64%;
 }
 
 .dark {
@@ -103,4 +111,137 @@
 
 .snap-center {
   scroll-snap-align: center;
+}
+
+/* App layout and transitions for smooth screen changes */
+.app-container {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.main-content {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  height: calc(100vh - 4rem);
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: 60% 40%;
+  }
+}
+
+/* Panel styling for app sections */
+.app-panel {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Tab system for multi-view panels */
+.tab-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.tab-nav {
+  display: flex;
+  background-color: hsl(var(--muted));
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.tab-button {
+  padding: 0.75rem 1.25rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.tab-button.active {
+  color: hsl(var(--app-blue));
+  border-bottom-color: hsl(var(--app-blue));
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.tab-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-panel {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  overflow-y: auto;
+}
+
+.tab-panel:not(.active) {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(10px);
+}
+
+.tab-panel.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+  z-index: 10;
+}
+
+/* Improved scrollbars */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.2) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 20px;
+}
+
+/* Enhanced message bubbles */
+.message-bubble {
+  max-width: 90%;
+  padding: 0.875rem 1.125rem;
+  border-radius: 1.25rem;
+  margin-bottom: 0.875rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+  animation: messageAppear 0.3s ease forwards;
+}
+
+@keyframes messageAppear {
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
