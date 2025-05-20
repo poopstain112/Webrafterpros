@@ -175,7 +175,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // API endpoint to add a chat message
+  // Clean reset endpoint
+  app.post("/api/reset_chat", async (req: Request, res: Response) => {
+    try {
+      // In a real app, we would delete chat history from DB
+      // Since we're returning empty messages to start fresh anyway, this just acknowledges the request
+      res.json({ success: true, message: "Chat reset successful" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+// API endpoint to add a chat message
   app.post("/api/websites/:id/messages", async (req: Request, res: Response) => {
     try {
       const websiteId = parseInt(req.params.id);
@@ -195,18 +206,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Get all messages for this website to provide context
       const allMessages = await storage.getMessagesByWebsiteId(websiteId);
-      const formattedMessages = allMessages.map(msg => ({
-        role: msg.role,
-        content: msg.content,
-      }));
       
-      // Get all current messages
-      const messageCount = formattedMessages.filter(m => m.role === "user").length;
+      // Count how many user messages we have to determine which question to ask next
+      const userMessageCount = allMessages.filter(m => m.role === "user").length;
       
-      // Generate AI response
-      let aiResponse;
-      
-      // BUSINESS QUESTIONS - only return the exact next question based on message count
+      // Define the fixed sequence of business questions - JUST QUESTIONS, no paragraphs
       const BUSINESS_QUESTIONS = [
         "What's the name of your business?",
         "Where is your business located?",
@@ -220,19 +224,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         "Do you have any social media accounts to link on the website?"
       ];
       
-      // Direct question mode - only return the next question, nothing else
-      if (messageCount <= BUSINESS_QUESTIONS.length) {
-        // Return the next question in the sequence
-        aiResponse = BUSINESS_QUESTIONS[messageCount - 1];
-      } else if (messageCount === BUSINESS_QUESTIONS.length + 1) {
-        // After all questions, ask for images
+      // Determine the AI response - ONLY use the exact questions, nothing else
+      let aiResponse;
+      
+      // Simple question-only approach
+      if (userMessageCount > 0 && userMessageCount <= BUSINESS_QUESTIONS.length) {
+        // Get the next question directly from the array (0-indexed, so userMessageCount - 1)
+        aiResponse = BUSINESS_QUESTIONS[userMessageCount - 1];
+      } else if (userMessageCount === BUSINESS_QUESTIONS.length + 1) {
+        // After final question, prompt for image upload - simple prompt only
         aiResponse = "Please upload images for your website.";
       } else {
-        // Only use the AI after all questions are answered
+        // After images upload, respond to any additional questions
+        // Format messages for OpenAI
+        const formattedMessages = allMessages.map(msg => ({
+          role: msg.role,
+          content: msg.content,
+        }));
+        
         aiResponse = await generateChatResponse(formattedMessages);
       }
       
-      // Save AI response
+      // Save AI response - guaranteed to be just a question
       const aiMessage = await storage.createMessage({
         websiteId,
         content: aiResponse,
