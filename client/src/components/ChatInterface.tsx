@@ -349,13 +349,29 @@ export default function ChatInterface({
                     className="w-full rounded-lg border border-gray-200 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     rows={3}
                   />
-                  <div className="flex justify-end mt-2">
+                  <div className="flex justify-between mt-2">
+                    <Button
+                      type="button"
+                      className="bg-gradient-to-r from-green-500 to-emerald-500 text-white"
+                      disabled={isLoading || message.trim() === ''}
+                      onClick={() => {
+                        if (onGenerateWebsite && message.trim()) {
+                          onGenerateWebsite(message);
+                          setMessage("");
+                          setIsUploadVisible(false);
+                        }
+                      }}
+                    >
+                      <Sparkles className="h-4 w-4 mr-1" />
+                      Generate Website
+                    </Button>
+                    
                     <Button
                       type="submit"
                       className="bg-gradient-to-r from-blue-500 to-blue-600 text-white"
                       disabled={isLoading || message.trim() === ''}
                     >
-                      Send
+                      Send Message
                     </Button>
                   </div>
                 </div>
