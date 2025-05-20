@@ -299,7 +299,7 @@ export function useChat(initialWebsiteId: number = 1) {
           ...prev,
           {
             role: 'assistant',
-            content: 'Your website has been generated! Take a look at the preview on the right and let me know if you\'d like to make any changes.',
+            content: 'Your website has been generated! Take a look at the preview and let me know if you\'d like to make any changes.',
           },
         ]);
 
@@ -307,6 +307,12 @@ export function useChat(initialWebsiteId: number = 1) {
           title: 'Success',
           description: 'Website generated successfully',
         });
+        
+        // Trigger preview display - this will show the website preview screen
+        window.dispatchEvent(new CustomEvent('showWebsitePreview', { detail: websiteData }));
+        
+        // Redirect directly to website preview page
+        window.location.href = '/website-preview';
       } catch (error) {
         console.error('Error generating website:', error);
         toast({
