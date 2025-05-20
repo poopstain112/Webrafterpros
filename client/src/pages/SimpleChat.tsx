@@ -58,6 +58,8 @@ export default function SimpleChat() {
   };
 
   // Handle file upload
+  const [isUploading, setIsUploading] = useState(false);
+  
   const handleUploadClick = () => {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
@@ -67,17 +69,25 @@ export default function SimpleChat() {
       const files = Array.from((e.target as HTMLInputElement).files || []);
       if (files.length > 0) {
         try {
+          // Show loading state
+          setIsUploading(true);
+          
           // Switch to review mode immediately when user selects files
           setUploadMode("review");
           
           // Process the upload
-          await handleImageUpload(files);
+          const uploadedFiles = await handleImageUpload(files);
+          console.log("Successfully uploaded images:", uploadedFiles);
           
-          // Make sure we're still in review mode
+          // Make sure we're still in review mode with loading complete
+          setIsUploading(false);
           setUploadMode("review");
           
         } catch (error) {
           console.error("Error during upload:", error);
+          setIsUploading(false);
+          setUploadMode("chat"); // Return to chat if there's an error
+          
           toast({
             title: "Error",
             description: "Failed to upload images. Please try again.",
@@ -193,7 +203,7 @@ export default function SimpleChat() {
       )}
       
       {/* REVIEW MODE - Images Review Screen */}
-      {uploadMode === "review" && uploadedImages.length > 0 && !websiteStructure && (
+      {uploadMode === "review" && !websiteStructure && (
         <div className="fixed inset-0 bg-white z-30 flex flex-col">
           <div className="bg-blue-500 text-white py-4 px-4 flex items-center">
             <button 
@@ -208,37 +218,58 @@ export default function SimpleChat() {
           </div>
           
           <div className="flex-1 p-4 overflow-y-auto">
-            <p className="text-gray-600 mb-4">
-              Review your images below. When you're ready, click "Create Website" to generate your website.
-            </p>
-            
-            <div className="grid grid-cols-2 gap-3">
-              {uploadedImages.map((image, index) => (
-                <div key={index} className="aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm">
-                  <img 
-                    src={image.url} 
-                    alt={`Uploaded ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.currentTarget.src = `${image.url}?t=${Date.now()}`;
-                    }}
-                  />
+            {isUploading ? (
+              <div className="h-full flex flex-col items-center justify-center">
+                <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p className="text-gray-600">Uploading your images...</p>
+              </div>
+            ) : uploadedImages.length > 0 ? (
+              <>
+                <p className="text-gray-600 mb-4">
+                  Review your images below. When you're ready, click "Create Website" to generate your website.
+                </p>
+                
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  {uploadedImages.map((image, index) => (
+                    <div key={index} className="aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
+                      <img 
+                        src={image.url} 
+                        alt={`Uploaded ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        loading="eager"
+                        onError={(e) => {
+                          // Retry loading the image with a timestamp to bypass cache
+                          e.currentTarget.src = `${image.url}?t=${Date.now()}`;
+                        }}
+                      />
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="p-4 border-t">
-            <Button
-              onClick={() => {
-                generateWebsiteContent("Generate a website based on our conversation");
-                setUploadMode("chat");
-              }}
-              disabled={isGenerating}
-              className="w-full bg-blue-500 hover:bg-blue-600 py-3 text-lg"
-            >
-              {isGenerating ? "Creating Website..." : "Create Website"}
-            </Button>
+                
+                <div className="p-4 border-t fixed bottom-0 left-0 right-0 bg-white">
+                  <Button
+                    onClick={() => {
+                      generateWebsiteContent("Generate a website based on our conversation");
+                      setUploadMode("chat");
+                    }}
+                    disabled={isGenerating}
+                    className="w-full bg-blue-500 hover:bg-blue-600 py-3 text-lg"
+                  >
+                    {isGenerating ? "Creating Website..." : "Create Website"}
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center">
+                <p className="text-gray-600 mb-4">No images have been uploaded yet.</p>
+                <Button
+                  onClick={handleUploadClick}
+                  className="bg-blue-500 hover:bg-blue-600"
+                >
+                  Upload Images
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}
