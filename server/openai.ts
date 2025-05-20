@@ -120,32 +120,57 @@ export async function generateChatResponse(
   messages: { role: string; content: string }[]
 ): Promise<string> {
   try {
-    // Check if this is a new conversation and we need to ask business questions
-    if (messages.filter(m => m.role === "user").length <= 2) {
-      // Find the appropriate question to ask based on conversation history
-      const questionIndex = messages.filter(m => m.role === "assistant").length;
-      if (questionIndex < BUSINESS_QUESTIONS.length) {
-        return BUSINESS_QUESTIONS[questionIndex];
-      }
+    // Get the count of user and assistant messages
+    const userMessageCount = messages.filter(m => m.role === "user").length;
+    const assistantMessageCount = messages.filter(m => m.role === "assistant").length;
+    
+    // Check if we should be asking sequential questions
+    // Ensure we always alternate: assistant asks a question, user answers, then assistant asks next question
+    if (userMessageCount === assistantMessageCount && userMessageCount <= BUSINESS_QUESTIONS.length) {
+      // We're in question-asking mode and it's time to ask the next question
+      // Return the next question in sequence
+      return BUSINESS_QUESTIONS[assistantMessageCount - 1];
+    }
+
+    // Check if we've just finished all the questions and should prompt for images
+    if (userMessageCount === BUSINESS_QUESTIONS.length + 1 && 
+        assistantMessageCount === BUSINESS_QUESTIONS.length) {
+      return "Thank you for providing all that information! Now, please upload some images for your website. " +
+             "High-quality images are essential for creating a premium website. " +
+             "Once you've uploaded your images, click the 'Create Website' button to see a preview.";
     }
     
-    // If we've already asked all the questions, or this is a response to a user question
     // Check if the previous message is from a user (we're responding to user input)
     const isRespondingToUser = messages[messages.length - 1].role === "user";
     
     let systemPrompt = "";
     
     if (isRespondingToUser) {
-      systemPrompt = `You are a professional website consultant that helps users create premium, $20,000-caliber websites. 
+      // If we've gathered all business info and now the user is asking questions or requesting changes
+      if (userMessageCount > BUSINESS_QUESTIONS.length + 1) {
+        systemPrompt = `You are a premium website design consultant working with a client on their $20,000 custom website.
+        
+        The client might ask for design changes, request feature adjustments, or ask questions about their website.
+        
+        Respond with expertise and confidence, explaining how you'll implement any requested changes or answering
+        their questions thoughtfully. Always maintain a tone of luxury and exclusivity.
+        
+        If they request a change, acknowledge it and explain how you'll enhance their website with their feedback.
+        
+        Keep your responses concise, professional, and focused on helping them get the perfect website.`;
+      } else {
+        // We're still gathering business information, so enhance their answers into professional copy
+        systemPrompt = `You are a professional website consultant that helps users create premium, $20,000-caliber websites.
         
         Take the user's input and enhance it into compelling, professional website copy. 
         Transform simple answers into polished, engaging content that could appear directly on a premium website.
         
         For example, if a user says "We sell shoes", you should respond with elegant marketing copy like:
-        "I've refined that into: 'Discover unparalleled craftsmanship with our curated collection of luxury footwear. Each pair is meticulously designed to combine timeless elegance with modern comfort, ensuring you make a statement with every step.'"
+        "Perfect. I've refined that into: 'Discover unparalleled craftsmanship with our curated collection of luxury footwear. Each pair is meticulously designed to combine timeless elegance with modern comfort, ensuring you make a statement with every step.'"
         
-        Always acknowledge their input, then provide the enhanced version that you've crafted.
-        Keep your responses concise but impactful.`;
+        After acknowledging their input and providing your enhanced version, ask the NEXT QUESTION from the sequence.
+        This creates a guided interview flow where you're helping the user build their website one step at a time.`;
+      }
     } else {
       // Default chatbot behavior
       systemPrompt = `You are a helpful AI assistant specializing in premium website creation. 
@@ -173,7 +198,21 @@ export async function generateChatResponse(
       messages: typedMessages
     });
 
-    return response.choices[0].message.content || "";
+    let responseContent = response.choices[0].message.content || "";
+    
+    // If we're in the question-asking phase and this is a response to a user answer,
+    // append the next question to guide the conversation forward
+    if (isRespondingToUser && userMessageCount <= BUSINESS_QUESTIONS.length && 
+        !responseContent.includes(BUSINESS_QUESTIONS[assistantMessageCount])) {
+        
+      const nextQuestionIndex = assistantMessageCount;
+      if (nextQuestionIndex < BUSINESS_QUESTIONS.length) {
+        // Only append if the response doesn't already include the next question
+        responseContent += "\n\n" + BUSINESS_QUESTIONS[nextQuestionIndex];
+      }
+    }
+
+    return responseContent;
   } catch (error: any) {
     console.error("OpenAI API error:", error);
     throw new Error(`Failed to generate chat response: ${error.message}`);
