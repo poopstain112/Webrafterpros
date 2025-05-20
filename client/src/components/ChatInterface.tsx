@@ -335,8 +335,31 @@ export default function ChatInterface({
                 uploadedImages={uploadedImages}
                 onRemoveImage={onRemoveImage}
                 isVisible={true}
-                onToggleVisible={() => {}}
+                onToggleVisible={() => setIsUploadVisible(false)}
               />
+              
+              {/* Text input area for describing the website */}
+              {uploadedImages.length > 0 && (
+                <div className="mt-4 bg-white rounded-lg border border-blue-100 p-3">
+                  <h3 className="text-sm font-medium text-blue-700 mb-2">Describe your website:</h3>
+                  <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Describe what kind of website you want to create using these images..."
+                    className="w-full rounded-lg border border-gray-200 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    rows={3}
+                  />
+                  <div className="flex justify-end mt-2">
+                    <Button
+                      type="submit"
+                      className="bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                      disabled={isLoading || message.trim() === ''}
+                    >
+                      Send
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
           
