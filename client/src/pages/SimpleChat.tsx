@@ -192,15 +192,21 @@ export default function SimpleChat() {
           <div className="flex-1 relative flex items-center">
             <textarea
               value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
+              onChange={(e) => {
+                setInputMessage(e.target.value);
+                // Auto-resize the textarea
+                e.target.style.height = 'auto';
+                e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`;
+              }}
               placeholder="Type a message..."
-              className="w-full py-2 px-4 bg-gray-50 rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 pr-12 resize-none overflow-auto"
+              className="w-full py-2 px-4 bg-gray-50 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 pr-12 resize-none"
               style={{ 
                 minHeight: '40px', 
-                maxHeight: '100px',
+                maxHeight: '120px',
                 height: 'auto',
                 lineHeight: '1.5',
-                paddingRight: '3rem'
+                paddingRight: '3rem',
+                overflowY: 'auto'
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
