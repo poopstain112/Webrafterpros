@@ -44,6 +44,16 @@ export default function ChatPage() {
       setMessage('');
     }
   };
+  
+  // Function to skip the current question
+  const handleSkip = () => {
+    sendMessage("Skip this question");
+    // Show a toast to inform the user
+    toast({
+      title: "Question skipped",
+      description: "Moving to the next question",
+    });
+  };
 
   return (
     <div className="flex flex-col h-screen bg-white">
@@ -191,6 +201,19 @@ export default function ChatPage() {
           </div>
         )}
       </div>
+      
+      {/* Skip Question Button */}
+      {messages.length > 0 && messages[messages.length - 1].role === 'assistant' && (
+        <div className="flex justify-center mb-3 mt-1">
+          <button 
+            type="button"
+            onClick={handleSkip}
+            className="text-xs text-gray-500 hover:text-blue-500 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full transition-colors"
+          >
+            Skip this question
+          </button>
+        </div>
+      )}
 
       {/* Bottom navigation bar (only on mobile) */}
       <div className="sm:hidden bg-white border-t border-gray-200 py-2 px-4 flex justify-center">

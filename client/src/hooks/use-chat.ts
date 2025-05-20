@@ -66,10 +66,10 @@ export function useChat(initialWebsiteId: number = 1) {
         // Send message to API including uploaded images
         const response = await sendChatMessage(initialWebsiteId, content, 'user', uploadedImages);
 
-        // Update messages
+        // Only update with the AI message, since we already added the user message above
         setMessages(prev => {
           const filtered = prev.filter(m => !m.isLoading);
-          return [...filtered, response.userMessage, response.aiMessage];
+          return [...filtered, response.aiMessage];
         });
 
         // Clear uploaded images after sending
