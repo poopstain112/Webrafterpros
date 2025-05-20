@@ -12,47 +12,51 @@ export function useChat(initialWebsiteId: number = 1) {
   const { toast } = useToast();
 
   // Fetch initial messages when component mounts
-  useEffect(() => {
-    async function fetchMessages() {
-      try {
-        console.log("Fetching messages for website ID:", initialWebsiteId);
-        const fetchedMessages = await getChatMessages(initialWebsiteId);
-        console.log("Fetched messages:", fetchedMessages);
-        
-        if (fetchedMessages.length === 0) {
-          // Add initial message if no messages exist - first business question
-          console.log("No messages found, using initial question");
-          setMessages([
-            {
-              role: 'assistant',
-              content: "What's the name of your business?",
-            },
-          ]);
-        } else {
-          console.log("Using fetched messages");
-          setMessages(fetchedMessages);
-        }
-      } catch (error) {
-        console.error('Error fetching messages:', error);
-        // Fallback to initial question if there's an error
-        console.log("Error occurred, using initial question");
+  // Function to fetch messages that can be called on-demand for pull-to-refresh
+  const fetchMessages = useCallback(async () => {
+    try {
+      console.log("Fetching messages for website ID:", initialWebsiteId);
+      const fetchedMessages = await getChatMessages(initialWebsiteId);
+      console.log("Fetched messages:", fetchedMessages);
+      
+      if (fetchedMessages.length === 0) {
+        // Add initial message if no messages exist - first business question
+        console.log("No messages found, using initial question");
         setMessages([
           {
             role: 'assistant',
             content: "What's the name of your business?",
           },
         ]);
-        
-        toast({
-          title: 'Error',
-          description: 'Failed to load chat history',
-          variant: 'destructive',
-        });
+      } else {
+        console.log("Using fetched messages");
+        setMessages(fetchedMessages);
       }
+      return fetchedMessages;
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      // Fallback to initial question if there's an error
+      console.log("Error occurred, using initial question");
+      setMessages([
+        {
+          role: 'assistant',
+          content: "What's the name of your business?",
+        },
+      ]);
+      
+      toast({
+        title: 'Error',
+        description: 'Failed to load chat history',
+        variant: 'destructive',
+      });
+      return [];
     }
-
-    fetchMessages();
   }, [initialWebsiteId, toast]);
+
+  // Fetch initial messages when component mounts
+  useEffect(() => {
+    fetchMessages();
+  }, [fetchMessages]);
 
   // Handle sending a new message
   const sendMessage = useCallback(
@@ -226,5 +230,6 @@ export function useChat(initialWebsiteId: number = 1) {
     generateWebsiteContent,
     clearUploadedImages,
     resetChat,
+    fetchMessages,
   };
 }

@@ -183,8 +183,84 @@ ${websiteStructure.html}
         {/* Chat Screen */}
         {currentScreen === "chat" && (
           <div className="h-full flex flex-col">
+            {/* Pull-to-refresh indicator */}
+            <div 
+              ref={refreshAreaRef}
+              className="absolute top-0 left-0 right-0 flex justify-center transform -translate-y-full transition-transform duration-300 z-10 bg-blue-50 py-2"
+              style={{ 
+                transform: isRefreshing 
+                  ? 'translateY(0)' 
+                  : pullMoveY.current > 0 
+                    ? `translateY(${Math.min(pullMoveY.current * 0.4, 60)}px)` 
+                    : 'translateY(-100%)' 
+              }}
+            >
+              <div className="flex items-center space-x-2">
+                <RefreshCw className={`h-5 w-5 text-blue-500 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <span className="text-sm text-blue-700">
+                  {isRefreshing ? 'Refreshing...' : 'Pull down to refresh'}
+                </span>
+              </div>
+            </div>
+            
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+            <div 
+              className="flex-1 overflow-y-auto p-4 bg-gray-50 relative"
+              onTouchStart={(e) => {
+                // Only enable pull-to-refresh when at the top of the scroll
+                const messageContainer = e.currentTarget;
+                if (messageContainer.scrollTop <= 0) {
+                  pullStartY.current = e.touches[0].clientY;
+                  pullMoveY.current = 0;
+                  isRefreshingRef.current = false;
+                }
+              }}
+              onTouchMove={(e) => {
+                // Calculate pull distance when at the top
+                const messageContainer = e.currentTarget;
+                if (pullStartY.current > 0 && messageContainer.scrollTop <= 0) {
+                  pullMoveY.current = e.touches[0].clientY - pullStartY.current;
+                  // Force UI update
+                  if (pullMoveY.current > 0) {
+                    e.currentTarget.style.overflow = 'hidden';
+                    refreshAreaRef.current?.style.setProperty(
+                      'transform', 
+                      `translateY(${Math.min(pullMoveY.current * 0.4, 60)}px)`
+                    );
+                  }
+                }
+              }}
+              onTouchEnd={(e) => {
+                // Trigger refresh if pulled far enough
+                const messageContainer = e.currentTarget;
+                if (pullMoveY.current > distanceThreshold && !isRefreshingRef.current) {
+                  isRefreshingRef.current = true;
+                  setIsRefreshing(true);
+                  
+                  // Perform the refresh
+                  fetchMessages()
+                    .then(() => {
+                      setTimeout(() => {
+                        setIsRefreshing(false);
+                        pullStartY.current = 0;
+                        pullMoveY.current = 0;
+                        isRefreshingRef.current = false;
+                        e.currentTarget.style.overflow = 'auto';
+                        toast({
+                          title: "Refreshed!",
+                          description: "Chat content has been updated"
+                        });
+                      }, 800);
+                    });
+                } else {
+                  // Reset if not pulled far enough
+                  pullStartY.current = 0;
+                  pullMoveY.current = 0;
+                  e.currentTarget.style.overflow = 'auto';
+                  refreshAreaRef.current?.style.setProperty('transform', 'translateY(-100%)');
+                }
+              }}
+            >
               {messages.length === 0 ? (
                 <div className="text-center p-8">
                   <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -218,14 +294,22 @@ ${websiteStructure.html}
                         <p>{msg.content}</p>
                         {msg.images && msg.images.length > 0 && (
                           <div className="mt-2">
-                            <div className="flex overflow-x-auto gap-2 py-1">
+                            <p className="text-xs opacity-70 mb-1">
+                              {msg.images.length} image{msg.images.length !== 1 ? 's' : ''} uploaded
+                            </p>
+                            <div className="flex overflow-x-auto pb-2 gap-2 no-scrollbar">
                               {msg.images.map((img, i) => (
-                                <img
-                                  key={i}
-                                  src={img.url}
-                                  alt={`Uploaded ${i + 1}`}
-                                  className="h-24 w-auto rounded border border-gray-200"
-                                />
+                                <div key={i} className="flex-shrink-0">
+                                  <img
+                                    src={img.url}
+                                    alt={`Uploaded ${i + 1}`}
+                                    className="h-24 w-auto rounded border border-gray-200 shadow-sm"
+                                    onError={(e) => {
+                                      console.error(`Failed to load image ${i}:`, img.url);
+                                      e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIHJ4PSI4IiBmaWxsPSIjRjNGNEY2Ii8+PHBhdGggZD0iTTM2IDQwSDY0VjcwSDM2VjQwWiIgc3Ryb2tlPSIjOTQ5N0EwIiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNNDAgNjRMNDggNTZMNTIgNjBMNjAgNTIiIHN0cm9rZT0iIzk0OTdBMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48Y2lyY2xlIGN4PSI0NCIgY3k9IjQ4IiByPSIzIiBmaWxsPSIjOTQ5N0EwIi8+PC9zdmc+';
+                                    }}
+                                  />
+                                </div>
                               ))}
                             </div>
                           </div>
@@ -272,28 +356,46 @@ ${websiteStructure.html}
 
               {/* Modern Uploaded Images Preview */}
               {uploadedImages.length > 0 && (
-                <div className="mt-2 flex overflow-x-auto gap-2 py-1 scrollbar-hide">
-                  {uploadedImages.map((img, index) => (
-                    <div key={index} className="relative group">
-                      <div className="h-14 w-14 rounded-xl overflow-hidden shadow-sm border border-gray-100">
-                        <img
-                          src={img.url}
-                          alt={`Uploaded ${index + 1}`}
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
-                      <button
-                        className="absolute -top-1.5 -right-1.5 bg-white shadow-md text-red-500 rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                        onClick={() => {
-                          const newImages = [...uploadedImages];
-                          newImages.splice(index, 1);
-                          clearUploadedImages();
-                        }}
-                      >
-                        ×
-                      </button>
+                <div className="mt-3 pt-2 border-t border-gray-100">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs font-medium text-gray-500">
+                      {uploadedImages.length} image{uploadedImages.length !== 1 ? 's' : ''} ready
+                    </span>
+                    <span className="text-xs text-blue-500">← Scroll →</span>
+                  </div>
+                  
+                  <div className="overflow-x-auto pb-1">
+                    <div className="flex gap-3 py-1" style={{ minWidth: 'min-content' }}>
+                      {uploadedImages.map((img, index) => (
+                        <div key={index} className="relative group flex-shrink-0" style={{ width: '100px' }}>
+                          <div className="rounded-lg overflow-hidden shadow-sm border border-gray-200 aspect-square">
+                            <img
+                              src={img.url}
+                              alt={`Uploaded ${index + 1}`}
+                              className="h-full w-full object-cover"
+                              onError={(e) => {
+                                console.error(`Failed to load image thumbnail ${index}:`, img.url);
+                                e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIHJ4PSI4IiBmaWxsPSIjRjNGNEY2Ii8+PHBhdGggZD0iTTM2IDQwSDY0VjcwSDM2VjQwWiIgc3Ryb2tlPSIjOTQ5N0EwIiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNNDAgNjRMNDggNTZMNTIgNjBMNjAgNTIiIHN0cm9rZT0iIzk0OTdBMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48Y2lyY2xlIGN4PSI0NCIgY3k9IjQ4IiByPSIzIiBmaWxsPSIjOTQ5N0EwIi8+PC9zdmc+';
+                              }}
+                            />
+                          </div>
+                          <button
+                            className="absolute -top-2 -right-2 bg-white shadow text-red-500 rounded-full w-6 h-6 flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity"
+                            onClick={() => {
+                              const newImages = [...uploadedImages];
+                              newImages.splice(index, 1);
+                              clearUploadedImages();
+                            }}
+                          >
+                            ×
+                          </button>
+                          <div className="absolute bottom-0 left-0 right-0 text-[10px] bg-black/60 text-white px-1 py-0.5 truncate text-center">
+                            Image {index + 1}
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
               )}
             </div>
