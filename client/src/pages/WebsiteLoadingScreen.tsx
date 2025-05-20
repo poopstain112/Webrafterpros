@@ -44,8 +44,28 @@ const WebsiteLoadingScreen: React.FC = () => {
         
         // Store the website data in localStorage so it can be accessed in the chat view
         if (websiteData && websiteData.html) {
-          localStorage.setItem('generatedWebsiteHTML', websiteData.html);
+          // Wrap HTML in proper document structure with essential styling
+          const enhancedHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${businessType || 'Business'} Website</title>
+  <style>
+    /* Essential styling */
+    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    img { max-width: 100%; height: auto; }
+    * { box-sizing: border-box; }
+  </style>
+</head>
+<body>
+  ${websiteData.html}
+</body>
+</html>`;
+          
+          localStorage.setItem('generatedWebsiteHTML', enhancedHtml);
           localStorage.setItem('websiteGeneratedAt', new Date().toISOString());
+          console.log("Enhanced HTML stored in localStorage:", enhancedHtml.length, "characters");
         }
         
         // Allow the progress animation to complete
