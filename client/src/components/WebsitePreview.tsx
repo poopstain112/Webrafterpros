@@ -174,10 +174,10 @@ ${websiteHtml}
           </div>
         ) : (
           <div className="h-full flex items-center justify-center">
-            <div className="text-center max-w-md">
+            <div className="text-center max-w-md bg-blue-50 p-6 border-2 border-blue-200 rounded-xl shadow-lg">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 mx-auto text-gray-400 mb-4"
+                className="h-16 w-16 mx-auto text-blue-500 mb-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -185,17 +185,43 @@ ${websiteHtml}
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={1.5}
+                  strokeWidth={2}
                   d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                 />
               </svg>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                No website generated yet
+              <h3 className="text-2xl font-bold text-blue-700 mb-3">
+                Your Website Is Ready To Generate!
               </h3>
-              <p className="text-gray-500">
-                Describe your website in the chat to get started. Include details
-                about your business, colors, layout preferences, and any other
-                specific elements you'd like to include.
+              <p className="text-lg text-blue-600 mb-4">
+                You've uploaded images! Now click the button below to create your website.
+              </p>
+              
+              <button
+                onClick={() => {
+                  const description = "Create a beautiful website using the uploaded images. Include home, about, services, gallery, and contact sections.";
+                  // Show a toast notification since we're bypassing the normal flow
+                  toast({
+                    title: "Generating your website!",
+                    description: "We're creating your website based on the uploaded images. This may take a moment...",
+                  });
+                  
+                  setTimeout(() => {
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth'
+                    });
+                  }, 500);
+                }}
+                className="w-full py-4 px-4 bg-green-500 hover:bg-green-600 text-white text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+              >
+                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                GENERATE MY WEBSITE NOW
+              </button>
+              
+              <p className="text-blue-500 mt-3">
+                Click the button above to automatically create your website based on your uploaded images
               </p>
             </div>
           </div>
