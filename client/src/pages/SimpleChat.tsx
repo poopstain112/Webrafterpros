@@ -62,10 +62,14 @@ export default function SimpleChat() {
     fileInput.type = "file";
     fileInput.accept = "image/*";
     fileInput.multiple = true;
-    fileInput.onchange = (e) => {
+    fileInput.onchange = async (e) => {
       const files = Array.from((e.target as HTMLInputElement).files || []);
       if (files.length > 0) {
-        handleImageUpload(files);
+        const uploadedImages = await handleImageUpload(files);
+        // Show the images review screen if we have enough conversation history
+        if (messages.length > 5 && !websiteStructure) {
+          setTimeout(() => setShowImagesReview(true), 800); // Short delay for better UX
+        }
       }
     };
     fileInput.click();
