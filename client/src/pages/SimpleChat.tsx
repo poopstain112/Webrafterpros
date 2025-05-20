@@ -65,10 +65,25 @@ export default function SimpleChat() {
     fileInput.onchange = async (e) => {
       const files = Array.from((e.target as HTMLInputElement).files || []);
       if (files.length > 0) {
-        const uploadedImages = await handleImageUpload(files);
-        // Show the images review screen if we have enough conversation history
-        if (messages.length > 5 && !websiteStructure) {
-          setTimeout(() => setShowImagesReview(true), 800); // Short delay for better UX
+        try {
+          // Log for debugging
+          console.log("Starting image upload...");
+          
+          await handleImageUpload(files);
+          
+          // Check again after upload completes
+          console.log("Upload complete, message count:", messages.length);
+          
+          // Force show the images review screen since upload was successful
+          if (messages.length > 0) {
+            console.log("Setting showImagesReview to true");
+            setTimeout(() => {
+              setShowImagesReview(true);
+              console.log("Image review screen should be visible now");
+            }, 500);
+          }
+        } catch (error) {
+          console.error("Error during upload:", error);
         }
       }
     };
