@@ -45,8 +45,13 @@ export async function sendChatMessage(
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Failed to send message');
+      try {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to send message');
+      } catch (jsonError) {
+        // If we can't parse JSON, just use the status text
+        throw new Error(`Failed to send message: ${response.statusText}`);
+      }
     }
 
     return await response.json();

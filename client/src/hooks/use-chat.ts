@@ -59,6 +59,7 @@ export function useChat(initialWebsiteId: number = 1) {
         isLoading: true,
       };
 
+      // Just add the user message, not both
       setMessages(prev => [...prev, userMessage, loadingMessage]);
       setIsLoading(true);
 
@@ -66,10 +67,12 @@ export function useChat(initialWebsiteId: number = 1) {
         // Send message to API including uploaded images
         const response = await sendChatMessage(initialWebsiteId, content, 'user', uploadedImages);
 
-        // Only update with the AI message, since we already added the user message above
+        // Replace loading message with AI response, don't add a second user message
         setMessages(prev => {
-          const filtered = prev.filter(m => !m.isLoading);
-          return [...filtered, response.aiMessage];
+          // Remove the loading message
+          const withoutLoading = prev.filter(m => !m.isLoading);
+          // Add the AI response
+          return [...withoutLoading, response.aiMessage];
         });
 
         // Clear uploaded images after sending
