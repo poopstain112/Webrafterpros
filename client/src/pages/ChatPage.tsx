@@ -202,8 +202,8 @@ export default function ChatPage() {
         )}
       </div>
       
-      {/* Skip Question Button */}
-      {messages.length > 0 && messages[messages.length - 1].role === 'assistant' && !messages[messages.length - 1].content.includes("upload images") && (
+      {/* Skip Question Button - always show it */}
+      {messages.length > 0 && messages[messages.length - 1].role === 'assistant' && (
         <div className="flex justify-center mb-3 mt-1">
           <button 
             type="button"
