@@ -11,8 +11,28 @@ const WebsitePreviewScreen = () => {
   useEffect(() => {
     // Get the stored website HTML from localStorage
     const storedHtml = localStorage.getItem('generatedWebsiteHTML');
+    console.log("WebsitePreviewScreen: Checking for stored HTML", storedHtml ? "HTML found, length: " + storedHtml.length : "No HTML found");
+    
     if (storedHtml) {
       setWebsiteHtml(storedHtml);
+    } else {
+      // If no HTML is found, try to reload it a few times in case we arrived before localStorage was set
+      let attempts = 0;
+      const checkInterval = setInterval(() => {
+        const html = localStorage.getItem('generatedWebsiteHTML');
+        console.log("Retry attempt", attempts + 1, "for website HTML");
+        
+        if (html) {
+          console.log("HTML found on retry! Length:", html.length);
+          setWebsiteHtml(html);
+          clearInterval(checkInterval);
+        } else if (++attempts >= 5) {
+          console.log("Failed to find HTML after 5 attempts");
+          clearInterval(checkInterval);
+        }
+      }, 500);
+      
+      return () => clearInterval(checkInterval);
     }
   }, []);
 

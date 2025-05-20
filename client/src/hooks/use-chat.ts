@@ -308,11 +308,20 @@ export function useChat(initialWebsiteId: number = 1) {
           description: 'Website generated successfully',
         });
         
-        // Trigger preview display - this will show the website preview screen
-        window.dispatchEvent(new CustomEvent('showWebsitePreview', { detail: websiteData }));
-        
-        // Redirect directly to website preview page
-        window.location.href = '/website-preview';
+        // Save the website HTML in localStorage for the preview page to access
+        if (websiteData?.html) {
+          localStorage.setItem('generatedWebsiteHTML', websiteData.html);
+          console.log("CRITICAL: Saved website HTML to localStorage, length:", websiteData.html.length);
+          
+          // CRITICAL FIX: Force navigation to website preview with a 500ms delay
+          // to ensure localStorage is properly set before navigation
+          setTimeout(() => {
+            console.log("CRITICAL: Force navigating to website preview");
+            window.location.replace('/website-preview');
+          }, 500);
+        } else {
+          console.error("Failed to get website HTML");
+        }
       } catch (error) {
         console.error('Error generating website:', error);
         toast({
