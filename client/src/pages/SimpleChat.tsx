@@ -157,25 +157,50 @@ export default function SimpleChat() {
         </div>
       )}
       
-      {/* Website generation or preview button - fixed above input when needed */}
-      {messages.length > 5 && (
-        <div className="fixed bottom-16 left-0 right-0 bg-blue-50 p-3 border-t border-blue-100 z-10">
-          {!websiteStructure ? (
-            <Button
-              onClick={() => generateWebsiteContent("Generate a website based on our conversation")}
-              disabled={isGenerating}
-              className="w-full bg-blue-500 hover:bg-blue-600"
-            >
-              {isGenerating ? "Creating Website..." : "Create Website"}
-            </Button>
-          ) : (
-            <Button
-              onClick={() => setShowWebsitePreview(true)}
-              className="w-full bg-green-500 hover:bg-green-600"
-            >
-              View Your Website
-            </Button>
-          )}
+      {/* Website generation button - as icon in the image upload button row */}
+      {messages.length > 5 && !websiteStructure && !uploadedImages.length && (
+        <div className="fixed bottom-0 right-0 p-3 z-30">
+          <Button
+            onClick={() => generateWebsiteContent("Generate a website based on our conversation")}
+            disabled={isGenerating}
+            className="rounded-full w-12 h-12 bg-blue-600 hover:bg-blue-700 flex items-center justify-center"
+            title="Create Website"
+          >
+            {isGenerating ? (
+              <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            )}
+          </Button>
+        </div>
+      )}
+      
+      {/* When images are uploaded, show the website button with images */}
+      {messages.length > 5 && !websiteStructure && uploadedImages.length > 0 && (
+        <div className="fixed bottom-24 left-0 right-0 bg-white border-t border-gray-200 p-2 z-10">
+          <Button
+            onClick={() => generateWebsiteContent("Generate a website based on our conversation")}
+            disabled={isGenerating}
+            className="w-full bg-blue-500 hover:bg-blue-600"
+          >
+            {isGenerating ? "Creating Website..." : "Create Website"}
+          </Button>
+        </div>
+      )}
+      
+      {/* View website button - when website exists */}
+      {websiteStructure && (
+        <div className="fixed top-16 right-0 p-2 z-10">
+          <Button
+            onClick={() => setShowWebsitePreview(true)}
+            className="rounded-full w-10 h-10 bg-green-500 hover:bg-green-600 flex items-center justify-center"
+            title="View Your Website"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </Button>
         </div>
       )}
       
