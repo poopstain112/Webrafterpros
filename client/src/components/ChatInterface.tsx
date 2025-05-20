@@ -248,34 +248,32 @@ export default function ChatInterface({
                         </div>
                         <div className="rounded-lg overflow-hidden shadow-md">
                           <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide">
-                            {console.log("Rendering message images:", JSON.stringify(msg.images))}
-                            {msg.images.map((img, imgIndex) => {
-                              console.log(`Image ${imgIndex} URL:`, img.url);
-                              return (
+                            
+                            {msg.images.map((img, imgIndex) => (
                                 <div
                                   key={imgIndex}
                                   className="relative flex-shrink-0 w-full h-40 snap-center"
                                   style={{ minWidth: "240px" }}
                                 >
-                                  {/* Use plain image placeholder while debugging */}
-                                  <div className="w-full h-full flex items-center justify-center bg-teal-100 rounded-lg">
+                                  <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg overflow-hidden">
                                     <img
-                                      src={img.url.startsWith('http') ? 
-                                        // Extract filename from full URL
-                                        `/uploads/${img.url.split('/').pop()}` : 
-                                        img.url}
+                                      src={img.url}
                                       alt={`Uploaded ${imgIndex + 1}`}
-                                      className="max-w-full max-h-full object-contain p-2"
+                                      className="max-w-full max-h-full object-contain"
                                       onError={(e) => {
                                         console.error(`Error loading image ${imgIndex}:`, img.url);
                                         e.currentTarget.style.display = 'none';
-                                        // Show filename as fallback
+                                        
+                                        // Clean fallback for image errors
                                         const parent = e.currentTarget.parentElement;
                                         if (parent) {
-                                          const filename = img.filename || img.url.split('/').pop();
-                                          parent.innerHTML += `<div class="text-teal-700 font-medium">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="M21 15L16 10L5 21" /></svg>
-                                            Image: ${filename}
+                                          parent.innerHTML = `<div class="flex flex-col items-center justify-center text-blue-500 p-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                              <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                                              <circle cx="9" cy="9" r="2" />
+                                              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                                            </svg>
+                                            <span class="text-sm font-medium">Image</span>
                                           </div>`;
                                         }
                                       }}
@@ -285,8 +283,7 @@ export default function ChatInterface({
                                     {imgIndex + 1}/{msg.images?.length || 0}
                                   </div>
                                 </div>
-                              );
-                            })}
+                            ))}
                           </div>
                           {msg.images && msg.images.length > 1 && (
                             <div className="flex justify-center gap-1 p-1 bg-gray-800/10">
