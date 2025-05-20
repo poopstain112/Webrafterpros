@@ -312,6 +312,10 @@ export default function SimplifiedHome() {
     <div className="relative">
       {/* Global loading overlay - shows when website is generating */}
       {isGeneratingWebsite && <FullScreenLoader />}
+      {/* Debug information - for troubleshooting */}
+      {/*<div className="fixed bottom-0 right-0 bg-black/70 text-white text-xs p-2 z-50">
+        Website HTML Length: {websiteHtml?.length || 0}
+      </div>*/}
       
       <div className="flex flex-col h-screen">
       {/* Modern Header - 2025 Style */}
@@ -525,7 +529,8 @@ export default function SimplifiedHome() {
                 srcDoc={websiteHtml}
                 title="Website Preview"
                 className="w-full h-full border-0"
-                sandbox="allow-same-origin allow-scripts"
+                style={{width: '100%', height: '100%', border: 'none'}}
+                sandbox="allow-same-origin allow-scripts allow-forms"
               />
             ) : (
               <div className="h-full flex items-center justify-center">
