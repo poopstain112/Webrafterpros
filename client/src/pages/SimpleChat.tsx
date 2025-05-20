@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Image as ImageIcon, ExternalLink } from "lucide-react";
+import { Send, Image as ImageIcon, ExternalLink, RefreshCw, AlertTriangle } from "lucide-react";
 import { useChat } from "@/hooks/use-chat";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -7,10 +7,21 @@ import WebsitePreview from "@/components/WebsitePreview";
 import ViewWebsiteButton from "@/components/ViewWebsiteButton";
 import { useWebsiteGeneration } from "../contexts/WebsiteGenerationContext";
 import { useLocation } from "wouter";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function SimpleChat() {
   const [inputMessage, setInputMessage] = useState("");
   const [showWebsitePreview, setShowWebsitePreview] = useState(false);
+  const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
   const { startGeneration } = useWebsiteGeneration();
   const [showImagesReview, setShowImagesReview] = useState(false);
   const [uploadMode, setUploadMode] = useState<"chat" | "review">("chat");
@@ -218,9 +229,56 @@ export default function SimpleChat() {
       description: "You can now view the sample website by clicking the 'View Website' button"
     });
   };
+  
+  // Reset application to start fresh
+  const handleReset = () => {
+    setResetConfirmOpen(true);
+  };
+  
+  // Confirm reset and clear all data
+  const confirmReset = () => {
+    // Clear local storage
+    localStorage.removeItem('generatedWebsiteHTML');
+    
+    // Reset states
+    setUploadMode("chat");
+    setShowWebsitePreview(false);
+    setShowImagesReview(false);
+    setUploadProgress(0);
+    setIsUploading(false);
+    
+    // Close dialog
+    setResetConfirmOpen(false);
+    
+    // Show success message
+    toast({
+      title: "Reset Complete",
+      description: "All data has been cleared. You can start fresh!",
+    });
+    
+    // Reload the page to ensure everything is reset
+    window.location.reload();
+  };
 
   return (
     <div className="h-full flex flex-col">
+      {/* Reset Confirmation Dialog */}
+      <AlertDialog open={resetConfirmOpen} onOpenChange={setResetConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure you want to start over?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will clear all your chat history, uploaded images, and generated website. 
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmReset}>Start Over</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      
       {/* Website Preview Screen - when a website has been generated */}
       {websiteStructure && showWebsitePreview && (
         <WebsitePreview 
@@ -234,7 +292,16 @@ export default function SimpleChat() {
       {uploadMode === "chat" && (
         <>
           <div className="bg-blue-500 text-white py-4 px-4 fixed top-0 left-0 right-0 z-10 flex justify-between items-center">
-            <h1 className="text-xl font-bold">Instant Website</h1>
+            <div className="flex items-center">
+              <button
+                onClick={handleReset}
+                className="mr-3 p-2 rounded-full hover:bg-blue-600 transition-colors"
+                title="Start Over"
+              >
+                <RefreshCw size={18} />
+              </button>
+              <h1 className="text-xl font-bold">Instant Website</h1>
+            </div>
             <ViewWebsiteButton />
           </div>
           
