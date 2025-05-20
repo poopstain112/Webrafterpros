@@ -3,6 +3,111 @@ import { MessageSquare, Settings, Image, Send, ArrowLeft, RefreshCw } from "luci
 import { Button } from "@/components/ui/button";
 import { useChat } from "@/hooks/use-chat";
 import { useToast } from "@/hooks/use-toast";
+import { Message } from "@/types";
+
+// Helper function to extract business info from messages
+function extractBusinessInfo(messages: Message[]) {
+  const businessInfo: {
+    businessName?: string;
+    businessType?: string;
+    location?: string;
+    services?: string[];
+    contactInfo?: string;
+    description?: string;
+  } = {};
+  
+  // Match questions to answers
+  const questionMap: Record<string, string> = {
+    "What's the name of your business?": "businessName",
+    "Where is your business located?": "location",
+    "What products or services do you offer?": "services"
+  };
+  
+  // Power washing specific keywords
+  const powerWashingKeywords = [
+    'power wash', 'power washing', 'pressure wash', 'pressure washing', 
+    'clean', 'cleaning', 'exterior cleaning', 'surface cleaning'
+  ];
+  
+  // Extract info from conversation
+  for (let i = 0; i < messages.length - 1; i++) {
+    if (messages[i].role === 'assistant' && messages[i+1].role === 'user') {
+      const question = messages[i].content;
+      const answer = messages[i+1].content;
+      
+      // Map to the right field
+      for (const [q, field] of Object.entries(questionMap)) {
+        if (question.includes(q) && answer.trim()) {
+          if (field === 'services') {
+            businessInfo[field] = answer.split(',').map(s => s.trim());
+          } else {
+            businessInfo[field] = answer.trim();
+          }
+        }
+      }
+      
+      // Check for power washing indicators in services
+      if (businessInfo.services) {
+        for (const service of businessInfo.services) {
+          for (const keyword of powerWashingKeywords) {
+            if (service.toLowerCase().includes(keyword)) {
+              businessInfo.businessType = 'power washing';
+              break;
+            }
+          }
+          if (businessInfo.businessType) break;
+        }
+      }
+      
+      // Check for power washing indicators in all answers
+      if (!businessInfo.businessType && answer) {
+        for (const keyword of powerWashingKeywords) {
+          if (answer.toLowerCase().includes(keyword)) {
+            businessInfo.businessType = 'power washing';
+            break;
+          }
+        }
+      }
+    }
+  }
+  
+  return businessInfo;
+}
+
+// Create a detailed description based on messages for better website generation
+function createDetailedDescription(messages: Message[], businessInfo: any): string {
+  let description = "";
+  
+  // Start with business name if available
+  if (businessInfo.businessName) {
+    description += `Business Name: ${businessInfo.businessName}. `;
+  }
+  
+  // Add location
+  if (businessInfo.location) {
+    description += `Location: ${businessInfo.location}. `;
+  }
+  
+  // Add services
+  if (businessInfo.services && businessInfo.services.length > 0) {
+    description += `Services: ${businessInfo.services.join(', ')}. `;
+  }
+  
+  // Add all user responses to provide more context
+  description += "Additional Information: ";
+  for (const message of messages) {
+    if (message.role === 'user') {
+      description += message.content + ". ";
+    }
+  }
+  
+  // Special handling for power washing businesses
+  if (businessInfo.businessType === 'power washing') {
+    description += "This is a professional power washing business that needs a clean, modern website showcasing their cleaning services with before/after examples, service areas, and contact information. Include sections for residential and commercial power washing services.";
+  }
+  
+  return description;
+}
 
 export default function SimplifiedHome() {
   const { toast } = useToast();
@@ -69,9 +174,17 @@ export default function SimplifiedHome() {
       });
       return;
     }
-
+    
+    // Extract business information from chat messages
+    const businessInfo = extractBusinessInfo(messages);
+    
+    // Create a comprehensive description based on chat history
+    const description = createDetailedDescription(messages, businessInfo);
+    
+    // Pass business type if detected
     generateWebsiteContent(
-      "Create a professional business website using the uploaded images with modern design"
+      description,
+      businessInfo.businessType
     );
     setCurrentScreen("preview");
   };

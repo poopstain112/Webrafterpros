@@ -3,17 +3,41 @@ import { Message, UploadedImage, WebsiteStructure } from '@/types';
 // Generate website content from description and images
 export async function generateWebsite(
   description: string,
-  images: UploadedImage[] = []
+  images: UploadedImage[] = [],
+  businessType?: string
 ): Promise<WebsiteStructure> {
   try {
     const imageUrls = images.map(img => img.url);
+    
+    // Try to detect business type from description if not explicitly provided
+    let detectedBusinessType = businessType;
+    if (!detectedBusinessType) {
+      // Look for common business type indicators in description
+      const businessTypes = [
+        'power washing', 'cleaning', 'home service', 'consulting', 
+        'retail', 'healthcare', 'fitness', 'technology', 'education'
+      ];
+      
+      for (const type of businessTypes) {
+        if (description.toLowerCase().includes(type.toLowerCase())) {
+          detectedBusinessType = type;
+          break;
+        }
+      }
+    }
+    
+    console.log(`Generating website with business type: ${detectedBusinessType || 'unspecified'}`);
     
     const response = await fetch('/api/generate-website', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ description, imageUrls }),
+      body: JSON.stringify({ 
+        description, 
+        imageUrls,
+        businessType: detectedBusinessType 
+      }),
     });
 
     if (!response.ok) {

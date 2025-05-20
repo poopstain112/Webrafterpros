@@ -74,19 +74,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // API endpoint to generate website content
+  // API endpoint to generate professional website content
   app.post("/api/generate-website", async (req: Request, res: Response) => {
     try {
-      const { description, imageUrls } = req.body;
+      const { description, imageUrls, businessType } = req.body;
       
       if (!description) {
         return res.status(400).json({ message: "Description is required" });
       }
       
-      const websiteContent = await generateWebsiteContent(description, imageUrls || []);
+      // Log website generation request for debugging
+      console.log(`Generating website with: Description length: ${description.length}, Images: ${(imageUrls || []).length}, Business type: ${businessType || 'not specified'}`);
+      
+      // Generate the website content with enhanced parameters
+      const websiteContent = await generateWebsiteContent(
+        description, 
+        imageUrls || [],
+        businessType
+      );
+      
+      console.log("Website generated successfully");
       res.json(websiteContent);
     } catch (error: any) {
-      res.status(500).json({ message: error.message });
+      console.error("Website generation error:", error);
+      res.status(500).json({ 
+        message: error.message,
+        details: error.stack
+      });
     }
   });
 

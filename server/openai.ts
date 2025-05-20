@@ -6,12 +6,14 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
 // Process website descriptions and generate website content
 export async function generateWebsiteContent(
   description: string,
-  imageUrls: string[] = []
+  imageUrls: string[] = [],
+  businessType?: string
 ): Promise<{
   html: string;
   css: string;
   structure: any;
   recommendation: string;
+  industrySpecificFeatures?: string[];
 }> {
   try {
     // Extract business details from the description

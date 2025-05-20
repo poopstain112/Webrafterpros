@@ -137,7 +137,7 @@ export function useChat(initialWebsiteId: number = 1) {
 
   // Generate website based on description
   const generateWebsiteContent = useCallback(
-    async (description: string) => {
+    async (description: string, businessType?: string) => {
       if (!description.trim()) return;
 
       setIsGeneratingWebsite(true);
@@ -148,11 +148,12 @@ export function useChat(initialWebsiteId: number = 1) {
           ...prev,
           {
             role: 'assistant',
-            content: 'Generating your website based on your description. This may take a moment...',
+            content: 'Generating your professional website based on your description. This may take a moment...',
           },
         ]);
 
-        const websiteData = await generateWebsite(description, uploadedImages);
+        // Include business type for better website generation
+        const websiteData = await generateWebsite(description, uploadedImages, businessType);
         setWebsiteStructure(websiteData);
 
         // Add success message
