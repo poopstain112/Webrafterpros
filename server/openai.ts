@@ -15,7 +15,7 @@ export async function generateWebsiteContent(
 }> {
   try {
     const imagesPrompt = imageUrls.length
-      ? `The user has provided ${imageUrls.length} images (${imageUrls.join(", ")}). Please incorporate them strategically throughout the website, ensuring they are referenced correctly in the HTML.`
+      ? `The user has provided ${imageUrls.length} images (${imageUrls.join(", ")}). Please incorporate all of these images strategically throughout the website, treating them as premium photography assets.`
       : "The user hasn't provided any images yet.";
 
     const response = await openai.chat.completions.create({
@@ -23,31 +23,32 @@ export async function generateWebsiteContent(
       messages: [
         {
           role: "system",
-          content: `You are an expert website designer and developer specializing in creating professional business websites.
+          content: `You are a high-end creative director at an exclusive web design agency that charges $20,000+ per website. Your clients include luxury brands and premium businesses.
           
-          Your task is to generate a complete, production-ready website based on the user's description and images.
+          Your task is to create a visually stunning, high-end website based on the user's description that looks like it cost $20,000 to design.
           
-          WEBSITE REQUIREMENTS:
-          - Create a visually stunning, modern business website with professional design elements
-          - The HTML must be fully responsive and mobile-optimized with proper viewport settings
-          - Use modern CSS with flexbox, grid, and responsive design patterns
-          - Include smooth animations and transitions for interactive elements
-          - Implement proper semantic HTML5 structure (header, nav, sections, footer)
-          - Ensure accessibility features (aria attributes, alt text, keyboard navigation)
-          - Add hover effects for buttons and interactive elements
-          - Include a contact form in the footer
-          - Create a sticky navigation header
-          - Add proper SEO meta tags
+          PREMIUM WEBSITE REQUIREMENTS:
+          - Create an exceptional, sophisticated website that exudes luxury and exclusivity
+          - The HTML must follow perfect semantic structure with responsive design built-in
+          - Use advanced CSS techniques including elegant animations, transitions, and micro-interactions
+          - Implement thoughtful whitespace and perfect typography with proper hierarchy
+          - Design should feature layered elements that create depth and dimension
+          - Include subtle parallax-like effects and elegant scroll animations
+          - Create custom gradient buttons with sophisticated hover effects
+          - Design a premium-looking navigation experience
+          - Include elegant animations that trigger on scroll or hover
+          - Implement perfect responsive behavior across all devices
           
-          CSS REQUIREMENTS:
-          - Use a clean, professional color scheme with complementary colors
-          - Implement responsive typography with proper hierarchy
-          - Create custom button styles with hover effects
-          - Add box-shadows and subtle gradients for depth
-          - Use modern card designs for content sections
-          - Design a professional footer with multiple columns
-          - Include media queries for different screen sizes
-          - Implement proper spacing and whitespace management
+          VISUAL DESIGN REQUIREMENTS:
+          - Use a sophisticated, premium color palette appropriate for the industry
+          - Create a stunning visual hierarchy with perfect typographic scale
+          - Implement premium card/panel designs with subtle shadows and layering
+          - Use elegant spacing throughout to create a sense of luxury
+          - Design beautiful, high-end CTAs that entice interaction
+          - Create a distinctive, memorable hero section
+          - Implement sophisticated layout techniques that feel custom-designed
+          - Use subtle background patterns or gradients where appropriate
+          - Design should reflect current 2025 premium web design trends
           
           Return a JSON object with the following structure:
           {
@@ -65,23 +66,24 @@ export async function generateWebsiteContent(
               ],
               "footer": { "columns": [{"title": "About", "links": ["Our Story", "Team"]}, {"title": "Contact", "contact_info": {"address": "", "phone": "", "email": ""}}] }
             },
-            "recommendation": "Detailed recommendations for improving the website"
+            "recommendation": "Recommendations for elevating the website even further"
           }`,
         },
         {
           role: "user",
-          content: `I need a professional business website with the following description: ${description}. ${imagesPrompt}
+          content: `I need a premium, high-end business website for: ${description}. ${imagesPrompt}
           
-          Please make sure:
-          1. All images are properly referenced in the HTML (use the exact image paths provided)
-          2. The design is modern and visually appealing with a professional color scheme
-          3. The website is fully responsive
-          4. There's a clear call-to-action in the hero section
-          5. The navigation is intuitive and user-friendly
-          6. Include testimonial and services sections
-          7. Add a contact form in the footer
+          Requirements for this $20,000 website:
+          1. Create a visually stunning, luxury-level design that looks truly premium
+          2. All images must be incorporated elegantly throughout the site as professional assets
+          3. The website must feature sophisticated animations and interactions
+          4. Typography and spacing must be impeccable, creating a sense of luxury
+          5. The color palette must be refined and premium-looking
+          6. The site must include compelling, persuasive marketing copy
+          7. Navigation must be intuitive yet distinctive
+          8. Design should feature modern touches like layered elements and parallax-like effects
           
-          BE CREATIVE and make this look like a professional business website that would impress clients!`,
+          Create this as if it were designed by a top-tier agency for a premium client with an unlimited budget. Make it truly exceptional.`,
         },
       ],
       response_format: { type: "json_object" },
@@ -101,23 +103,74 @@ export async function generateWebsiteContent(
   }
 }
 
+// Business questions the chatbot will ask in sequence to gather information
+const BUSINESS_QUESTIONS = [
+  "What's the name of your business?",
+  "What industry or sector is your business in? (e.g., healthcare, retail, construction)",
+  "What products or services do you offer? List the main ones.",
+  "What makes your business unique compared to competitors?",
+  "Who is your target audience or ideal customer?",
+  "What are your business values or mission?",
+  "Do you have any specific color preferences for your website?",
+  "Is there anything specific you want to highlight on your website?"
+];
+
 // Process user message and generate response
 export async function generateChatResponse(
   messages: { role: string; content: string }[]
 ): Promise<string> {
   try {
+    // Check if this is a new conversation and we need to ask business questions
+    if (messages.filter(m => m.role === "user").length <= 2) {
+      // Find the appropriate question to ask based on conversation history
+      const questionIndex = messages.filter(m => m.role === "assistant").length;
+      if (questionIndex < BUSINESS_QUESTIONS.length) {
+        return BUSINESS_QUESTIONS[questionIndex];
+      }
+    }
+    
+    // If we've already asked all the questions, or this is a response to a user question
+    // Check if the previous message is from a user (we're responding to user input)
+    const isRespondingToUser = messages[messages.length - 1].role === "user";
+    
+    let systemPrompt = "";
+    
+    if (isRespondingToUser) {
+      systemPrompt = `You are a professional website consultant that helps users create premium, $20,000-caliber websites. 
+        
+        Take the user's input and enhance it into compelling, professional website copy. 
+        Transform simple answers into polished, engaging content that could appear directly on a premium website.
+        
+        For example, if a user says "We sell shoes", you should respond with elegant marketing copy like:
+        "I've refined that into: 'Discover unparalleled craftsmanship with our curated collection of luxury footwear. Each pair is meticulously designed to combine timeless elegance with modern comfort, ensuring you make a statement with every step.'"
+        
+        Always acknowledge their input, then provide the enhanced version that you've crafted.
+        Keep your responses concise but impactful.`;
+    } else {
+      // Default chatbot behavior
+      systemPrompt = `You are a helpful AI assistant specializing in premium website creation. 
+        Provide concise yet valuable responses about creating high-end websites.
+        If asked about technical details, explain the sophisticated techniques used in modern web development.
+        Maintain a tone that reflects expertise in premium design and development.`;
+    }
+    
+    // Properly type the messages for OpenAI API
+    const typedMessages = [
+      {
+        role: "system" as const,
+        content: systemPrompt
+      },
+      ...messages.map(msg => ({
+        role: (msg.role === "user" || msg.role === "assistant" || msg.role === "system") 
+          ? msg.role as "user" | "assistant" | "system" 
+          : "user" as const, // fallback to user if unknown role
+        content: msg.content
+      }))
+    ];
+    
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: `You are a helpful assistant for a website generation tool. 
-          You help users describe their website needs and guide them through the process.
-          Be friendly, concise, and helpful. Ask follow-up questions to get a clear picture
-          of what the user wants in their website.`,
-        },
-        ...messages,
-      ],
+      messages: typedMessages
     });
 
     return response.choices[0].message.content || "";
@@ -142,14 +195,14 @@ export async function analyzeImages(imageUrl: string): Promise<string> {
       messages: [
         {
           role: "system",
-          content: "You are a professional website designer and image analyst. Your task is to analyze images and suggest how they could be used in a business website."
+          content: "You are a luxury brand creative director specializing in premium website aesthetics. Your expertise is analyzing images and crafting sophisticated descriptions for high-end business websites."
         },
         {
           role: "user",
           content: [
             {
               type: "text",
-              text: "Analyze this image and suggest how it could be used in a business website. Describe what the image shows and where it would be appropriate to place it (hero section, about page, gallery, etc.)."
+              text: "Analyze this image for use in a premium $20,000 website. Provide an elegant description of what it shows and suggest how it could enhance the website's aesthetic (hero section, testimonial background, brand story, etc.). Focus on its premium qualities and emotional impact."
             },
             {
               type: "image_url",
@@ -157,7 +210,7 @@ export async function analyzeImages(imageUrl: string): Promise<string> {
                 url: fullImageUrl
               }
             }
-          ],
+          ] as any, // Type assertion to fix compatibility issues
         },
       ],
     });
