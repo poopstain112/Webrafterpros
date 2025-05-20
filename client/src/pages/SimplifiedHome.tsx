@@ -213,29 +213,79 @@ export default function SimplifiedHome() {
     fileInput.click();
   };
 
-  // Handle website generation
-  const handleGenerateWebsite = () => {
-    // Extract business information from chat messages
-    const businessInfo = extractBusinessInfo(messages);
-    
-    // Create a comprehensive description based on chat history
-    const description = createDetailedDescription(messages, businessInfo);
-    
-    // Generate website even without images (simplified approach)
-    generateWebsiteContent(
-      description,
-      businessInfo.businessType
-    );
-    setCurrentScreen("preview");
-    
-    // Save the fact that we've generated a website to localStorage
-    localStorage.setItem('websiteGenerated', 'true');
-    
-    // Success message
-    toast({
-      title: "Website generating",
-      description: "Your professional website is being created. This may take a moment.",
-    });
+  // Handle website generation with proper loading indicator
+  const handleGenerateWebsite = async () => {
+    try {
+      // Extract business information from chat messages
+      const businessInfo = extractBusinessInfo(messages);
+      
+      // Create a comprehensive description based on chat history
+      const description = createDetailedDescription(messages, businessInfo);
+      
+      // Show loading state immediately
+      setIsGeneratingWebsite(true);
+      
+      // Switch to preview screen to show loading animation
+      setCurrentScreen("preview");
+      
+      // Show a toast to indicate we're starting
+      toast({
+        title: "Creating your website",
+        description: "Your professional website is being generated. This may take 30-60 seconds.",
+      });
+      
+      // Add a message in the chat showing we're generating a website
+      const updatedMessages = [...messages, {
+        role: 'assistant',
+        content: 'Generating your professional website based on your description. This may take a moment...',
+        id: Date.now(),
+        websiteId: 1,
+        createdAt: new Date().toISOString()
+      }];
+      
+      // Update the messages state
+      setMessages(updatedMessages);
+      
+      // Generate website using the API
+      // Since we adjusted the hook earlier, this function exists in the useChat hook
+      const websiteData = await generateWebsite(
+        description,
+        uploadedImages,
+        businessInfo.businessType
+      );
+      
+      // Update the website structure
+      setWebsiteStructure(websiteData);
+      
+      // Add success message to chat
+      setMessages([...updatedMessages, {
+        role: 'assistant',
+        content: 'Your website has been generated! You can now preview it and make additional changes if needed.',
+        id: Date.now() + 1,
+        websiteId: 1,
+        createdAt: new Date().toISOString()
+      }]);
+      
+      // Save generation state to localStorage
+      localStorage.setItem('websiteGenerated', 'true');
+      
+      // Success toast
+      toast({
+        title: "Website ready",
+        description: "Your professional website has been generated successfully!",
+      });
+      
+    } catch (error) {
+      console.error("Website generation error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to generate website. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      // When complete (success or failure), update loading state
+      setIsGeneratingWebsite(false);
+    }
   };
 
   // Handle downloading the website

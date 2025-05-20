@@ -2,266 +2,116 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Simple mobile-friendly scrolling */
-html, body, #root {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
 
-/* Only hide scrollbar but allow scrolling */
-.message-container::-webkit-scrollbar {
-  display: none;
-}
-
-.message-container {
-  -webkit-overflow-scrolling: touch;
-  overflow-y: auto;
-  touch-action: pan-y;
-}
-
-:root {
-  /* Professional design system with smooth transitions */
-  --background: 210 40% 98%;
-  --foreground: 222 47% 11%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
-  --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --primary: 221 83% 53%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222 47% 11%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222 47% 11%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 210 40% 98%;
-  --ring: 221 83% 53%;
-  --radius: 0.75rem;
-  
-  /* App theme additional colors */
-  --app-blue: 221 83% 53%;
-  --app-green: 142 76% 36%;
-  --app-red: 0 84% 60%;
-  --app-yellow: 38 92% 50%;
-  --app-purple: 262 83% 58%;
-  --app-teal: 171 77% 64%;
-}
-
-.dark {
-  --background: 222 47% 11%;
-  --foreground: 210 40% 98%;
-  --muted: 217 33% 17%;
-  --muted-foreground: 215 20% 65%;
-  --popover: 222 47% 11%;
-  --popover-foreground: 210 40% 98%;
-  --card: 222 47% 11%;
-  --card-foreground: 210 40% 98%;
-  --border: 217 33% 17%;
-  --input: 217 33% 17%;
-  --primary: 221 83% 53%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 217 33% 17%;
-  --secondary-foreground: 210 40% 98%;
-  --accent: 217 33% 17%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62% 30%;
-  --destructive-foreground: 210 40% 98%;
-  --ring: 224 76% 48%;
-  --radius: 0.75rem;
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
 }
 
 @layer base {
   * {
     @apply border-border;
   }
-
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply bg-background text-foreground;
   }
 }
 
-/* Image Gallery and Carousel Styles */
-.embla {
-  --slide-spacing: 1rem;
-  --slide-size: 100%;
-  --slide-height: 19rem;
-  overflow: hidden;
-  position: relative;
-}
-
-.embla__viewport {
-  overflow: hidden;
-}
-
-.embla__container {
-  display: flex;
-  flex-direction: row;
-  height: auto;
-  margin-left: calc(var(--slide-spacing) * -1);
-}
-
-.embla__slide {
-  flex: 0 0 var(--slide-size);
-  min-width: 0;
-  position: relative;
-  padding-left: var(--slide-spacing);
-}
-
-/* Scrollbar customization */
-.scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
-}
-
-/* Snap scrolling for image galleries */
-.snap-x {
-  scroll-snap-type: x mandatory;
-}
-
-.snap-center {
-  scroll-snap-align: center;
-}
-
-/* App layout and transitions for smooth screen changes */
-.app-container {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  min-height: 100vh;
-  width: 100%;
-  overflow: hidden;
-}
-
-.main-content {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  padding: 1rem;
-  height: calc(100vh - 4rem);
-  overflow: hidden;
-}
-
-@media (max-width: 768px) {
-  .main-content {
-    grid-template-columns: 1fr;
-    grid-template-rows: 60% 40%;
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
   }
 }
 
-/* Panel styling for app sections */
-.app-panel {
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-  transition: all 0.3s ease;
+/* Animation delay classes */
+.animation-delay-100 {
+  animation-delay: 100ms;
 }
 
-/* Tab system for multi-view panels */
-.tab-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
+.animation-delay-150 {
+  animation-delay: 150ms;
 }
 
-.tab-nav {
-  display: flex;
-  background-color: hsl(var(--muted));
-  border-bottom: 1px solid hsl(var(--border));
+.animation-delay-300 {
+  animation-delay: 300ms;
 }
 
-.tab-button {
-  padding: 0.75rem 1.25rem;
-  font-weight: 500;
-  color: hsl(var(--muted-foreground));
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s ease;
-  cursor: pointer;
+.animation-delay-500 {
+  animation-delay: 500ms;
 }
 
-.tab-button.active {
-  color: hsl(var(--app-blue));
-  border-bottom-color: hsl(var(--app-blue));
-  background-color: rgba(59, 130, 246, 0.05);
+.animation-delay-700 {
+  animation-delay: 700ms;
 }
 
-.tab-content {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-}
-
-.tab-panel {
-  position: absolute;
-  inset: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  overflow-y: auto;
-}
-
-.tab-panel:not(.active) {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(10px);
-}
-
-.tab-panel.active {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(0);
-  z-index: 10;
-}
-
-/* Improved scrollbars */
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0,0,0,0.2) transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(0,0,0,0.2);
-  border-radius: 20px;
-}
-
-/* Enhanced message bubbles */
-.message-bubble {
-  max-width: 90%;
-  padding: 0.875rem 1.125rem;
-  border-radius: 1.25rem;
-  margin-bottom: 0.875rem;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  transition: all 0.2s ease;
-  animation: messageAppear 0.3s ease forwards;
-}
-
-@keyframes messageAppear {
-  from { 
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to { 
+/* Custom pulse animation with more dramatic effect */
+@keyframes enhanced-pulse {
+  0%, 100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
   }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+.animate-enhanced-pulse {
+  animation: enhanced-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Image hover effect */
+.image-hover-effect {
+  @apply transition-transform duration-200;
+}
+
+.image-hover-effect:hover {
+  @apply transform scale-105 shadow-md;
 }
