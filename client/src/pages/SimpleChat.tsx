@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Image as ImageIcon } from "lucide-react";
+import { Send, Image as ImageIcon, ExternalLink } from "lucide-react";
 import { useChat } from "@/hooks/use-chat";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import WebsitePreview from "@/components/WebsitePreview";
 import { useWebsiteGeneration } from "../contexts/WebsiteGenerationContext";
+import { useLocation } from "wouter";
 
 export default function SimpleChat() {
   const [inputMessage, setInputMessage] = useState("");
@@ -90,6 +91,14 @@ export default function SimpleChat() {
     }
   }, [uploadedImages.length, websiteStructure]);
   
+  // Add navigation to view website
+  const [, setLocation] = useLocation();
+  
+  // Function to navigate to website preview
+  const goToWebsitePreview = () => {
+    setLocation('/website-preview');
+  };
+  
   // Check for generated website in localStorage when component mounts
   useEffect(() => {
     const generatedHTML = localStorage.getItem('generatedWebsiteHTML');
@@ -99,8 +108,7 @@ export default function SimpleChat() {
         send('Your website has been generated! Take a look at the preview and let me know if you\'d like to make any changes.');
       }
       
-      // Let user see website by swiping
-      // We'll keep the preview modal option too for convenience
+      // We'll keep the preview modal option for now as a backup
       setShowWebsitePreview(true);
     }
   }, []);
