@@ -329,7 +329,7 @@ export default function ChatInterface({
       <div className="p-3 bg-white border-t border-gray-200 shadow-sm sticky bottom-0 left-0 right-0">
         <form onSubmit={handleSubmit} className="relative">
           {isUploadVisible && (
-            <div className="mb-3 bg-gray-50 rounded-xl p-3 border border-gray-200">
+            <div className="bg-gray-50 rounded-xl p-3 border border-gray-200">
               <ImageUpload
                 onUpload={onImageUpload}
                 uploadedImages={uploadedImages}
@@ -338,54 +338,46 @@ export default function ChatInterface({
                 onToggleVisible={() => setIsUploadVisible(false)}
               />
               
-              {/* Text input area for describing the website */}
+              {/* Separate prominent website generation section */}
               {uploadedImages.length > 0 && (
                 <div className="mt-4 bg-white rounded-lg border border-blue-100 p-3">
                   <h3 className="text-lg font-medium text-blue-700 mb-2">Describe your website:</h3>
                   <textarea
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Describe what kind of website you want to create using these images..."
+                    placeholder="Example: Create a boat rental website using these images. Include an about section, services, gallery, and contact form."
                     className="w-full rounded-lg border border-gray-200 p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    rows={3}
+                    rows={2}
                   />
-                  
-                  <div className="mt-4">
-                    {/* Extra prominent button for generating website */}
-                    <button
-                      type="button"
-                      className="w-full py-4 px-4 bg-green-500 hover:bg-green-600 text-white text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center justify-center"
-                      disabled={isLoading || message.trim() === ''}
-                      onClick={() => {
-                        if (onGenerateWebsite && message.trim()) {
-                          // Call the generate website function directly
-                          onGenerateWebsite(message);
-                          // Reset UI state
-                          setMessage("");
-                          setIsUploadVisible(false);
-                        }
-                      }}
-                    >
-                      <Sparkles className="h-6 w-6 mr-2" />
-                      GENERATE MY WEBSITE
-                    </button>
-                    
-                    <p className="text-center text-sm text-gray-500 mt-2">
-                      Click this button to create your website
-                    </p>
-                  </div>
-                  
-                  <div className="flex justify-end mt-3">
-                    <Button
-                      type="submit"
-                      className="bg-gradient-to-r from-blue-500 to-blue-600 text-white"
-                      disabled={isLoading || message.trim() === ''}
-                    >
-                      Send as Message
-                    </Button>
-                  </div>
                 </div>
               )}
+            </div>
+          )}
+          
+          {/* Separate website generation button that's always visible when images are uploaded */}
+          {uploadedImages.length > 0 && (
+            <div className="bg-green-50 mt-3 mb-3 p-4 rounded-xl border-2 border-green-200 shadow-md">
+              <h2 className="text-center text-xl font-bold text-green-700 mb-2">Ready to create your website?</h2>
+              <button
+                type="button"
+                className="w-full py-4 px-4 bg-green-500 hover:bg-green-600 text-white text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+                disabled={isLoading || message.trim() === ''}
+                onClick={() => {
+                  if (onGenerateWebsite && message.trim()) {
+                    // Call the generate website function directly
+                    onGenerateWebsite(message);
+                    // Reset UI state
+                    setMessage("");
+                    setIsUploadVisible(false);
+                  }
+                }}
+              >
+                <Sparkles className="h-7 w-7 mr-2" />
+                GENERATE MY WEBSITE
+              </button>
+              <p className="text-center text-sm text-green-700 font-medium mt-2">
+                Click to create your website based on your images and description
+              </p>
             </div>
           )}
           

@@ -157,7 +157,7 @@ export default function ImageUpload({
                   {uploadedImages.map((image, index) => (
                     <div 
                       key={index} 
-                      className="relative min-w-0 flex-[0_0_100%] h-72"
+                      className="relative min-w-0 flex-[0_0_100%] h-60"
                     >
                       <img
                         src={image.url}
