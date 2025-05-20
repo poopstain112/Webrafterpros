@@ -203,7 +203,7 @@ export default function ChatPage() {
       </div>
       
       {/* Skip Question Button */}
-      {messages.length > 0 && messages[messages.length - 1].role === 'assistant' && (
+      {messages.length > 0 && messages[messages.length - 1].role === 'assistant' && !messages[messages.length - 1].content.includes("upload images") && (
         <div className="flex justify-center mb-3 mt-1">
           <button 
             type="button"
@@ -211,6 +211,20 @@ export default function ChatPage() {
             className="text-xs text-gray-500 hover:text-blue-500 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full transition-colors"
           >
             Skip this question
+          </button>
+        </div>
+      )}
+      
+      {/* Generate Website Button - only show after images are uploaded */}
+      {uploadedImages.length > 0 && (
+        <div className="flex justify-center my-4">
+          <button 
+            type="button"
+            onClick={() => navigate('/website')}
+            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
+          >
+            <LayoutTemplate className="h-5 w-5" />
+            Generate Website
           </button>
         </div>
       )}
