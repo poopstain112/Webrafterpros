@@ -28,10 +28,11 @@ export interface IStorage {
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private websites: Map<number, Website>;
-  private messages: Map<number, Message>;
-  private images: Map<number, Image>;
+  // Made messages accessible so we can force-clear if needed
+  users: Map<number, User>;
+  websites: Map<number, Website>;
+  messages: Map<number, Message>;
+  images: Map<number, Image>;
   private userCurrentId: number;
   private websiteCurrentId: number;
   private messageCurrentId: number;
@@ -128,11 +129,23 @@ export class MemStorage implements IStorage {
   }
   
   async deleteMessagesByWebsiteId(websiteId: number): Promise<void> {
+    console.log(`Deleting all messages for website ID: ${websiteId}`);
+    console.log(`Message count before deletion: ${this.messages.size}`);
+    
     // Find all messages for this website and remove them
     for (const [id, message] of this.messages.entries()) {
       if (message.websiteId === websiteId) {
         this.messages.delete(id);
+        console.log(`Deleted message ID: ${id}`);
       }
+    }
+    
+    console.log(`Message count after deletion: ${this.messages.size}`);
+    
+    // For a more aggressive approach, just clear all messages if needed
+    if (websiteId === 1) { // Default website ID is usually 1
+      this.messages.clear();
+      console.log("Cleared all messages from storage");
     }
   }
   

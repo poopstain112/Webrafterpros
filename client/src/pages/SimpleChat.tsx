@@ -328,6 +328,18 @@ export default function SimpleChat() {
                 <RefreshCw size={18} />
               </button>
               <h1 className="text-xl font-bold">Instant Website</h1>
+              
+              {/* For testing only - direct clear button */}
+              <button
+                onClick={() => {
+                  localStorage.clear();
+                  window.location.href = "/?reset=" + new Date().getTime();
+                }}
+                className="ml-3 text-xs bg-red-500 hover:bg-red-600 px-2 py-1 rounded"
+                title="Emergency Reset"
+              >
+                Clear All
+              </button>
             </div>
             <ViewWebsiteButton />
           </div>
