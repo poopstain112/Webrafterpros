@@ -20,18 +20,22 @@ export async function generateWebsiteContent(
       messages: [
         {
           role: "system",
-          content: `You are a data extraction specialist. Your task is to extract structured business information from the following text that contains a conversation about a business website. 
+          content: `You are a branding strategist specializing in extracting and enhancing business details for premium website creation. Your task is to analyze a conversation about a business and extract comprehensive structured information.
 
-          Extract ONLY factual information that was explicitly provided, do not invent or assume any details.
+          PRIMARY GOAL: Extract ONLY factual information that was explicitly provided in the conversation. When information is ambiguous or missing, use null or empty arrays as appropriate.
+          
+          SECONDARY GOAL: For certain fields like uniqueSellingPoints and businessDescription, craft a more polished, professional version while maintaining 100% factual accuracy to what was provided.
           
           Return a JSON object with the following structure:
           {
-            "businessName": "The exact business name",
-            "location": "The business location",
+            "businessName": "The exact business name as provided",
+            "businessType": "Boat rental company / Restaurant / Service business / etc.",
+            "location": "The specific business location",
             "services": ["Service 1", "Service 2"],
-            "uniqueSellingPoints": ["USP 1", "USP 2"],
-            "targetCustomers": "Description of ideal customers",
-            "slogan": "Business slogan or tagline (if any)",
+            "uniqueSellingPoints": ["Enhanced USP 1", "Enhanced USP 2"],
+            "businessDescription": "A comprehensive, well-crafted description based solely on the information provided. This should read like professional marketing copy while maintaining perfect factual accuracy.",
+            "targetCustomers": "Enhanced description of ideal customers",
+            "slogan": "Business slogan or tagline (if provided)",
             "hours": "Business hours",
             "contact": {
               "phone": "Phone number",
@@ -42,7 +46,12 @@ export async function generateWebsiteContent(
             "socialMedia": ["Platform 1", "Platform 2"]
           }
           
-          If any field is missing information, use null or an empty array as appropriate. Be precise and only include information that was explicitly mentioned.`
+          CRITICAL RULES:
+          1. NEVER invent core facts, services, or contact information not explicitly mentioned
+          2. Only enhance language and presentation, never the underlying facts
+          3. If the business name lacks "proper noun capitalization", apply standard capitalization rules
+          4. For vague descriptions like "clean boats", you may enhance to "Meticulously maintained and sanitized vessels"
+          5. Be precise and thorough in your extraction - if it wasn't mentioned, don't include it`
         },
         {
           role: "user",
@@ -57,22 +66,40 @@ export async function generateWebsiteContent(
     // Format image information
     const formattedImageUrls = imageUrls.map(url => ({ path: url }));
     
-    // Generate theme based on business type
+    // Generate premium theme based on business type
     const themeResponse = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
           role: "system",
-          content: `You are a brand strategist specializing in website color psychology and visual design. Based on the business information provided, suggest a premium, harmonious color palette (5-6 colors) with exact hex codes that would create an exceptional website experience.
-          
-          For a boat rental company named after Poseidon (Greek god of the sea), you might suggest:
-          - Primary: #0B4F6C (deep ocean blue) - For brand identity and main elements
-          - Secondary: #01BAEF (vibrant cerulean) - For accents and call-to-action elements
-          - Tertiary: #FBFBFF (off-white) - For backgrounds and negative space
-          - Accent 1: #B80C09 (coral red) - For important highlights and energy
-          - Accent 2: #040F16 (midnight blue) - For contrast and depth
-          - Accent 3: #FFD700 (golden yellow) - For subtle luxury touches
+          content: `You are the world's most prestigious luxury brand designer who creates custom visual identities for elite clients willing to pay $100,000+ for a complete brand system. Your color palettes are featured in design annuals and win international awards. Your expertise in color psychology, typography, and visual harmony creates immersive brand experiences that elevate businesses to iconic status.
 
+          ESSENTIAL REQUIREMENTS:
+          - Create a sophisticated, harmonious color system that conveys premium quality
+          - Design a palette that feels uniquely crafted for THIS specific business type and name
+          - Select colors with perfect color theory relationships (complementary, analogous, etc.)
+          - Choose typography that creates an unmistakable luxury voice
+          - Develop a cohesive visual language that works across digital and print applications
+          - Consider the emotional and psychological impact of each color choice
+          - Ensure the palette communicates the intended brand positioning and personality
+          
+          For a boat rental company named after Poseidon (Greek god of the sea), create a sophisticated palette like:
+          
+          PRIMARY PALETTE:
+          - Primary: #0D5C63 (deep teal) - A rich, commanding blue-green conveying maritime authority and trust
+          - Secondary: #44A1A0 (aqua verde) - An elegant middle-tone teal suggesting pristine waters
+          - Tertiary: #FCFAF9 (sea foam white) - A warm off-white creating breathing room and lightness
+          
+          ACCENT PALETTE:
+          - Accent 1: #F9C784 (golden hour) - A sophisticated golden tone evoking sunset reflections on water
+          - Accent 2: #247BA0 (deep horizon) - A profound blue suggesting open water and endless possibilities
+          - Accent 3: #2E3532 (carbon) - A near-black with subtle warmth for sophisticated text and details
+          
+          TYPOGRAPHY SYSTEM:
+          - Display: "Cormorant Garamond" - A regal, sophisticated serif with nautical heritage references
+          - Headlines: "Montserrat" (medium/semibold) - Contemporary, authoritative sans-serif
+          - Body: "Source Sans Pro" - Highly legible, elegant sans-serif for extended reading
+          
           Return your response as a JSON object with the following structure:
           {
             "colorPalette": {
@@ -83,12 +110,20 @@ export async function generateWebsiteContent(
               "accent2": "#hex",
               "accent3": "#hex"
             },
-            "typography": {
-              "headingFont": "Font family suggestion",
-              "bodyFont": "Font family suggestion" 
+            "gradients": {
+              "primary": "linear-gradient(to right, #hex, #hex)",
+              "secondary": "linear-gradient(to right, #hex, #hex)",
+              "accent": "linear-gradient(to right, #hex, #hex)"
             },
-            "mood": "The mood/feeling this palette evokes",
-            "rationale": "Brief explanation of why this palette works for this business"
+            "typography": {
+              "displayFont": "Premium display font name",
+              "headingFont": "Heading font name",
+              "bodyFont": "Body font name",
+              "accentFont": "Optional accent font"
+            },
+            "mood": "The specific emotional quality this palette evokes",
+            "rationale": "In-depth explanation of how this palette embodies the brand's essence",
+            "designNotes": "Strategic application guidelines for this palette"
           }`
         },
         {
@@ -107,61 +142,77 @@ export async function generateWebsiteContent(
       messages: [
         {
           role: "system",
-          content: `You are an expert website copywriter for premium businesses. Create engaging, persuasive content for each section of a high-end business website. 
+          content: `You are the world's best luxury copywriter responsible for creating exceptional, award-winning content for elite websites. Your words create immersive brand narratives that win design awards and captivate high-value audiences. Your task is to craft extraordinary copy that would be suitable for a $50,000+ premium website.
+
+          IMPORTANT REQUIREMENTS:
+          - Create content that feels custom-crafted specifically for THIS unique business
+          - Develop a distinctive brand voice that reflects the elite nature of the business
+          - Craft compelling, emotionally resonant headlines that capture attention immediately
+          - Write body copy with perfect rhythm, pacing, and flow
+          - Include specific details from the business information to create authentic, personalized content
+          - Convey unique value propositions with sophisticated language
+          - Create narrative throughlines that connect sections cohesively
+          - Balance aspirational language with concrete details
+          - Use literary techniques (metaphor, alliteration, etc.) thoughtfully
           
-          Craft compelling headlines, subheadlines, and body copy that conveys the business's value proposition and engages visitors.
+          CRITICALLY IMPORTANT:
+          - DO NOT use generic statements like "high-quality service" or "customer satisfaction"
+          - DO NOT write bland, interchangeable copy that could apply to any business
+          - INSTEAD, write content that could ONLY apply to THIS SPECIFIC business
+          - BE SPECIFIC about their unique offerings, location, and customer experience
           
-          For a boat rental company, instead of generic copy like "We offer boat rentals", write compelling content like:
-          "Experience the freedom of Florida's waterways aboard our immaculately maintained fleet of pontoon boats. Each vessel in our collection offers unparalleled comfort with premium seating, advanced navigation systems, and all the amenities you need for a perfect day on the water."
+          For a boat rental company, instead of generic copy like "We offer boat rentals", write rich, evocative content like:
+          "Navigate the pristine waterways of Port Orange aboard Poseidon's fleet of immaculately maintained vessels. Each craft in our collection represents the pinnacle of maritime comfort—sumptuous seating, state-of-the-art navigation systems, and thoughtful amenities transform an ordinary day on Florida's waters into an extraordinary aquatic adventure."
           
           Return your content as a JSON object with the following structure:
           {
             "hero": {
-              "headline": "Compelling main headline",
-              "subheadline": "Supporting statement",
-              "ctaText": "Call to action button text"
+              "headline": "Bold, memorable headline (max 8 words)",
+              "subheadline": "Elegant supporting statement (1-2 sentences)",
+              "ctaText": "Compelling call to action (3-5 words)"
             },
             "about": {
-              "headline": "About section headline",
-              "content": "Engaging paragraph about the business (min 150 words, include specific details from business information)"
+              "headline": "Distinctive about section headline",
+              "content": "Storytelling narrative about the business (200-250 words, include specific details about location, services, and unique attributes)"
             },
             "services": {
-              "headline": "Services section headline",
-              "intro": "Brief introduction",
+              "headline": "Evocative services section headline",
+              "intro": "Captivating introduction (2-3 sentences)",
               "servicesList": [
                 {
-                  "name": "Service name",
-                  "description": "Detailed description (min 75 words)"
+                  "name": "Distinctively named service",
+                  "description": "Richly detailed description with sensory elements and specific benefits (100-150 words)"
                 }
               ]
             },
-            "features": {
-              "headline": "Features/Benefits headline",
+            "experience": {
+              "headline": "Customer experience headline",
+              "content": "Vivid description of what customers will experience (150-200 words)",
               "featuresList": [
                 {
-                  "name": "Feature name",
-                  "description": "Brief feature description"
+                  "name": "Distinctive feature/benefit name",
+                  "description": "Emotionally resonant description with specific details (30-40 words)"
                 }
               ]
             },
             "cta": {
-              "headline": "Call to action headline",
-              "content": "Compelling reason to act",
-              "buttonText": "CTA button text"
+              "headline": "Urgent, compelling call to action headline",
+              "content": "Persuasive reason to act immediately (50-75 words)",
+              "buttonText": "Action-oriented button text"
             },
             "testimonials": {
-              "headline": "Testimonials headline",
+              "headline": "Social proof headline",
               "testimonialsList": [
                 {
-                  "quote": "Realistic customer testimonial",
-                  "author": "Customer name",
-                  "location": "Location"
+                  "quote": "Authentic-sounding testimonial with specific details about experience (50-60 words)",
+                  "author": "Realistic customer name",
+                  "location": "Specific location"
                 }
               ]
             },
             "contact": {
-              "headline": "Contact section headline",
-              "content": "Brief message encouraging contact"
+              "headline": "Connection-focused contact headline",
+              "content": "Inviting message encouraging immediate contact (40-50 words)"
             }
           }`
         },
@@ -179,51 +230,60 @@ export async function generateWebsiteContent(
 
     const contentInfo = JSON.parse(contentResponse.choices[0].message.content || "{}");
     
-    // Generate complete website HTML and CSS
+    // Generate complete award-winning website HTML and CSS
     const websiteResponse = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
           role: "system",
-          content: `You are a senior frontend engineer specializing in creating pixel-perfect, high-end websites worth $20,000 or more.
+          content: `You are an award-winning frontend architect who creates revolutionary digital experiences that have been featured in Awwwards, Communication Arts, and The FWA. Your websites are taught in design schools worldwide and set new standards for digital excellence.
 
-          CREATE A COMPLETE, FULLY FUNCTIONAL, VISUALLY STUNNING WEBSITE with the following requirements:
+          CREATE AN EXTRAORDINARY, AWARD-CALIBER WEBSITE with these non-negotiable requirements:
           
-          1. RESPONSIVENESS: Website must look perfect on ALL screen sizes from mobile to desktop
-          2. ACCESSIBILITY: Follow WCAG standards for accessibility
-          3. PERFORMANCE: Optimize for fast loading and smooth animations
-          4. CODE QUALITY: Write clean, semantic HTML and efficient CSS
-          5. VISUAL APPEAL: Create a truly premium-looking design
+          TECHNICAL EXCELLENCE:
+          - Craft pixel-perfect, semantically flawless HTML5
+          - Write bleeding-edge CSS with sophisticated animations and transitions
+          - Implement flawless responsive behavior across ALL devices (mobile, tablet, desktop)
+          - Ensure perfect accessibility (WCAG AAA compliance)
+          - Optimize performance with efficient code structure
+          - Include meta tags for perfect SEO and social sharing
           
-          THE HTML MUST:
-          - Have proper document structure (<DOCTYPE>, <html>, <head>, <body>)
-          - Include all necessary meta tags, favicon links, etc.
-          - Use semantic HTML5 elements (<header>, <nav>, <main>, <section>, <footer>)
-          - Be fully responsive without external frameworks
-          - Include working navigation, forms, and interactive elements
-          - Properly showcase all provided images
-          - Include Font Awesome icons for visual appeal (link to Font Awesome CDN)
-          - Have properly structured text with appropriate heading hierarchy
+          VISUAL PERFECTION:
+          - Create a design that would win international design competitions
+          - Implement sophisticated micro-interactions and motion design
+          - Utilize advanced CSS techniques (variable fonts, backdrop-filter, etc.)
+          - Create a distinctive visual language unique to this business
+          - Implement perfect visual hierarchy and typography
+          - Use layered design elements to create depth and dimension
+          - Create custom interaction patterns that feel bespoke and premium
           
-          THE CSS MUST:
-          - Be modern and feature-rich with animations, transitions, and effects
-          - Use custom properties (CSS variables) for the color scheme
-          - Implement responsive design without external frameworks
-          - Include hover/active states for interactive elements
-          - Feature sophisticated animations and transitions
-          - Create visual interest with layered elements, subtle shadows
-          - Use modern CSS techniques like Grid and Flexbox
-          - Include media queries for perfect responsive behavior
+          REVOLUTIONARY UX:
+          - Design innovative navigation patterns that feel intuitive yet novel
+          - Implement sophisticated scroll-based interactions
+          - Create memorable moments that surprise and delight users
+          - Ensure the entire experience feels cohesive and intentional
+          - Design with a perfect balance of innovation and usability
           
-          IMPORTANT VISUAL REQUIREMENTS:
-          - The website must look like it cost $20,000 to design
-          - Design must be cohesive, with consistent color application
-          - Typography must be impeccable with proper hierarchy
-          - Use generous whitespace to create a sense of luxury
-          - Include subtle animations that enhance the experience
-          - Navigation must be intuitive yet distinctive
-          - Call-to-action elements should stand out
-          - Layout should feel custom-designed
+          CRITICAL MOBILE REQUIREMENTS:
+          - Design a perfect mobile experience first
+          - Ensure all interactive elements are perfectly sized for touch
+          - Create unique mobile-specific interactions
+          - Ensure perfect readability and usability on small screens
+          - Design adaptive layouts that maximize each screen size
+          
+          ELEVATED TYPOGRAPHY:
+          - Implement perfect typographic scale and rhythm
+          - Use sophisticated font loading techniques
+          - Create custom typographic animations and effects
+          - Design unique heading treatments with CSS
+          - Implement proper kerning, leading, and text treatments
+          
+          SOPHISTICATED IMAGERY:
+          - Create advanced image treatments and effects
+          - Implement perfect responsive image handling
+          - Design custom image layouts that showcase the content
+          - Add subtle animations to imagery on scroll/hover
+          - Create a cohesive visual language for all images
           
           RETURN A JSON OBJECT with the following structure:
           {
@@ -236,11 +296,13 @@ export async function generateWebsiteContent(
                 {"id": "about", "type": "about", "title": "About Us", "content": "Company description"},
                 {"id": "services", "type": "services", "title": "Our Services"},
                 {"id": "gallery", "type": "gallery", "title": "Our Work", "images": [image paths]},
+                {"id": "cta", "type": "cta", "title": "Call to Action"},
                 {"id": "testimonials", "type": "testimonials", "title": "What Clients Say"},
                 {"id": "contact", "type": "contact", "title": "Contact Us"}
               ],
               "footer": { "columns": [{"title": "About", "links": ["Our Story", "Team"]}, {"title": "Contact", "contact_info": {}}] }
             },
+            "features": ["List of advanced features implemented"],
             "recommendation": "Recommendations for elevating the website even further"
           }`
         },
