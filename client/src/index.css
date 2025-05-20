@@ -2,29 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Enable smooth touch scrolling on mobile devices */
-html, body {
+/* Simple mobile-friendly scrolling */
+html, body, #root {
   height: 100%;
-  overflow: hidden;
-  position: fixed;
   width: 100%;
-  overscroll-behavior: none;
-}
-
-/* Custom scrollbar styling */
-.message-container::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
-}
-
-/* Enable elastic scrolling like messaging apps */
-.message-container {
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  height: 100%;
-  position: relative;
   margin: 0;
   padding: 0;
+  overflow: hidden;
+}
+
+/* Only hide scrollbar but allow scrolling */
+.message-container::-webkit-scrollbar {
+  display: none;
+}
+
+.message-container {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
   touch-action: pan-y;
 }
 

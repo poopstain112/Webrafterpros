@@ -92,8 +92,8 @@ export default function SimpleChat() {
         <h1 className="text-xl font-bold">Instant Website</h1>
       </div>
       
-      {/* Messages area - with padding to account for fixed header and input */}
-      <div className="flex-1 bg-gray-50 overflow-y-auto pt-16 pb-20 touch-pan-y message-container" style={{WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
+      {/* Messages area - using absolute positioning for better mobile scrolling */}
+      <div className="absolute top-16 bottom-16 left-0 right-0 bg-gray-50 overflow-y-scroll message-container">
         <div className="space-y-4 p-4">
           {messages.map((message, index) => (
             <div key={index} className={`flex ${message.role === 'assistant' ? 'justify-start' : 'justify-end'}`}>
