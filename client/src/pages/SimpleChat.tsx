@@ -236,28 +236,55 @@ export default function SimpleChat() {
   };
   
   // Confirm reset and clear all data
-  const confirmReset = () => {
-    // Clear local storage
-    localStorage.removeItem('generatedWebsiteHTML');
-    
-    // Reset states
-    setUploadMode("chat");
-    setShowWebsitePreview(false);
-    setShowImagesReview(false);
-    setUploadProgress(0);
-    setIsUploading(false);
-    
-    // Close dialog
-    setResetConfirmOpen(false);
-    
-    // Show success message
-    toast({
-      title: "Reset Complete",
-      description: "All data has been cleared. You can start fresh!",
-    });
-    
-    // Reload the page to ensure everything is reset
-    window.location.reload();
+  const confirmReset = async () => {
+    try {
+      // First, call our new server-side reset endpoint
+      const response = await fetch('/api/reset_all', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ websiteId: 1 }) // Assuming default website ID is 1
+      });
+      
+      if (!response.ok) {
+        throw new Error('Server reset failed');
+      }
+      
+      // Clear all localStorage
+      localStorage.clear();
+      
+      // Reset all state variables
+      setUploadMode("chat");
+      setShowWebsitePreview(false);
+      setShowImagesReview(false);
+      setUploadProgress(0);
+      setIsUploading(false);
+      setInputMessage("");
+      
+      // Close dialog
+      setResetConfirmOpen(false);
+      
+      // Show success message
+      toast({
+        title: "Reset Complete",
+        description: "All data has been cleared. You can start fresh!",
+      });
+      
+      // Force hard reload of the page to reset everything
+      // This is the most reliable way to truly reset the application
+      setTimeout(() => {
+        window.location.href = window.location.pathname + "?reset=" + Date.now();
+      }, 500);
+      
+    } catch (error) {
+      console.error("Error during reset:", error);
+      toast({
+        title: "Reset Failed",
+        description: "Something went wrong while trying to reset. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (

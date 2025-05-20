@@ -214,6 +214,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
 // API endpoint to add a chat message
+  // Reset all data for a website (needed for "Start Over" functionality)
+  app.post("/api/reset_all", async (req: Request, res: Response) => {
+    try {
+      // Get the default website ID (should be 1 for most users)
+      const websiteId = req.body.websiteId || 1;
+      
+      // Delete all messages for this website
+      await storage.deleteMessagesByWebsiteId(websiteId);
+      
+      // Reset default initial message
+      const initialMessage = {
+        websiteId: websiteId,
+        role: "assistant",
+        content: "What's the name of your business?"
+      };
+      
+      await storage.createMessage(initialMessage);
+      
+      res.status(200).json({ 
+        message: "Application reset successfully",
+        initialMessage 
+      });
+    } catch (error) {
+      console.error("Error resetting application:", error);
+      res.status(500).json({ error: "Failed to reset application" });
+    }
+  });
+
   app.post("/api/websites/:id/messages", async (req: Request, res: Response) => {
     try {
       const websiteId = parseInt(req.params.id);
