@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { MessageSquare, Settings, Image, Send, ArrowLeft } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { MessageSquare, Settings, Image, Send, ArrowLeft, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useChat } from "@/hooks/use-chat";
 import { useToast } from "@/hooks/use-toast";
@@ -17,11 +17,20 @@ export default function SimplifiedHome() {
     isGeneratingWebsite,
     clearUploadedImages,
     resetChat,
+    fetchMessages,
   } = useChat();
 
   const [currentScreen, setCurrentScreen] = useState<"chat" | "preview">("chat");
   const [inputMessage, setInputMessage] = useState("");
   const [showImageUploader, setShowImageUploader] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  
+  // Refs for pull-to-refresh functionality
+  const pullStartY = useRef(0);
+  const pullMoveY = useRef(0);
+  const distanceThreshold = 100; // Minimum pull distance to trigger refresh
+  const refreshAreaRef = useRef<HTMLDivElement>(null);
+  const isRefreshingRef = useRef(false);
 
   // Handle sending a message
   const handleSendMessage = () => {
