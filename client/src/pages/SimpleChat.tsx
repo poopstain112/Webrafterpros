@@ -108,6 +108,9 @@ export default function SimpleChat() {
             </div>
           )}
           
+          {/* Add extra space at bottom when website button is showing */}
+          {messages.length > 5 && <div className="h-16"></div>}
+          
           {/* This invisible element helps us scroll to the bottom */}
           <div ref={messagesEndRef}></div>
         </div>
