@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Route, Switch } from "wouter";
 import SimplifiedHome from "@/pages/SimplifiedHome";
+import TestUpload from "@/pages/TestUpload";
 import "./App.css";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <div className="app-container">
           <Switch>
             <Route path="/" component={SimplifiedHome} />
+            <Route path="/test-upload" component={TestUpload} />
           </Switch>
         </div>
       </TooltipProvider>

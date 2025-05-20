@@ -160,12 +160,15 @@ export default function ImageUpload({
                       className="relative min-w-0 flex-[0_0_100%] h-60"
                     >
                       <img
-                        src={image.url}
+                        src={`${image.url}?t=${Date.now()}`}
                         alt={`Uploaded ${index + 1}`}
                         className="w-full h-full object-contain"
                         onError={(e) => {
                           console.error(`Error loading thumbnail for image ${index}:`, image.url);
-                          e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTkgM0g1QzMuODk1NDMgMyAzIDMuODk1NDMgMyA1VjE5QzMgMjAuMTA0NiAzLjg5NTQzIDIxIDUgMjFIMTlDMjAuMTA0NiAyMSAyMSAyMC4xMDQ2IDIxIDE5VjVDMjEgMy44OTU0MyAyMC4xMDQ2IDMgMTkgM1oiIHN0cm9rZT0iIzJDN0E3QiIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTguOSAxMC45Njg1QzEwLjA0NTUgMTAuOTY4NSAxMC45NjkgMTAuMDQ1MSAxMC45NjkgOC44OTk2QzEwLjk2OSA3Ljc1NDEgMTAuMDQ1NSA2LjgzMDYgOC45IDYuODMwNkM3Ljc1NDUgNi44MzA2IDYuODMxIDcuNzU0MSA2LjgzMSA4Ljg5OTZDNS44MzEgOS44OTk2IDcuNzU0NSAxMC45Njg1IDguOSAxMC45Njg1WiIgZmlsbD0iIzJDN0E3QiIvPjxwYXRoIGQ9Ik0xNiAxNkg2TDkgMTIuNUwxMSAxNUwxMyAxM0wxNiAxNloiIGZpbGw9IiMyQzdBN0IiLz48L3N2Zz4=';
+                          // Retry with a new timestamp
+                          setTimeout(() => {
+                            e.currentTarget.src = `${image.url}?t=${Date.now() + 100}`;
+                          }, 500);
                         }}
                       />
                       <div className="absolute top-2 right-2">
@@ -217,7 +220,7 @@ export default function ImageUpload({
                   onClick={() => emblaApi?.scrollTo(index)}
                 >
                   <img
-                    src={image.url}
+                    src={`${image.url}?t=${Date.now()}`}
                     alt={`Thumbnail ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
