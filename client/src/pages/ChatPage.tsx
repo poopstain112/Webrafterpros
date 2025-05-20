@@ -157,17 +157,7 @@ export default function ChatPage() {
 
       {/* Chat Input */}
       <div className="p-3 bg-white border-t border-gray-200">
-        {/* Add Skip Button Here - Full Width */}
-        <button
-          type="button"
-          onClick={handleSkip}
-          className="w-full mb-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded transition-colors flex items-center justify-center gap-1"
-        >
-          Skip Question
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 6L15 12L9 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
+        {/* Skip button removed as requested */}
         
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <Button
