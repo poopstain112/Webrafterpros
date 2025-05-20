@@ -266,6 +266,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get all messages for this website to provide context
       const allMessages = await storage.getMessagesByWebsiteId(websiteId);
       
+      // Check for website generation notification
+      if (content.toLowerCase().includes("website has been generated") || 
+          content.toLowerCase().includes("look at the preview")) {
+        
+        // Use a consistent response for website generation messages
+        const aiResponse = "Great! Your website has been generated. You can view it in the preview tab. Let me know if you'd like to make any changes to the design or content.";
+        
+        // Save the response
+        const aiMessage = await storage.createMessage({
+          websiteId,
+          content: aiResponse,
+          role: "assistant",
+        });
+        
+        // Return immediately with special response
+        return res.status(201).json({
+          userMessage,
+          aiMessage,
+        });
+      }
+      
       // Define the fixed sequence of business questions - JUST QUESTIONS, no paragraphs
       const BUSINESS_QUESTIONS = [
         "What's the name of your business?",
