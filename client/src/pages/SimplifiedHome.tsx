@@ -215,22 +215,13 @@ export default function SimplifiedHome() {
 
   // Handle website generation
   const handleGenerateWebsite = () => {
-    if (uploadedImages.length === 0) {
-      toast({
-        title: "Upload images first",
-        description: "Please upload at least one image to generate a website",
-        variant: "destructive",
-      });
-      return;
-    }
-    
     // Extract business information from chat messages
     const businessInfo = extractBusinessInfo(messages);
     
     // Create a comprehensive description based on chat history
     const description = createDetailedDescription(messages, businessInfo);
     
-    // Pass business type if detected
+    // Generate website even without images (simplified approach)
     generateWebsiteContent(
       description,
       businessInfo.businessType
@@ -239,6 +230,12 @@ export default function SimplifiedHome() {
     
     // Save the fact that we've generated a website to localStorage
     localStorage.setItem('websiteGenerated', 'true');
+    
+    // Success message
+    toast({
+      title: "Website generating",
+      description: "Your professional website is being created. This may take a moment.",
+    });
   };
 
   // Handle downloading the website
