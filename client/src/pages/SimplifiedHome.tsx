@@ -5,7 +5,7 @@ import { useChat } from "@/hooks/use-chat";
 import { useToast } from "@/hooks/use-toast";
 import { Message, UploadedImage } from "@/types";
 import { resetChat, uploadImages, generateWebsite } from "@/lib/openai";
-import FullScreenLoader from "@/components/FullScreenLoader";
+import WebsiteLoadingScreen from "./WebsiteLoadingScreen";
 
 // Helper function to extract business info from messages
 function extractBusinessInfo(messages: Message[]) {
@@ -241,9 +241,20 @@ export default function SimplifiedHome() {
     }
   };
   
+  // State to control showing the dedicated loading screen
+  const [showLoadingScreen, setShowLoadingScreen] = useState(false);
+  
+  // Cancel loading and return to chat
+  const cancelLoading = useCallback(() => {
+    setShowLoadingScreen(false);
+    setIsGeneratingWebsite(false);
+  }, []);
+
   // Handle website generation
   const handleGenerateWebsite = async () => {
     try {
+      // Show the dedicated loading screen first
+      setShowLoadingScreen(true);
       setIsGeneratingWebsite(true);
       
       const businessInfo = extractBusinessInfo(messages);
@@ -251,6 +262,7 @@ export default function SimplifiedHome() {
       
       await generateWebsiteFromChat(description, businessType);
     } catch (error) {
+      setShowLoadingScreen(false);
       setIsGeneratingWebsite(false);
       toast({
         title: "Generation Failed",
@@ -310,8 +322,8 @@ export default function SimplifiedHome() {
 
   return (
     <div className="relative">
-      {/* Global loading overlay - shows when website is generating */}
-      {isGeneratingWebsite && <FullScreenLoader />}
+      {/* Show dedicated loading screen when generating website */}
+      {showLoadingScreen && <WebsiteLoadingScreen onCancel={cancelLoading} />}
       {/* Debug information - for troubleshooting */}
       {/*<div className="fixed bottom-0 right-0 bg-black/70 text-white text-xs p-2 z-50">
         Website HTML Length: {websiteHtml?.length || 0}
