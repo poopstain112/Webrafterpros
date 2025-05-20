@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Image as ImageIcon, ArrowLeft } from "lucide-react";
+import { Send, Image as ImageIcon, ArrowLeft, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Message, UploadedImage } from "@/types";
@@ -340,16 +340,16 @@ export default function ChatInterface({
             </div>
           )}
           
-          {/* Mobile-friendly input area */}
+          {/* Mobile-friendly messaging-style input area */}
           <div 
-            className="flex items-center justify-between gap-2 bg-gray-50 rounded-full py-2 px-4 border border-gray-200"
+            className="flex items-center justify-between gap-2 bg-white rounded-full py-2 px-4 border border-gray-200 shadow-sm"
             onClick={() => setIsFullscreen(true)}
           >
-            <div className="flex-grow py-2 text-gray-500 cursor-text truncate">
+            <div className="flex-grow py-2.5 text-gray-500 cursor-text truncate text-sm">
               {message ? message : "Message Website Designer..."}
             </div>
             
-            <div className="flex gap-2">
+            <div className="flex gap-1.5">
               <Button
                 type="button"
                 onClick={(e) => {
@@ -357,21 +357,30 @@ export default function ChatInterface({
                   setIsUploadVisible(true);
                 }}
                 variant="ghost"
-                className="rounded-full w-10 h-10 flex items-center justify-center hover:bg-gray-200"
+                className="rounded-full w-10 h-10 flex items-center justify-center hover:bg-gray-100"
                 size="icon"
               >
-                <ImageIcon className="h-5 w-5 text-gray-500" />
+                <ImageIcon className="h-5 w-5 text-blue-500" />
               </Button>
               
-              {message.trim().length > 0 && (
+              {message.trim().length > 0 ? (
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="rounded-full w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 text-white flex items-center justify-center"
+                  className="rounded-full w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-200"
                   size="icon"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Send className="h-5 w-5" />
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="rounded-full w-10 h-10 flex items-center justify-center hover:bg-gray-100"
+                  size="icon"
+                >
+                  <Sparkles className="h-5 w-5 text-blue-500" />
                 </Button>
               )}
             </div>
