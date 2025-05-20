@@ -1,10 +1,11 @@
 import { Message, UploadedImage, WebsiteStructure } from '@/types';
 
-// Generate website content from description and images
+// Generate or edit website content
 export async function generateWebsite(
   description: string,
   images: UploadedImage[] = [],
-  businessType?: string
+  businessType?: string,
+  existingWebsite?: WebsiteStructure
 ): Promise<WebsiteStructure> {
   try {
     const imageUrls = images.map(img => img.url);
@@ -26,7 +27,8 @@ export async function generateWebsite(
       }
     }
     
-    console.log(`Generating website with business type: ${detectedBusinessType || 'unspecified'}`);
+    const isEdit = !!existingWebsite;
+    console.log(`${isEdit ? 'Editing' : 'Generating'} website with business type: ${detectedBusinessType || 'unspecified'}`);
     
     const response = await fetch('/api/generate-website', {
       method: 'POST',
@@ -36,7 +38,9 @@ export async function generateWebsite(
       body: JSON.stringify({ 
         description, 
         imageUrls,
-        businessType: detectedBusinessType 
+        businessType: detectedBusinessType,
+        existingWebsite: isEdit ? existingWebsite : undefined,
+        isEdit
       }),
     });
 

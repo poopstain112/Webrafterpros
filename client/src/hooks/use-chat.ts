@@ -157,6 +157,69 @@ export function useChat(initialWebsiteId: number = 1) {
     [initialWebsiteId, toast]
   );
 
+  // Edit the generated website based on user instructions
+  const editWebsiteContent = useCallback(
+    async (instructions: string) => {
+      if (!instructions.trim() || !websiteStructure) return;
+      
+      setIsGeneratingWebsite(true);
+      
+      try {
+        // Add a message indicating website editing
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: 'Making changes to your website based on your instructions. This may take a moment...',
+          },
+        ]);
+        
+        // Call the API with the current website structure and the edit instructions
+        const updatedWebsiteData = await generateWebsite(
+          instructions, 
+          uploadedImages, 
+          undefined, 
+          websiteStructure
+        );
+        
+        // Update the website structure with the new content
+        setWebsiteStructure(updatedWebsiteData);
+        
+        // Add success message
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: 'Your website has been updated! Take a look at the preview to see the changes.',
+          },
+        ]);
+        
+        toast({
+          title: 'Success',
+          description: 'Website updated successfully',
+        });
+      } catch (error) {
+        console.error('Error updating website:', error);
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: 'I had trouble updating your website. Please try again with different instructions.',
+          },
+        ]);
+        
+        toast({
+          title: 'Error',
+          description: 'Failed to update website',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsGeneratingWebsite(false);
+      }
+    },
+    [uploadedImages, websiteStructure, toast]
+  );
+  
   // Generate website based on description
   const generateWebsiteContent = useCallback(
     async (description: string, businessType?: string) => {
@@ -251,6 +314,7 @@ export function useChat(initialWebsiteId: number = 1) {
     sendMessage,
     handleImageUpload,
     generateWebsiteContent,
+    editWebsiteContent,
     clearUploadedImages,
     resetChat,
     fetchMessages,

@@ -19,7 +19,8 @@ export default function SimpleChat() {
     uploadedImages,
     websiteStructure,
     isGeneratingWebsite: isGenerating,
-    generateWebsiteContent
+    generateWebsiteContent,
+    editWebsiteContent
   } = useChat();
   
   // Scroll to bottom of messages whenever messages change
