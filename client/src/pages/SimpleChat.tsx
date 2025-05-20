@@ -38,14 +38,8 @@ export default function SimpleChat() {
     return () => clearTimeout(timer);
   }, [messages]);
   
-  // Add event listener for manual scrolling
-  useEffect(() => {
-    const messageContainer = document.querySelector('.message-container') as HTMLElement;
-    if (messageContainer) {
-      // Enable momentum scrolling on iOS
-      messageContainer.style.WebkitOverflowScrolling = 'touch';
-    }
-  }, []);
+  // We don't need the WebkitOverflowScrolling useEffect anymore as
+  // we'll handle scrolling with CSS instead
   
   // Show website preview when website is generated
   useEffect(() => {
@@ -99,7 +93,7 @@ export default function SimpleChat() {
       </div>
       
       {/* Messages area - with padding to account for fixed header and input */}
-      <div className="flex-1 bg-gray-50 overflow-y-auto pt-16 pb-20 overscroll-contain -webkit-overflow-scrolling-touch message-container">
+      <div className="flex-1 bg-gray-50 overflow-y-auto pt-16 pb-20 touch-pan-y message-container" style={{WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
         <div className="space-y-4 p-4">
           {messages.map((message, index) => (
             <div key={index} className={`flex ${message.role === 'assistant' ? 'justify-start' : 'justify-end'}`}>

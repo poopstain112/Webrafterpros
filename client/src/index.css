@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Enable smooth touch scrolling on mobile devices */
+html, body {
+  height: 100%;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  overscroll-behavior: none;
+}
+
+/* Custom scrollbar styling */
+.message-container::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Enable elastic scrolling like messaging apps */
+.message-container {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  height: 100%;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  touch-action: pan-y;
+}
+
 :root {
   /* Professional design system with smooth transitions */
   --background: 210 40% 98%;
