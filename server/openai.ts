@@ -14,82 +14,250 @@ export async function generateWebsiteContent(
   recommendation: string;
 }> {
   try {
-    const imagesPrompt = imageUrls.length
-      ? `The user has provided ${imageUrls.length} images (${imageUrls.join(", ")}). Please incorporate all of these images strategically throughout the website, treating them as premium photography assets.`
-      : "The user hasn't provided any images yet.";
-
-    const response = await openai.chat.completions.create({
+    // Extract business details from the description
+    const extractBusinessInfoResponse = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
           role: "system",
-          content: `You are a high-end creative director at an exclusive web design agency that charges $20,000+ per website. Your clients include luxury brands and premium businesses.
-          
-          Your task is to create a visually stunning, high-end website based on the user's description that looks like it cost $20,000 to design.
-          
-          PREMIUM WEBSITE REQUIREMENTS:
-          - Create an exceptional, sophisticated website that exudes luxury and exclusivity
-          - The HTML must follow perfect semantic structure with responsive design built-in
-          - Use advanced CSS techniques including elegant animations, transitions, and micro-interactions
-          - Implement thoughtful whitespace and perfect typography with proper hierarchy
-          - Design should feature layered elements that create depth and dimension
-          - Include subtle parallax-like effects and elegant scroll animations
-          - Create custom gradient buttons with sophisticated hover effects
-          - Design a premium-looking navigation experience
-          - Include elegant animations that trigger on scroll or hover
-          - Implement perfect responsive behavior across all devices
-          
-          VISUAL DESIGN REQUIREMENTS:
-          - Use a sophisticated, premium color palette appropriate for the industry
-          - Create a stunning visual hierarchy with perfect typographic scale
-          - Implement premium card/panel designs with subtle shadows and layering
-          - Use elegant spacing throughout to create a sense of luxury
-          - Design beautiful, high-end CTAs that entice interaction
-          - Create a distinctive, memorable hero section
-          - Implement sophisticated layout techniques that feel custom-designed
-          - Use subtle background patterns or gradients where appropriate
-          - Design should reflect current 2025 premium web design trends
+          content: `You are a data extraction specialist. Your task is to extract structured business information from the following text that contains a conversation about a business website. 
+
+          Extract ONLY factual information that was explicitly provided, do not invent or assume any details.
           
           Return a JSON object with the following structure:
           {
-            "html": "The complete HTML code for the website",
-            "css": "The complete CSS code for the website",
-            "structure": {
-              "header": { "title": "Website Title", "navigation": ["Home", "About", "Services", "Gallery", "Contact"] },
-              "sections": [
-                {"id": "hero", "type": "hero", "title": "Main Headline", "subtitle": "Supporting text", "imageUrl": "image_path"},
-                {"id": "about", "type": "about", "title": "About Us", "content": "Company description", "imageUrl": "image_path"},
-                {"id": "services", "type": "services", "title": "Our Services", "items": [{"title": "Service 1", "description": "Details"}]},
-                {"id": "gallery", "type": "gallery", "title": "Our Work", "images": ["image_path1", "image_path2"]},
-                {"id": "testimonials", "type": "testimonials", "title": "What Clients Say", "items": [{"text": "Testimonial", "author": "Client name"}]},
-                {"id": "contact", "type": "contact", "title": "Contact Us", "formFields": ["name", "email", "message"]}
-              ],
-              "footer": { "columns": [{"title": "About", "links": ["Our Story", "Team"]}, {"title": "Contact", "contact_info": {"address": "", "phone": "", "email": ""}}] }
+            "businessName": "The exact business name",
+            "location": "The business location",
+            "services": ["Service 1", "Service 2"],
+            "uniqueSellingPoints": ["USP 1", "USP 2"],
+            "targetCustomers": "Description of ideal customers",
+            "slogan": "Business slogan or tagline (if any)",
+            "hours": "Business hours",
+            "contact": {
+              "phone": "Phone number",
+              "email": "Email address",
+              "address": "Physical address"
             },
-            "recommendation": "Recommendations for elevating the website even further"
-          }`,
+            "colors": ["Color 1", "Color 2"],
+            "socialMedia": ["Platform 1", "Platform 2"]
+          }
+          
+          If any field is missing information, use null or an empty array as appropriate. Be precise and only include information that was explicitly mentioned.`
         },
         {
           role: "user",
-          content: `I need a premium, high-end business website for: ${description}. ${imagesPrompt}
-          
-          Requirements for this $20,000 website:
-          1. Create a visually stunning, luxury-level design that looks truly premium
-          2. All images must be incorporated elegantly throughout the site as professional assets
-          3. The website must feature sophisticated animations and interactions
-          4. Typography and spacing must be impeccable, creating a sense of luxury
-          5. The color palette must be refined and premium-looking
-          6. The site must include compelling, persuasive marketing copy
-          7. Navigation must be intuitive yet distinctive
-          8. Design should feature modern touches like layered elements and parallax-like effects
-          
-          Create this as if it were designed by a top-tier agency for a premium client with an unlimited budget. Make it truly exceptional.`,
-        },
+          content: description
+        }
       ],
       response_format: { type: "json_object" },
     });
 
-    const result = JSON.parse(response.choices[0].message.content || "{}");
+    const businessInfo = JSON.parse(extractBusinessInfoResponse.choices[0].message.content || "{}");
+    
+    // Format image information
+    const formattedImageUrls = imageUrls.map(url => ({ path: url }));
+    
+    // Generate theme based on business type
+    const themeResponse = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: `You are a brand strategist specializing in website color psychology and visual design. Based on the business information provided, suggest a premium, harmonious color palette (5-6 colors) with exact hex codes that would create an exceptional website experience.
+          
+          For a boat rental company named after Poseidon (Greek god of the sea), you might suggest:
+          - Primary: #0B4F6C (deep ocean blue) - For brand identity and main elements
+          - Secondary: #01BAEF (vibrant cerulean) - For accents and call-to-action elements
+          - Tertiary: #FBFBFF (off-white) - For backgrounds and negative space
+          - Accent 1: #B80C09 (coral red) - For important highlights and energy
+          - Accent 2: #040F16 (midnight blue) - For contrast and depth
+          - Accent 3: #FFD700 (golden yellow) - For subtle luxury touches
+
+          Return your response as a JSON object with the following structure:
+          {
+            "colorPalette": {
+              "primary": "#hex",
+              "secondary": "#hex",
+              "tertiary": "#hex",
+              "accent1": "#hex",
+              "accent2": "#hex",
+              "accent3": "#hex"
+            },
+            "typography": {
+              "headingFont": "Font family suggestion",
+              "bodyFont": "Font family suggestion" 
+            },
+            "mood": "The mood/feeling this palette evokes",
+            "rationale": "Brief explanation of why this palette works for this business"
+          }`
+        },
+        {
+          role: "user",
+          content: JSON.stringify(businessInfo)
+        }
+      ],
+      response_format: { type: "json_object" },
+    });
+
+    const themeInfo = JSON.parse(themeResponse.choices[0].message.content || "{}");
+    
+    // Generate content for website sections
+    const contentResponse = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: `You are an expert website copywriter for premium businesses. Create engaging, persuasive content for each section of a high-end business website. 
+          
+          Craft compelling headlines, subheadlines, and body copy that conveys the business's value proposition and engages visitors.
+          
+          For a boat rental company, instead of generic copy like "We offer boat rentals", write compelling content like:
+          "Experience the freedom of Florida's waterways aboard our immaculately maintained fleet of pontoon boats. Each vessel in our collection offers unparalleled comfort with premium seating, advanced navigation systems, and all the amenities you need for a perfect day on the water."
+          
+          Return your content as a JSON object with the following structure:
+          {
+            "hero": {
+              "headline": "Compelling main headline",
+              "subheadline": "Supporting statement",
+              "ctaText": "Call to action button text"
+            },
+            "about": {
+              "headline": "About section headline",
+              "content": "Engaging paragraph about the business (min 150 words, include specific details from business information)"
+            },
+            "services": {
+              "headline": "Services section headline",
+              "intro": "Brief introduction",
+              "servicesList": [
+                {
+                  "name": "Service name",
+                  "description": "Detailed description (min 75 words)"
+                }
+              ]
+            },
+            "features": {
+              "headline": "Features/Benefits headline",
+              "featuresList": [
+                {
+                  "name": "Feature name",
+                  "description": "Brief feature description"
+                }
+              ]
+            },
+            "cta": {
+              "headline": "Call to action headline",
+              "content": "Compelling reason to act",
+              "buttonText": "CTA button text"
+            },
+            "testimonials": {
+              "headline": "Testimonials headline",
+              "testimonialsList": [
+                {
+                  "quote": "Realistic customer testimonial",
+                  "author": "Customer name",
+                  "location": "Location"
+                }
+              ]
+            },
+            "contact": {
+              "headline": "Contact section headline",
+              "content": "Brief message encouraging contact"
+            }
+          }`
+        },
+        {
+          role: "user",
+          content: JSON.stringify({
+            businessInfo: businessInfo,
+            imageCount: imageUrls.length,
+            themeInfo: themeInfo
+          })
+        }
+      ],
+      response_format: { type: "json_object" },
+    });
+
+    const contentInfo = JSON.parse(contentResponse.choices[0].message.content || "{}");
+    
+    // Generate complete website HTML and CSS
+    const websiteResponse = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: `You are a senior frontend engineer specializing in creating pixel-perfect, high-end websites worth $20,000 or more.
+
+          CREATE A COMPLETE, FULLY FUNCTIONAL, VISUALLY STUNNING WEBSITE with the following requirements:
+          
+          1. RESPONSIVENESS: Website must look perfect on ALL screen sizes from mobile to desktop
+          2. ACCESSIBILITY: Follow WCAG standards for accessibility
+          3. PERFORMANCE: Optimize for fast loading and smooth animations
+          4. CODE QUALITY: Write clean, semantic HTML and efficient CSS
+          5. VISUAL APPEAL: Create a truly premium-looking design
+          
+          THE HTML MUST:
+          - Have proper document structure (<DOCTYPE>, <html>, <head>, <body>)
+          - Include all necessary meta tags, favicon links, etc.
+          - Use semantic HTML5 elements (<header>, <nav>, <main>, <section>, <footer>)
+          - Be fully responsive without external frameworks
+          - Include working navigation, forms, and interactive elements
+          - Properly showcase all provided images
+          - Include Font Awesome icons for visual appeal (link to Font Awesome CDN)
+          - Have properly structured text with appropriate heading hierarchy
+          
+          THE CSS MUST:
+          - Be modern and feature-rich with animations, transitions, and effects
+          - Use custom properties (CSS variables) for the color scheme
+          - Implement responsive design without external frameworks
+          - Include hover/active states for interactive elements
+          - Feature sophisticated animations and transitions
+          - Create visual interest with layered elements, subtle shadows
+          - Use modern CSS techniques like Grid and Flexbox
+          - Include media queries for perfect responsive behavior
+          
+          IMPORTANT VISUAL REQUIREMENTS:
+          - The website must look like it cost $20,000 to design
+          - Design must be cohesive, with consistent color application
+          - Typography must be impeccable with proper hierarchy
+          - Use generous whitespace to create a sense of luxury
+          - Include subtle animations that enhance the experience
+          - Navigation must be intuitive yet distinctive
+          - Call-to-action elements should stand out
+          - Layout should feel custom-designed
+          
+          RETURN A JSON OBJECT with the following structure:
+          {
+            "html": "Complete HTML code",
+            "css": "Complete CSS code",
+            "structure": {
+              "header": { "title": "Website Title", "navigation": ["Home", "About", "Services", "Gallery", "Contact"] },
+              "sections": [
+                {"id": "hero", "type": "hero", "title": "Main Headline", "subtitle": "Supporting text"},
+                {"id": "about", "type": "about", "title": "About Us", "content": "Company description"},
+                {"id": "services", "type": "services", "title": "Our Services"},
+                {"id": "gallery", "type": "gallery", "title": "Our Work", "images": [image paths]},
+                {"id": "testimonials", "type": "testimonials", "title": "What Clients Say"},
+                {"id": "contact", "type": "contact", "title": "Contact Us"}
+              ],
+              "footer": { "columns": [{"title": "About", "links": ["Our Story", "Team"]}, {"title": "Contact", "contact_info": {}}] }
+            },
+            "recommendation": "Recommendations for elevating the website even further"
+          }`
+        },
+        {
+          role: "user",
+          content: JSON.stringify({
+            businessInfo: businessInfo,
+            images: formattedImageUrls,
+            theme: themeInfo,
+            content: contentInfo
+          })
+        }
+      ],
+      response_format: { type: "json_object" },
+    });
+
+    const result = JSON.parse(websiteResponse.choices[0].message.content || "{}");
 
     return {
       html: result.html || "",
