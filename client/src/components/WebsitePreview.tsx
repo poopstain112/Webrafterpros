@@ -92,9 +92,9 @@ ${websiteHtml}
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-gray-100 flex justify-between items-center">
+      <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gradient-to-r from-blue-50 to-indigo-50">
         <div>
-          <h2 className="font-semibold">Website Preview</h2>
+          <h2 className="font-semibold text-gray-800">Website Preview</h2>
           <p className="text-sm text-gray-500">Click any element to edit</p>
         </div>
         <div className="flex items-center gap-2">

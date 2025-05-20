@@ -125,7 +125,7 @@ export default function ChatInterface({
 
   // Regular chat interface
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-gray-50 to-blue-50">
+    <div className="flex flex-col h-full relative overflow-hidden bg-white">
       {/* Header */}
       <div className="p-4 border-b border-gray-200 bg-white shadow-sm flex items-center">
         <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-white flex-shrink-0 mr-3">
@@ -183,7 +183,7 @@ export default function ChatInterface({
       )}
 
       {/* Chat Messages */}
-      <div className="overflow-y-auto p-4 flex-grow" style={{ backgroundImage: "url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiNmOGZhZmMiIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNMzYgMjRhNiA2IDAgMSAxLTEyIDAgNiA2IDAgMCAxIDEyIDB6bTAgMTJhNiA2IDAgMSAxLTEyIDAgNiA2IDAgMCAxIDEyIDB6bTEyLTEyYTYgNiAwIDEgMS0xMiAwIDYgNiAwIDAgMSAxMiAwem0wIDEyYTYgNiAwIDEgMS0xMiAwIDYgNiAwIDAgMSAxMiAwek0xMiAyNGE2IDYgMCAxIDEtMTIgMCA2IDYgMCAwIDEgMTIgMHptMCAxMmE2IDYgMCAxIDEtMTIgMCA2IDYgMCAwIDEgMTIgMHoiIGZpbGw9IiNlOWVjZWYiIGZpbGwtb3BhY2l0eT0iLjIiIGZpbGwtcnVsZT0ibm9uemVybyIvPjwvZz48L3N2Zz4=')" }}>
+      <div className="overflow-y-auto p-4 flex-grow custom-scrollbar bg-gradient-to-br from-gray-50 to-slate-50">
         <div className="space-y-3">
           {messages.map((msg, index) => (
             <div

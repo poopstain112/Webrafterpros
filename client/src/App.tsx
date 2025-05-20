@@ -9,6 +9,7 @@ import Home from "@/pages/Home";
 import History from "@/pages/History";
 import Help from "@/pages/Help";
 import NotFound from "@/pages/not-found";
+import "./App.css";
 
 function Router() {
   const [location] = useLocation();
