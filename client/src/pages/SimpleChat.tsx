@@ -4,6 +4,7 @@ import { useChat } from "@/hooks/use-chat";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import WebsitePreview from "@/components/WebsitePreview";
+import ViewWebsiteButton from "@/components/ViewWebsiteButton";
 import { useWebsiteGeneration } from "../contexts/WebsiteGenerationContext";
 import { useLocation } from "wouter";
 
@@ -191,8 +192,9 @@ export default function SimpleChat() {
       {/* CHAT MODE - Show the chat interface when in chat mode */}
       {uploadMode === "chat" && (
         <>
-          <div className="bg-blue-500 text-white py-4 px-4 fixed top-0 left-0 right-0 z-10">
+          <div className="bg-blue-500 text-white py-4 px-4 fixed top-0 left-0 right-0 z-10 flex justify-between items-center">
             <h1 className="text-xl font-bold">Instant Website</h1>
+            <ViewWebsiteButton />
           </div>
           
           {/* Messages area - using absolute positioning for better mobile scrolling */}

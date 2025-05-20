@@ -233,6 +233,11 @@ export function useChat(initialWebsiteId: number = 1) {
         // Update the website structure with the new content
         setWebsiteStructure(updatedWebsiteData);
         
+        // Save to localStorage for easy access later
+        if (updatedWebsiteData.html) {
+          localStorage.setItem('generatedWebsiteHTML', updatedWebsiteData.html);
+        }
+        
         // Add success message
         setMessages(prev => [
           ...prev,
