@@ -167,7 +167,7 @@ export function useChat(initialWebsiteId: number = 1) {
   }, []);
 
   // Reset chat function - starts conversation over
-  const resetChat = useCallback(() => {
+  const resetChat = useCallback(async () => {
     // Reset to first business question
     setMessages([
       {
@@ -179,11 +179,24 @@ export function useChat(initialWebsiteId: number = 1) {
     setUploadedImages([]);
     setWebsiteStructure(null);
     
+    // Call reset endpoint to clean server state
+    try {
+      await fetch('/api/reset_chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ websiteId: initialWebsiteId }),
+      });
+    } catch (error) {
+      console.error('Error resetting chat:', error);
+    }
+    
     toast({
       title: 'Chat Reset',
       description: 'Starting a fresh conversation',
     });
-  }, [toast]);
+  }, [toast, initialWebsiteId]);
 
   return {
     messages,

@@ -207,9 +207,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get all messages for this website to provide context
       const allMessages = await storage.getMessagesByWebsiteId(websiteId);
       
-      // Count how many user messages we have to determine which question to ask next
-      const userMessageCount = allMessages.filter(m => m.role === "user").length;
-      
       // Define the fixed sequence of business questions - JUST QUESTIONS, no paragraphs
       const BUSINESS_QUESTIONS = [
         "What's the name of your business?",
@@ -224,14 +221,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
         "Do you have any social media accounts to link on the website?"
       ];
       
+      // Log all messages to help debug
+      console.log("All messages:", allMessages.map(m => ({ role: m.role, content: m.content.substring(0, 30) })));
+      
+      // Get unique user messages (to avoid counting duplicates)
+      const uniqueUserMessages = new Set();
+      allMessages.forEach(msg => {
+        if (msg.role === "user") {
+          uniqueUserMessages.add(msg.content);
+        }
+      });
+      
+      // Calculate what question number we're on based on unique user responses
+      const questionNumber = uniqueUserMessages.size;
+      console.log("Question number:", questionNumber, "Unique user messages:", uniqueUserMessages.size);
+      
       // Determine the AI response - ONLY use the exact questions, nothing else
       let aiResponse;
       
-      // Simple question-only approach
-      if (userMessageCount > 0 && userMessageCount <= BUSINESS_QUESTIONS.length) {
-        // Get the next question directly from the array (0-indexed, so userMessageCount - 1)
-        aiResponse = BUSINESS_QUESTIONS[userMessageCount - 1];
-      } else if (userMessageCount === BUSINESS_QUESTIONS.length + 1) {
+      // Simple question-only approach - use the question number to get the next question
+      if (questionNumber >= 0 && questionNumber < BUSINESS_QUESTIONS.length) {
+        // Get the next question directly from the array
+        aiResponse = BUSINESS_QUESTIONS[questionNumber];
+      } else if (questionNumber === BUSINESS_QUESTIONS.length) {
         // After final question, prompt for image upload - simple prompt only
         aiResponse = "Please upload images for your website.";
       } else {
