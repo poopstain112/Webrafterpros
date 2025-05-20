@@ -379,7 +379,11 @@ ${websiteStructure.html}
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <>
+      {/* Global loading overlay - shows when website is generating */}
+      {isGeneratingWebsite && <LoadingOverlay />}
+      
+      <div className="flex flex-col h-screen">
       {/* Modern Header - 2025 Style */}
       <header className="p-3 flex items-center justify-between bg-white/95 backdrop-blur-sm shadow-sm z-10 sticky top-0">
         <div className="flex items-center">
