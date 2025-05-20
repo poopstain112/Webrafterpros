@@ -129,15 +129,30 @@ export default function SimplifiedHome() {
     websiteId: 1, // Default website ID
     initialMessages: messages,
     onWebsiteGenerated: (data) => {
+      // Save website data to localStorage first
+      if (data.html) {
+        localStorage.setItem('generatedWebsiteHTML', data.html);
+        console.log("Website HTML saved to localStorage, length:", data.html.length);
+      }
+      
+      // Set local state
       setWebsiteHtml(data.html);
       setWebsiteStructure(data.structure);
       setShowLoadingScreen(false);
       setIsGeneratingWebsite(false);
-      setCurrentScreen("preview");
+      
+      // Show success toast
       toast({
         title: "Website Generated",
-        description: "Your custom website has been created.",
+        description: "Your custom website has been created. Redirecting to preview...",
       });
+      
+      // CRITICAL FIX: Navigate directly to preview page bypassing the chat screen
+      // Using direct window location change to force a clean navigation
+      setTimeout(() => {
+        console.log("Direct navigation to website preview");
+        window.location.href = '/website-preview';
+      }, 100);
     },
     onError: (error) => {
       setShowLoadingScreen(false);
