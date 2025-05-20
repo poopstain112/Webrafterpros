@@ -12,21 +12,28 @@ interface WebsitePreviewProps {
 
 export default function WebsitePreview({
   websiteStructure,
-  isGenerating,
+  isGenerating: propIsGenerating,
 }: WebsitePreviewProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("desktop");
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
   const [websiteHtml, setWebsiteHtml] = useState("");
   const [websiteCss, setWebsiteCss] = useState("");
+  const [isGenerating, setIsGenerating] = useState(propIsGenerating);
+  const [hasGeneratedWebsite, setHasGeneratedWebsite] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     if (websiteStructure?.html && websiteStructure?.css) {
       setWebsiteHtml(websiteStructure.html);
       setWebsiteCss(websiteStructure.css);
+      setHasGeneratedWebsite(true);
     }
   }, [websiteStructure]);
+  
+  useEffect(() => {
+    setIsGenerating(propIsGenerating);
+  }, [propIsGenerating]);
 
   const handleSelectElement = (elementId: string, text: string) => {
     setSelectedElement(elementId);
@@ -148,13 +155,13 @@ ${websiteHtml}
           <div className="h-full flex items-center justify-center">
             <div className="text-center">
               <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-gray-500">Generating your website...</p>
+              <p className="text-gray-500">Generating your professional website...</p>
               <p className="text-sm text-gray-400 mt-2">
-                This may take a moment
+                This may take a moment as we create a beautiful design for you
               </p>
             </div>
           </div>
-        ) : websiteStructure ? (
+        ) : websiteHtml ? (
           <div
             className={`bg-white shadow-md rounded-lg overflow-hidden mx-auto border border-gray-200 transition-all ${
               viewMode === "mobile" ? "max-w-[375px]" : "max-w-4xl"
@@ -193,18 +200,18 @@ ${websiteHtml}
                 Your Website Is Ready To Generate!
               </h3>
               <p className="text-lg text-blue-600 mb-4">
-                You've uploaded images! Now click the button below to create your website.
+                You've uploaded images! Now click the button below to create your professional business website.
               </p>
               
               <button
                 onClick={async () => {
                   try {
-                    const description = "Create a beautiful website using the uploaded images. Include home, about, services, gallery, and contact sections.";
+                    const description = "Create a professional business website using the uploaded images. Include attractive home, about, services, gallery, testimonials, and contact sections with a modern design and professional color scheme.";
                     
                     // Show a toast notification
                     toast({
-                      title: "Generating your website!",
-                      description: "We're creating your website based on the uploaded images. This may take a moment...",
+                      title: "Generating your professional website!",
+                      description: "We're creating your website with a modern, professional design based on your images. This may take a moment...",
                     });
                     
                     // Set loading state
@@ -233,10 +240,19 @@ ${websiteHtml}
                     setWebsiteHtml(websiteData.html);
                     setWebsiteCss(websiteData.css);
                     
+                    // Mark website as generated
+                    setHasGeneratedWebsite(true);
+                    
                     // Success notification
                     toast({
                       title: "Website generated!",
-                      description: "Your website has been created successfully.",
+                      description: "Your professional website has been created successfully. You can save or export it using the buttons above.",
+                    });
+                    
+                    // Scroll to top to show the website
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth'
                     });
                   } catch (error) {
                     console.error('Error generating website:', error);
@@ -258,7 +274,7 @@ ${websiteHtml}
               </button>
               
               <p className="text-blue-500 mt-3">
-                Click the button above to automatically create your website based on your uploaded images
+                Click the button above to automatically create your professional website based on your uploaded images
               </p>
             </div>
           </div>

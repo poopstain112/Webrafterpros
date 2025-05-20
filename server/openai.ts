@@ -15,7 +15,7 @@ export async function generateWebsiteContent(
 }> {
   try {
     const imagesPrompt = imageUrls.length
-      ? `The user has provided these images (${imageUrls.join(", ")}). Please incorporate them appropriately.`
+      ? `The user has provided ${imageUrls.length} images (${imageUrls.join(", ")}). Please incorporate them strategically throughout the website, ensuring they are referenced correctly in the HTML.`
       : "The user hasn't provided any images yet.";
 
     const response = await openai.chat.completions.create({
@@ -23,27 +23,65 @@ export async function generateWebsiteContent(
       messages: [
         {
           role: "system",
-          content: `You are a professional website designer and developer. Your task is to generate website content based on user descriptions.
-          Create a modern, responsive website with clean design and clear visual hierarchy.
-          Focus on business website templates.
-          Generate a JSON structure that can be used to render the website.
-          Also provide recommendations on how to improve the website.
+          content: `You are an expert website designer and developer specializing in creating professional business websites.
+          
+          Your task is to generate a complete, production-ready website based on the user's description and images.
+          
+          WEBSITE REQUIREMENTS:
+          - Create a visually stunning, modern business website with professional design elements
+          - The HTML must be fully responsive and mobile-optimized with proper viewport settings
+          - Use modern CSS with flexbox, grid, and responsive design patterns
+          - Include smooth animations and transitions for interactive elements
+          - Implement proper semantic HTML5 structure (header, nav, sections, footer)
+          - Ensure accessibility features (aria attributes, alt text, keyboard navigation)
+          - Add hover effects for buttons and interactive elements
+          - Include a contact form in the footer
+          - Create a sticky navigation header
+          - Add proper SEO meta tags
+          
+          CSS REQUIREMENTS:
+          - Use a clean, professional color scheme with complementary colors
+          - Implement responsive typography with proper hierarchy
+          - Create custom button styles with hover effects
+          - Add box-shadows and subtle gradients for depth
+          - Use modern card designs for content sections
+          - Design a professional footer with multiple columns
+          - Include media queries for different screen sizes
+          - Implement proper spacing and whitespace management
+          
           Return a JSON object with the following structure:
           {
-            "html": "The HTML code for the website",
-            "css": "The CSS code for the website",
+            "html": "The complete HTML code for the website",
+            "css": "The complete CSS code for the website",
             "structure": {
-              // A nested JSON structure representing the website's components
-              "header": { ... },
-              "sections": [ ... ],
-              "footer": { ... }
+              "header": { "title": "Website Title", "navigation": ["Home", "About", "Services", "Gallery", "Contact"] },
+              "sections": [
+                {"id": "hero", "type": "hero", "title": "Main Headline", "subtitle": "Supporting text", "imageUrl": "image_path"},
+                {"id": "about", "type": "about", "title": "About Us", "content": "Company description", "imageUrl": "image_path"},
+                {"id": "services", "type": "services", "title": "Our Services", "items": [{"title": "Service 1", "description": "Details"}]},
+                {"id": "gallery", "type": "gallery", "title": "Our Work", "images": ["image_path1", "image_path2"]},
+                {"id": "testimonials", "type": "testimonials", "title": "What Clients Say", "items": [{"text": "Testimonial", "author": "Client name"}]},
+                {"id": "contact", "type": "contact", "title": "Contact Us", "formFields": ["name", "email", "message"]}
+              ],
+              "footer": { "columns": [{"title": "About", "links": ["Our Story", "Team"]}, {"title": "Contact", "contact_info": {"address": "", "phone": "", "email": ""}}] }
             },
-            "recommendation": "Recommendations for improving the website"
+            "recommendation": "Detailed recommendations for improving the website"
           }`,
         },
         {
           role: "user",
-          content: `I need a website with the following description: ${description}. ${imagesPrompt}`,
+          content: `I need a professional business website with the following description: ${description}. ${imagesPrompt}
+          
+          Please make sure:
+          1. All images are properly referenced in the HTML (use the exact image paths provided)
+          2. The design is modern and visually appealing with a professional color scheme
+          3. The website is fully responsive
+          4. There's a clear call-to-action in the hero section
+          5. The navigation is intuitive and user-friendly
+          6. Include testimonial and services sections
+          7. Add a contact form in the footer
+          
+          BE CREATIVE and make this look like a professional business website that would impress clients!`,
         },
       ],
       response_format: { type: "json_object" },
@@ -102,6 +140,10 @@ export async function analyzeImages(imageUrl: string): Promise<string> {
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
+        {
+          role: "system",
+          content: "You are a professional website designer and image analyst. Your task is to analyze images and suggest how they could be used in a business website."
+        },
         {
           role: "user",
           content: [
