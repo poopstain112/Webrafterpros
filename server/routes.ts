@@ -202,7 +202,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       // Save user message
-      const savedMessage = await storage.createMessage(validatedData);
+      const userMessage = await storage.createMessage(validatedData);
       
       // Get all messages for this website to provide context
       const allMessages = await storage.getMessagesByWebsiteId(websiteId);
@@ -233,7 +233,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       // For skip functionality - check if the latest message was a skip request
-      const wasSkipRequested = userMessage.content.trim().toLowerCase() === "skip this question";
+      const wasSkipRequested = validatedData.content.trim().toLowerCase() === "skip this question";
       
       // Calculate what question number we're on based on unique user responses
       const questionNumber = wasSkipRequested 
@@ -271,12 +271,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       // Add images to user message if provided
-      let userMessageWithImages = savedMessage;
+      let userMessageWithImages = userMessage;
       if (images && images.length > 0) {
         console.log("Adding images to message:", images);
         // Convert image URLs to relative paths if they're full URLs
-        const processedImages = images.map(img => {
-          if (img.url.includes('http')) {
+        const processedImages = images.map((img: any) => {
+          if (img.url && img.url.includes('http')) {
             // Extract the relative path from a full URL
             const urlParts = img.url.split('/uploads/');
             if (urlParts.length > 1) {
@@ -286,9 +286,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return img;
         });
         
+        // Create a new object with only the properties that exist in the database schema
         userMessageWithImages = {
-          ...savedMessage,
-          images: processedImages
+          ...userMessage,
+          // We'll handle images separately in the client
         };
       }
       

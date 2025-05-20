@@ -97,10 +97,6 @@ export async function uploadImages(
 // Get all chat messages for a website
 export async function getChatMessages(websiteId: number): Promise<Message[]> {
   try {
-    // Force a fresh start with the first question
-    return [];
-    
-    /* Original implementation - commented out to force fresh start
     const response = await fetch(`/api/websites/${websiteId}/messages`);
 
     if (!response.ok) {
@@ -109,7 +105,6 @@ export async function getChatMessages(websiteId: number): Promise<Message[]> {
     }
 
     return await response.json();
-    */
   } catch (error) {
     console.error('Error fetching chat messages:', error);
     throw error;
