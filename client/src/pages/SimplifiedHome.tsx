@@ -332,10 +332,14 @@ export default function SimplifiedHome() {
     }
   };
 
+  // If loading screen is active, render ONLY the loading screen
+  if (showLoadingScreen) {
+    return <WebsiteLoadingScreen onCancel={cancelLoading} />;
+  }
+  
+  // Otherwise render the normal UI
   return (
     <div className="relative">
-      {/* Show dedicated loading screen when generating website */}
-      {showLoadingScreen && <WebsiteLoadingScreen onCancel={cancelLoading} />}
       {/* Debug information - for troubleshooting */}
       {/*<div className="fixed bottom-0 right-0 bg-black/70 text-white text-xs p-2 z-50">
         Website HTML Length: {websiteHtml?.length || 0}
