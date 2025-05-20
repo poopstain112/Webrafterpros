@@ -573,8 +573,8 @@ ${websiteStructure.html}
               )}
             </div>
 
-            {/* Modern 2025 Input Area */}
-            <div className="p-3 bg-white border-t border-gray-100 shadow-sm">
+            {/* Modern 2025 Input Area - Fixed Positioning */}
+            <div className="p-3 bg-white border-t border-gray-100 shadow-sm sticky bottom-0 left-0 right-0 z-10">
               <div className="flex items-center gap-2">
                 <button
                   className="w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center transition-colors"
@@ -596,12 +596,12 @@ ${websiteStructure.html}
                       }
                     }}
                     rows={1}
-                    style={{ minHeight: "40px", maxHeight: "120px" }}
+                    style={{ minHeight: "40px", maxHeight: "80px" }}
                     onInput={(e) => {
                       // Auto-resize textarea
                       const target = e.target as HTMLTextAreaElement;
                       target.style.height = "40px";
-                      target.style.height = `${Math.min(120, target.scrollHeight)}px`;
+                      target.style.height = `${Math.min(80, target.scrollHeight)}px`;
                     }}
                   />
                   
