@@ -57,10 +57,12 @@ export default function SimpleChat() {
     fileInput.click();
   };
 
-  // Handle website editing - this will be expanded later
-  const handleEditWebsite = () => {
-    setShowWebsitePreview(false);
-    // Will add more functionality here in the future
+  // Handle website editing with edit instructions
+  const handleEditWebsite = (editInstructions?: string) => {
+    if (editInstructions) {
+      setShowWebsitePreview(false);
+      editWebsiteContent(editInstructions);
+    }
   };
 
   return (
