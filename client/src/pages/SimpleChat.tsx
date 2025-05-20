@@ -177,6 +177,36 @@ export default function SimpleChat() {
       editWebsiteContent(editInstructions);
     }
   };
+  
+  // For testing purposes - create a sample website HTML
+  const createSampleWebsite = () => {
+    const sampleHTML = `
+      <div style="padding: 20px; font-family: sans-serif;">
+        <h1 style="color: #3366cc;">Frontier Modeling</h1>
+        <p>Your professional website for high-quality modeling services.</p>
+        <div style="margin-top: 20px; padding: 15px; background-color: #f5f5f5; border-radius: 5px;">
+          <h2 style="color: #555;">Our Services</h2>
+          <ul>
+            <li>Professional Headshots</li>
+            <li>Portfolio Development</li>
+            <li>Commercial Modeling</li>
+            <li>Fashion Photography</li>
+          </ul>
+        </div>
+        <div style="margin-top: 20px; background-color: #3366cc; color: white; padding: 20px; border-radius: 5px;">
+          <h2>Contact Us</h2>
+          <p>Phone: (555) 123-4567</p>
+          <p>Email: info@frontiermodeling.com</p>
+        </div>
+      </div>
+    `;
+    
+    localStorage.setItem('generatedWebsiteHTML', sampleHTML);
+    toast({
+      title: "Sample Website Created",
+      description: "You can now view the sample website by clicking the 'View Website' button"
+    });
+  };
 
   return (
     <div className="h-full flex flex-col">
@@ -312,6 +342,13 @@ export default function SimpleChat() {
                   <p className="text-gray-600">
                     Review your images below. When you're ready, click "Create Website" to generate your website.
                   </p>
+                  <button
+                    onClick={createSampleWebsite}
+                    className="mt-3 px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                    type="button"
+                  >
+                    Create Sample Website for Testing
+                  </button>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4 mb-24">
