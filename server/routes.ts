@@ -227,14 +227,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get unique user messages (to avoid counting duplicates)
       const uniqueUserMessages = new Set();
       allMessages.forEach(msg => {
-        if (msg.role === "user") {
+        if (msg.role === "user" && msg.content.trim() !== "Skip this question") {
           uniqueUserMessages.add(msg.content);
         }
       });
       
+      // For skip functionality - check if the latest message was a skip request
+      const wasSkipRequested = userMessage.content.trim().toLowerCase() === "skip this question";
+      
       // Calculate what question number we're on based on unique user responses
-      const questionNumber = uniqueUserMessages.size;
-      console.log("Question number:", questionNumber, "Unique user messages:", uniqueUserMessages.size);
+      const questionNumber = wasSkipRequested 
+        ? uniqueUserMessages.size + 1  // Move to next question on skip
+        : uniqueUserMessages.size;
+      
+      console.log("Question number:", questionNumber, "Unique user messages:", uniqueUserMessages.size, "Skip requested:", wasSkipRequested);
       
       // Determine the AI response - ONLY use the exact questions, nothing else
       let aiResponse;
