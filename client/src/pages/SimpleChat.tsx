@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Send, Image as ImageIcon } from "lucide-react";
 import { useChat } from "@/hooks/use-chat";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 export default function SimpleChat() {
   const [inputMessage, setInputMessage] = useState("");
   const { toast } = useToast();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const {
     messages,
@@ -18,6 +19,11 @@ export default function SimpleChat() {
     isGeneratingWebsite: isGenerating,
     generateWebsiteContent
   } = useChat();
+  
+  // Scroll to bottom of messages whenever messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   // Handle sending a message
   const handleSendMessage = () => {
@@ -43,13 +49,13 @@ export default function SimpleChat() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="bg-blue-500 text-white py-4 px-4">
+      <div className="bg-blue-500 text-white py-4 px-4 fixed top-0 left-0 right-0 z-10">
         <h1 className="text-xl font-bold">Instant Website</h1>
       </div>
       
-      {/* Messages area */}
-      <div className="flex-1 bg-gray-50 overflow-y-auto p-4">
-        <div className="space-y-4 pb-16">
+      {/* Messages area - with padding to account for fixed header and input */}
+      <div className="flex-1 bg-gray-50 overflow-y-auto pt-16 pb-20">
+        <div className="space-y-4 p-4">
           {messages.map((message, index) => (
             <div key={index} className={`flex ${message.role === 'assistant' ? 'justify-start' : 'justify-end'}`}>
               <div
@@ -75,12 +81,15 @@ export default function SimpleChat() {
               </div>
             </div>
           )}
+          
+          {/* This invisible element helps us scroll to the bottom */}
+          <div ref={messagesEndRef}></div>
         </div>
       </div>
       
-      {/* Uploaded images */}
+      {/* Uploaded images - fixed above input */}
       {uploadedImages.length > 0 && (
-        <div className="bg-white border-t border-gray-200 px-4 py-2">
+        <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-10">
           <div className="text-xs text-gray-500 mb-1">{uploadedImages.length} image(s) uploaded</div>
           <div className="flex overflow-x-auto space-x-2 pb-1">
             {uploadedImages.map((image, index) => (
@@ -100,9 +109,9 @@ export default function SimpleChat() {
         </div>
       )}
       
-      {/* Website generation button */}
+      {/* Website generation button - fixed above input when needed */}
       {messages.length > 5 && !websiteStructure && (
-        <div className="bg-blue-50 p-3 border-t border-blue-100">
+        <div className="fixed bottom-16 left-0 right-0 bg-blue-50 p-3 border-t border-blue-100 z-10">
           <Button
             onClick={() => generateWebsiteContent("Generate a website based on our conversation")}
             disabled={isGenerating}
@@ -113,8 +122,8 @@ export default function SimpleChat() {
         </div>
       )}
       
-      {/* Input area */}
-      <div className="bg-white border-t border-gray-200 p-3">
+      {/* Input area - fixed at bottom */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 z-20">
         <div className="flex items-center gap-2">
           <button
             onClick={handleUploadClick}
