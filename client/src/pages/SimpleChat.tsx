@@ -178,8 +178,9 @@ export default function SimpleChat() {
     }
   };
   
-  // For testing purposes - create a sample website HTML
+  // For testing purposes - create a sample website
   const createSampleWebsite = () => {
+    // First approach: Direct HTML in localStorage
     const sampleHTML = `
       <div style="padding: 20px; font-family: sans-serif;">
         <h1 style="color: #3366cc;">Frontier Modeling</h1>
@@ -201,7 +202,17 @@ export default function SimpleChat() {
       </div>
     `;
     
+    // Save the HTML directly to localStorage
     localStorage.setItem('generatedWebsiteHTML', sampleHTML);
+    
+    // Try to generate via API as well
+    const description = "Create a professional website for Frontier Modeling, a premium modeling agency offering headshots, portfolio development, commercial modeling, and fashion photography services. Their tagline is 'Your vision, our profession'. They are located in New York City.";
+    
+    // Only run API call if we have uploaded images
+    if (uploadedImages.length > 0) {
+      generateWebsiteContent(description);
+    }
+    
     toast({
       title: "Sample Website Created",
       description: "You can now view the sample website by clicking the 'View Website' button"
