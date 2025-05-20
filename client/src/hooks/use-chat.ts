@@ -17,11 +17,11 @@ export function useChat(initialWebsiteId: number = 1) {
       try {
         const fetchedMessages = await getChatMessages(initialWebsiteId);
         if (fetchedMessages.length === 0) {
-          // Add initial message if no messages exist
+          // Add initial message if no messages exist - first business question
           setMessages([
             {
               role: 'assistant',
-              content: "Hi there! I'm your website creator assistant. I'll help you build a professional website in minutes. Let's get started! What kind of business website would you like to create?",
+              content: "What's the name of your business?",
             },
           ]);
         } else {
@@ -166,6 +166,25 @@ export function useChat(initialWebsiteId: number = 1) {
     setUploadedImages([]);
   }, []);
 
+  // Reset chat function - starts conversation over
+  const resetChat = useCallback(() => {
+    // Reset to first business question
+    setMessages([
+      {
+        role: 'assistant',
+        content: "What's the name of your business?",
+      },
+    ]);
+    // Clear any uploaded images and website structure
+    setUploadedImages([]);
+    setWebsiteStructure(null);
+    
+    toast({
+      title: 'Chat Reset',
+      description: 'Starting a fresh conversation',
+    });
+  }, [toast]);
+
   return {
     messages,
     isLoading,
@@ -176,5 +195,6 @@ export function useChat(initialWebsiteId: number = 1) {
     handleImageUpload,
     generateWebsiteContent,
     clearUploadedImages,
+    resetChat,
   };
 }

@@ -16,6 +16,7 @@ export default function SimplifiedHome() {
     websiteStructure,
     isGeneratingWebsite,
     clearUploadedImages,
+    resetChat,
   } = useChat();
 
   const [currentScreen, setCurrentScreen] = useState<"chat" | "preview">("chat");
@@ -123,32 +124,46 @@ ${websiteStructure.html}
           </h1>
         </div>
 
-        {currentScreen === "chat" && (
-          <>
-            {uploadedImages.length > 0 && (
-              <button
-                className="rounded-full px-4 py-2 font-medium text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm hover:shadow-md transition-all"
-                onClick={handleGenerateWebsite}
-              >
-                Create Website
-              </button>
-            )}
-          </>
-        )}
-
-        {currentScreen === "preview" && (
+        <div className="flex items-center gap-2">
+          {/* Reset button */}
           <button
-            className={`rounded-full px-4 py-2 font-medium text-sm transition-all ${
-              !websiteStructure || isGeneratingWebsite
-                ? "bg-gray-200 text-gray-400"
-                : "bg-gradient-to-r from-green-500 to-teal-500 text-white shadow-sm hover:shadow-md"
-            }`}
-            onClick={handleDownloadWebsite}
-            disabled={!websiteStructure || isGeneratingWebsite}
+            className="rounded-full h-8 w-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+            onClick={resetChat}
+            title="Start new conversation"
           >
-            Download Website
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
           </button>
-        )}
+
+          {currentScreen === "chat" && (
+            <>
+              {uploadedImages.length > 0 && (
+                <button
+                  className="rounded-full px-4 py-2 font-medium text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm hover:shadow-md transition-all"
+                  onClick={handleGenerateWebsite}
+                >
+                  Create Website
+                </button>
+              )}
+            </>
+          )}
+
+          {currentScreen === "preview" && (
+            <button
+              className={`rounded-full px-4 py-2 font-medium text-sm transition-all ${
+                !websiteStructure || isGeneratingWebsite
+                  ? "bg-gray-200 text-gray-400"
+                  : "bg-gradient-to-r from-green-500 to-teal-500 text-white shadow-sm hover:shadow-md"
+              }`}
+              onClick={handleDownloadWebsite}
+              disabled={!websiteStructure || isGeneratingWebsite}
+            >
+              Download Website
+            </button>
+          )}
+        </div>
       </header>
 
       {/* Main Content */}
