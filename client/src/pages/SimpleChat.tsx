@@ -150,7 +150,7 @@ export default function SimpleChat() {
       </div>
       
       {/* Images Review Screen - appears after uploading images */}
-      {uploadedImages.length > 0 && messages.length > 5 && !websiteStructure && showImagesReview && (
+      {uploadedImages.length > 0 && !websiteStructure && (
         <div className="fixed inset-0 bg-white z-30 flex flex-col">
           <div className="bg-blue-500 text-white py-4 px-4 flex items-center">
             <button 
