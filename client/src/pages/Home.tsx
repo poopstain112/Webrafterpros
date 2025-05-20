@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { MessageSquare, Image, Zap, Eye } from "lucide-react";
-import ChatInterface from "@/components/ChatInterface";
-import WebsitePreview from "@/components/WebsitePreview";
+import { MessageSquare, Image, ArrowRight, Sparkles, Upload } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useChat } from "@/hooks/use-chat";
-import { UploadedImage } from "@/types";
 
 export default function Home() {
   const {
