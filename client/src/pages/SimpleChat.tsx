@@ -189,28 +189,35 @@ export default function SimpleChat() {
             <ImageIcon className="h-5 w-5 text-blue-500" />
           </button>
           
-          <div className="flex-1 relative">
-            <input
-              type="text"
+          <div className="flex-1 relative flex items-center">
+            <textarea
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               placeholder="Type a message..."
-              className="w-full h-10 py-2 px-4 bg-gray-50 rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 pr-10"
+              className="w-full py-2 px-4 bg-gray-50 rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 pr-12 resize-none overflow-auto"
+              style={{ 
+                minHeight: '40px', 
+                maxHeight: '100px',
+                height: 'auto',
+                lineHeight: '1.5',
+                paddingRight: '3rem'
+              }}
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   handleSendMessage();
                 }
               }}
+              rows={1}
             />
             
             <button
               onClick={handleSendMessage}
               disabled={!inputMessage.trim()}
-              className="absolute right-1 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-white"
+              className="absolute right-1 w-10 h-10 rounded-full flex items-center justify-center text-white"
               style={{ backgroundColor: inputMessage.trim() ? '#3b82f6' : '#d1d5db' }}
             >
-              <Send className="h-4 w-4" />
+              <Send className="h-5 w-5" />
             </button>
           </div>
         </div>
