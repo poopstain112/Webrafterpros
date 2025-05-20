@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { MessageSquare, Settings, Image, Send, ArrowLeft, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useChat } from "@/hooks/use-chat";
@@ -131,6 +131,7 @@ export default function SimplifiedHome() {
     onWebsiteGenerated: (data) => {
       setWebsiteHtml(data.html);
       setWebsiteStructure(data.structure);
+      setShowLoadingScreen(false);
       setIsGeneratingWebsite(false);
       setCurrentScreen("preview");
       toast({
@@ -139,6 +140,7 @@ export default function SimplifiedHome() {
       });
     },
     onError: (error) => {
+      setShowLoadingScreen(false);
       setIsGeneratingWebsite(false);
       toast({
         title: "Error",
@@ -299,6 +301,8 @@ export default function SimplifiedHome() {
   // Update website based on chat
   const updateWebsite = async () => {
     try {
+      // Show the dedicated loading screen
+      setShowLoadingScreen(true);
       setIsGeneratingWebsite(true);
       
       const businessInfo = extractBusinessInfo(messages);
@@ -311,6 +315,7 @@ export default function SimplifiedHome() {
         description: "Your website has been updated with the latest information",
       });
     } catch (error) {
+      setShowLoadingScreen(false);
       setIsGeneratingWebsite(false);
       toast({
         title: "Update Failed",
