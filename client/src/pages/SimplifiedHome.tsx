@@ -429,7 +429,7 @@ ${websiteStructure.html}
       <div className="flex-1 overflow-hidden">
         {/* Chat Screen */}
         {currentScreen === "chat" && (
-          <div className="h-full flex flex-col">
+          <div className="h-full flex flex-col relative">
             {/* Pull-to-refresh indicator */}
             <div 
               ref={refreshAreaRef}
@@ -450,9 +450,9 @@ ${websiteStructure.html}
               </div>
             </div>
             
-            {/* Messages */}
+            {/* Messages - with padding at bottom to prevent input overlap */}
             <div 
-              className="flex-1 overflow-y-auto p-4 bg-gray-50 relative"
+              className="flex-1 overflow-y-auto p-4 pb-20 bg-gray-50 relative"
               onTouchStart={(e) => {
                 // Only enable pull-to-refresh when at the top of the scroll
                 const messageContainer = e.currentTarget;
@@ -574,8 +574,8 @@ ${websiteStructure.html}
             </div>
 
             {/* Modern 2025 Input Area - Fixed Positioning */}
-            <div className="p-3 bg-white border-t border-gray-100 shadow-sm sticky bottom-0 left-0 right-0 z-10">
-              <div className="flex items-center gap-2">
+            <div className="p-3 bg-white border-t border-gray-100 shadow-md fixed bottom-0 left-0 right-0 z-20">
+              <div className="flex items-center gap-2 max-w-lg mx-auto">
                 <button
                   className="w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center transition-colors"
                   onClick={handleUploadClick}
