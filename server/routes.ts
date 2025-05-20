@@ -200,8 +200,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
         content: msg.content,
       }));
       
+      // Get all current messages
+      const messageCount = formattedMessages.filter(m => m.role === "user").length;
+      
       // Generate AI response
-      const aiResponse = await generateChatResponse(formattedMessages);
+      let aiResponse;
+      
+      // BUSINESS QUESTIONS - only return the exact next question based on message count
+      const BUSINESS_QUESTIONS = [
+        "What's the name of your business?",
+        "Where is your business located?",
+        "What products or services do you offer?",
+        "What makes your business unique compared to competitors?",
+        "Who is your ideal customer?",
+        "What's your business slogan or tagline (if you have one)?",
+        "What are your business hours?",
+        "What contact information should be on the website?",
+        "What are your primary business colors (if you have brand colors)?",
+        "Do you have any social media accounts to link on the website?"
+      ];
+      
+      // Direct question mode - only return the next question, nothing else
+      if (messageCount <= BUSINESS_QUESTIONS.length) {
+        // Return the next question in the sequence
+        aiResponse = BUSINESS_QUESTIONS[messageCount - 1];
+      } else if (messageCount === BUSINESS_QUESTIONS.length + 1) {
+        // After all questions, ask for images
+        aiResponse = "Please upload images for your website.";
+      } else {
+        // Only use the AI after all questions are answered
+        aiResponse = await generateChatResponse(formattedMessages);
+      }
       
       // Save AI response
       const aiMessage = await storage.createMessage({
