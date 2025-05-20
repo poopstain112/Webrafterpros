@@ -107,13 +107,13 @@ export default function ChatPage() {
                 key={index}
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div className="flex flex-col items-start">
+                <div className="flex flex-col items-start w-full">
                   <div
-                    className={`rounded-lg p-3 max-w-[80%] ${
+                    className={`rounded-lg p-3 ${
                       msg.role === 'user'
-                        ? 'bg-blue-500 text-white rounded-br-none'
+                        ? 'bg-blue-500 text-white rounded-br-none ml-auto'
                         : 'bg-white border border-gray-200 rounded-bl-none'
-                    }`}
+                    } ${msg.role === 'user' ? 'max-w-[80%]' : 'max-w-[80%]'}`}
                   >
                     {msg.content}
                     
@@ -133,16 +133,7 @@ export default function ChatPage() {
                     )}
                   </div>
                   
-                  {/* Skip button under assistant messages */}
-                  {msg.role === 'assistant' && index === messages.length - 1 && (
-                    <button
-                      type="button"
-                      onClick={handleSkip}
-                      className="mt-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-medium hover:bg-blue-200"
-                    >
-                      Skip this question →
-                    </button>
-                  )}
+                  {/* Removed skip button here to test */}
                 </div>
               </div>
             ))
@@ -166,7 +157,17 @@ export default function ChatPage() {
 
       {/* Chat Input */}
       <div className="p-3 bg-white border-t border-gray-200">
-
+        {/* Add Skip Button Here - Full Width */}
+        <button
+          type="button"
+          onClick={handleSkip}
+          className="w-full mb-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded transition-colors flex items-center justify-center gap-1"
+        >
+          Skip Question
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6L15 12L9 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
         
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <Button
