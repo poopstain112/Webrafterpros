@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, ArrowLeft, RefreshCw } from 'lucide-react';
 import { useLocation } from 'wouter';
+import SimplePullToRefresh from './SimplePullToRefresh';
 
 interface WebsitePreviewProps {
   websiteStructure?: {
@@ -241,43 +242,45 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
           </div>
         </div>
       ) : (
-        <div className="flex-1 bg-gray-100 overflow-y-auto" style={{ position: 'relative' }}>
-          <iframe 
-            ref={(iframe) => {
-              // Add listener to prevent navigation from opening in the same iframe
-              if (iframe) {
-                iframe.onload = () => {
-                  try {
-                    const iframeDocument = iframe.contentDocument || iframe.contentWindow?.document;
-                    if (iframeDocument) {
-                      const links = iframeDocument.getElementsByTagName('a');
-                      
-                      // Prevent default navigation and stop event propagation for all links
-                      for (let i = 0; i < links.length; i++) {
-                        links[i].addEventListener('click', (e) => {
-                          e.preventDefault();
-                          // Either prevent navigation entirely or handle it in a specific way
-                          console.log('Link clicked, navigation prevented');
-                        });
+        <div className="flex-1 bg-gray-100 overflow-hidden" style={{ position: 'relative' }}>
+          <SimplePullToRefresh onRefresh={handleRefresh}>
+            <iframe 
+              ref={(iframe) => {
+                // Add listener to prevent navigation from opening in the same iframe
+                if (iframe) {
+                  iframe.onload = () => {
+                    try {
+                      const iframeDocument = iframe.contentDocument || iframe.contentWindow?.document;
+                      if (iframeDocument) {
+                        const links = iframeDocument.getElementsByTagName('a');
+                        
+                        // Prevent default navigation and stop event propagation for all links
+                        for (let i = 0; i < links.length; i++) {
+                          links[i].addEventListener('click', (e) => {
+                            e.preventDefault();
+                            // Either prevent navigation entirely or handle it in a specific way
+                            console.log('Link clicked, navigation prevented');
+                          });
+                        }
                       }
+                    } catch (e) {
+                      console.error('Error adding navigation handlers:', e);
                     }
-                  } catch (e) {
-                    console.error('Error adding navigation handlers:', e);
-                  }
-                };
-              }
-            }}
-            srcDoc={fullHtml}
-            title="Website Preview"
-            className="w-full h-full border-none"
-            sandbox="allow-same-origin allow-scripts allow-forms"
-            style={{
-              minHeight: "100vh",
-              width: "100%",
-              border: "none",
-              display: "block"
-            }}
-          />
+                  };
+                }
+              }}
+              srcDoc={fullHtml}
+              title="Website Preview"
+              className="w-full h-full border-none"
+              sandbox="allow-same-origin allow-scripts allow-forms"
+              style={{
+                minHeight: "100vh",
+                width: "100%",
+                border: "none",
+                display: "block"
+              }}
+            />
+          </SimplePullToRefresh>
         </div>
       )}
       
