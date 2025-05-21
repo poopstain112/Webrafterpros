@@ -130,7 +130,14 @@ export default function SimpleChat() {
   // Function to handle website generation
   const handleGenerateWebsite = async () => {
     try {
-      startGeneration();
+      // Extract description from chat messages
+      const chatSummary = messages
+        .filter(m => m.role === 'user')
+        .map(m => m.content)
+        .join(" | ");
+      
+      // Start generation with proper parameters
+      startGeneration(1, chatSummary || "Business website");
       navigate("/generating-website");
     } catch (error) {
       console.error("Error starting website generation:", error);

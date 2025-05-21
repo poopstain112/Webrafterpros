@@ -1,5 +1,6 @@
 export type Message = {
   id?: number;
+  websiteId?: number;
   content: string;
   role: "user" | "assistant";
   createdAt?: string;
