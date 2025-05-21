@@ -5,6 +5,14 @@ export async function generateWebsite(
   description: string,
   images: UploadedImage[] = [],
   businessType?: string,
+  socialMedia?: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    youtube?: string;
+    tiktok?: string;
+  },
   existingWebsite?: WebsiteStructure
 ): Promise<WebsiteStructure> {
   try {
@@ -39,6 +47,7 @@ export async function generateWebsite(
         description, 
         imageUrls,
         businessType: detectedBusinessType,
+        socialMedia,
         existingWebsite: isEdit ? existingWebsite : undefined,
         isEdit
       }),

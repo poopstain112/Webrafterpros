@@ -203,7 +203,7 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
   // API endpoint to generate professional website content
   app.post("/api/generate-website", async (req: Request, res: Response) => {
     try {
-      const { description, imageUrls, businessType } = req.body;
+      const { description, imageUrls, businessType, socialMedia } = req.body;
       
       if (!description) {
         return res.status(400).json({ message: "Description is required" });
@@ -212,6 +212,7 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
       // Log website generation request for debugging
       console.log(`Generating website with: Description length: ${description.length}, Images: ${(imageUrls || []).length}, Business type: ${businessType || 'not specified'}`);
       console.log("Image URLs received:", imageUrls);
+      console.log("Social media links received:", socialMedia);
       
       // Get all images for the current website
       const websiteId = 1; // Default website ID
