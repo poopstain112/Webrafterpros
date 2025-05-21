@@ -3,19 +3,32 @@ import { ArrowLeft, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'wouter';
 import WebsitePreview from '@/components/WebsitePreview';
+import SimplePullToRefresh from '@/components/SimplePullToRefresh';
 
 const WebsitePreviewScreen = () => {
   const [websiteHtml, setWebsiteHtml] = useState<string | null>(null);
   const [, setLocation] = useLocation();
 
-  useEffect(() => {
+  const loadWebsiteHTML = () => {
     // Get the stored website HTML from localStorage
     const storedHtml = localStorage.getItem('generatedWebsiteHTML');
     console.log("WebsitePreviewScreen: Checking for stored HTML", storedHtml ? "HTML found, length: " + storedHtml.length : "No HTML found");
     
     if (storedHtml) {
       setWebsiteHtml(storedHtml);
-    } else {
+      return true;
+    }
+    return false;
+  };
+  
+  // Handle refreshing the page content
+  const handleRefresh = async () => {
+    console.log("Pull-to-refresh triggered, reloading website HTML");
+    loadWebsiteHTML();
+  };
+  
+  useEffect(() => {
+    if (!loadWebsiteHTML()) {
       // If no HTML is found, try to reload it a few times in case we arrived before localStorage was set
       let attempts = 0;
       const checkInterval = setInterval(() => {
@@ -77,10 +90,12 @@ const WebsitePreviewScreen = () => {
         </Button>
       </div>
       
-      {/* Website Preview - fixed height container resolves flickering */}
+      {/* Website Preview - with pull-to-refresh capability */}
       <div className="flex-1 bg-gray-100" style={{ height: 'calc(100vh - 56px)' }}>
         {websiteHtml ? (
-          <WebsitePreview html={websiteHtml} />
+          <SimplePullToRefresh onRefresh={handleRefresh}>
+            <WebsitePreview html={websiteHtml} />
+          </SimplePullToRefresh>
         ) : (
           <div className="flex items-center justify-center h-full">
             <div className="text-center p-8">
