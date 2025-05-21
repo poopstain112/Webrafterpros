@@ -142,31 +142,56 @@ export default function SimpleChat() {
     }
   };
 
-  // Auto-scroll to latest message
+  // Enhanced auto-scroll to latest message with improved reliability
   useEffect(() => {
+    // Create a more robust scroll function
     const scrollToBottom = () => {
       const chatContainer = document.querySelector('.chat-messages-container');
       if (chatContainer) {
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+        // Force scroll to absolute bottom with a small buffer to ensure visibility
+        chatContainer.scrollTop = chatContainer.scrollHeight + 1000;
+        
+        // Add a class to ensure smooth scrolling
+        chatContainer.classList.add('scrolling');
+        setTimeout(() => chatContainer.classList.remove('scrolling'), 300);
       }
     };
     
-    // Scroll immediately and then again multiple times with different delays
-    // This helps ensure scrolling works even with slow rendering or dynamic content
-    scrollToBottom();
+    // Create a mutation observer to detect when content changes in the chat
+    // This ensures we scroll even when images or dynamic content loads
+    const observer = new MutationObserver((mutations) => {
+      scrollToBottom();
+    });
     
-    // Use multiple timers with different delays for better reliability
-    const timers = [
-      setTimeout(scrollToBottom, 50),
-      setTimeout(scrollToBottom, 100),
-      setTimeout(scrollToBottom, 300),
-      setTimeout(scrollToBottom, 500)
-    ];
-    
-    // Cleanup timers on unmount
-    return () => {
-      timers.forEach(timer => clearTimeout(timer));
-    };
+    // Get the chat container
+    const chatContainer = document.querySelector('.chat-messages-container');
+    if (chatContainer) {
+      // Observe all changes to the chat container
+      observer.observe(chatContainer, { 
+        childList: true,
+        subtree: true,
+        attributes: true,
+        characterData: true
+      });
+      
+      // Force scroll immediately
+      scrollToBottom();
+      
+      // And multiple times with delays for better reliability
+      const timers = [
+        setTimeout(scrollToBottom, 50),
+        setTimeout(scrollToBottom, 100),
+        setTimeout(scrollToBottom, 300),
+        setTimeout(scrollToBottom, 600),
+        setTimeout(scrollToBottom, 1000)
+      ];
+      
+      // Cleanup timers and observer on unmount
+      return () => {
+        timers.forEach(timer => clearTimeout(timer));
+        observer.disconnect();
+      };
+    }
   }, [messages]);
 
   // Keydown handler for enter key
