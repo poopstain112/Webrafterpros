@@ -549,8 +549,8 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
         // Get the next question directly from the array
         aiResponse = BUSINESS_QUESTIONS[nextQuestionIndex];
       } else if (nextQuestionIndex === BUSINESS_QUESTIONS.length) {
-        // After final question, prompt for social media and then images
-        aiResponse = "Please add your social media links using the social media button, and then upload images for your website.";
+        // After final question, prompt for social media and then images with a cleaner message
+        aiResponse = "Great! Now let's finalize your website. Please add your social media links and upload images using the buttons below.";
       } else {
         // After images upload, respond to any additional questions
         // Format messages for OpenAI

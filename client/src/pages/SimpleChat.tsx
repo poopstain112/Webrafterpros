@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Image as ImageIcon, ExternalLink, RefreshCw, AlertTriangle, Facebook, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
+import { Send, Image as ImageIcon, ExternalLink, RefreshCw, AlertTriangle, Facebook, Instagram, Twitter, Linkedin, Youtube, Check } from "lucide-react";
 import { useChat } from "@/hooks/use-chat";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -319,9 +319,9 @@ export default function SimpleChat() {
       <Dialog open={showSocialMediaDialog} onOpenChange={setShowSocialMediaDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Add Your Social Media Links</DialogTitle>
+            <DialogTitle className="text-xl font-bold text-blue-600">Add Your Social Media</DialogTitle>
             <DialogDescription>
-              Enter your business social media accounts below to include them on your website.
+              Enter your business social media accounts to enhance your website with direct links to your profiles.
             </DialogDescription>
           </DialogHeader>
           
@@ -400,12 +400,15 @@ export default function SimpleChat() {
               type="button" 
               variant="default" 
               onClick={handleSocialMediaSubmit}
-              className="bg-blue-500 hover:bg-blue-600"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium"
             >
-              Add to Chat
+              <span className="flex items-center gap-1">
+                <Check className="h-4 w-4" />
+                Save Links
+              </span>
             </Button>
             <DialogClose asChild>
-              <Button type="button" variant="outline">
+              <Button type="button" variant="outline" className="text-gray-600">
                 Cancel
               </Button>
             </DialogClose>

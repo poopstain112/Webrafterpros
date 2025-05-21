@@ -1238,7 +1238,7 @@ export async function generateChatResponse(
       } 
       // If we've gone through all questions, prompt for social media and images
       else if (assistantMessageCount === BUSINESS_QUESTIONS.length) {
-        return "Please add your social media links using the social media button, and then upload images for your website.";
+        return "Great! Now let's finalize your website. Please add your social media links and upload images using the buttons below.";
       }
     }
 
