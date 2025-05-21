@@ -546,8 +546,25 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
         case "buttons":
           editInstructions = "Simplify and improve all buttons on the website. Keep only essential buttons for email, phone, and social media (Facebook and Instagram). Ensure all buttons have real functionality - email buttons should link to mailto:info@frontiermodeling.com, phone buttons should link to tel:+15551234567, and social media buttons should link to the respective platforms. Add hover effects, rounded corners, and consistent styling. Make them visually appealing and fully functional.";
           break;
-        case "social-media":
-          editInstructions = "Add minimal, elegant social media icons for Facebook and Instagram to the website footer or contact section. Ensure these are actually functional and link to the respective platforms. Remove any non-essential social media links like Twitter or LinkedIn unless specifically requested.";
+        case "add-social-media":
+          // Use any social media links detected from chat
+          if (socialMediaLinks) {
+            let linksList = [];
+            if (socialMediaLinks.facebook) linksList.push(`Facebook: ${socialMediaLinks.facebook}`);
+            if (socialMediaLinks.instagram) linksList.push(`Instagram: ${socialMediaLinks.instagram}`);
+            if (socialMediaLinks.twitter) linksList.push(`Twitter: ${socialMediaLinks.twitter}`);
+            if (socialMediaLinks.linkedin) linksList.push(`LinkedIn: ${socialMediaLinks.linkedin}`);
+            if (socialMediaLinks.youtube) linksList.push(`YouTube: ${socialMediaLinks.youtube}`);
+            if (socialMediaLinks.tiktok) linksList.push(`TikTok: ${socialMediaLinks.tiktok}`);
+            
+            if (linksList.length > 0) {
+              editInstructions = `Add elegant social media icons to the website footer and header. Include links to the following accounts: ${linksList.join(', ')}. Make the icons visually appealing, properly spaced, and ensure they match the website's style. Add hover effects for better user experience.`;
+            } else {
+              editInstructions = "Add minimal, elegant social media icons for Facebook and Instagram to the website footer or contact section. Ensure these are actually functional and link to the respective platforms.";
+            }
+          } else {
+            editInstructions = "Add minimal, elegant social media icons for Facebook and Instagram to the website footer or contact section. Ensure these are actually functional and link to the respective platforms.";
+          }
           break;
         default:
           editInstructions = "";
@@ -563,6 +580,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
           body: JSON.stringify({
             instructions: editInstructions,
             html: htmlContent,
+            socialMedia: socialMediaLinks
           }),
         });
         
@@ -695,6 +713,16 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
                 <div>
                   <span className="font-medium">Change Color Scheme</span>
                   <p className="text-xs text-gray-500 mt-1">Update to blue and white colors</p>
+                </div>
+              </Button>
+              <Button 
+                variant="outline"
+                className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
+                onClick={() => handlePresetEdit("add-social-media")}
+              >
+                <div>
+                  <span className="font-medium">Add Social Media</span>
+                  <p className="text-xs text-gray-500 mt-1">Add links to your social media accounts</p>
                 </div>
               </Button>
               
