@@ -137,7 +137,15 @@ export default function SimpleChat() {
 
   // Auto-scroll to latest message
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Using setTimeout to ensure scrolling happens after DOM update
+    setTimeout(() => {
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ 
+          behavior: "smooth", 
+          block: "end" 
+        });
+      }
+    }, 100);
   }, [messages]);
 
   // Keydown handler for enter key
