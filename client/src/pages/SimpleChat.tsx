@@ -227,6 +227,42 @@ export default function SimpleChat() {
             >
               <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{message.content}</p>
               
+              {/* Social Media Button in Message - shown only for assistant messages about social media */}
+              {message.role === "assistant" && 
+               message.content.toLowerCase().includes("social media") && (
+                <div className="mt-3">
+                  <button
+                    onClick={() => setShowSocialMediaDialog(true)}
+                    className="px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg flex items-center gap-2 transition-colors duration-200"
+                  >
+                    <Facebook className="h-4 w-4" />
+                    <span>Add Social Media Links</span>
+                  </button>
+                </div>
+              )}
+              
+              {/* Image Upload Button in Message - shown only for assistant messages about images */}
+              {message.role === "assistant" && 
+               (message.content.toLowerCase().includes("image") || 
+                message.content.toLowerCase().includes("photo") || 
+                message.content.toLowerCase().includes("picture")) && (
+                <div className="mt-3">
+                  <label 
+                    className="px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg flex items-center gap-2 transition-colors duration-200 cursor-pointer"
+                  >
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                    <ImageIcon className="h-4 w-4" />
+                    <span>Upload Images</span>
+                  </label>
+                </div>
+              )}
+              
               {/* Display images if any */}
               {message.images && message.images.length > 0 && (
                 <div className="grid grid-cols-2 gap-3 mt-3">
@@ -270,32 +306,8 @@ export default function SimpleChat() {
             rows={1}
           />
           
-          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
-            {/* Social Media Button */}
-            <button
-              onClick={() => setShowSocialMediaDialog(true)}
-              className="p-2.5 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
-              title="Add social media links"
-            >
-              <Facebook className="h-5 w-5 text-blue-600" />
-            </button>
-            
-            {/* Upload Image Button */}
-            <label 
-              className="p-2.5 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors duration-200 cursor-pointer"
-              title="Upload images"
-            >
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={handleFileChange}
-                className="hidden"
-              />
-              <ImageIcon className="h-5 w-5 text-blue-600" />
-            </label>
-            
-            {/* Send Button */}
+          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center">
+            {/* Send Button - Now the only button in the input area */}
             <button
               onClick={sendMessage}
               disabled={!inputMessage.trim()}
