@@ -464,6 +464,81 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
     }
   };
   
+  // Handle pre-defined edits
+  const handlePresetEdit = async (editType: string) => {
+    const loadingToast = toast({
+      title: "Updating Website",
+      description: `Applying ${editType} changes...`,
+      duration: 30000,
+    });
+    
+    try {
+      let editInstructions = "";
+      
+      switch (editType) {
+        case "color-scheme":
+          editInstructions = "Update the website's color scheme to use a professional blue and white color palette. Apply blue to headings, buttons, and section backgrounds, and use white for text and content areas.";
+          break;
+        case "contact-form":
+          editInstructions = "Add a contact form to the website with fields for name, email, phone, and message. Place it in the contact section and style it to match the website's design.";
+          break;
+        case "buttons":
+          editInstructions = "Improve all buttons on the website by adding hover effects, rounded corners, and consistent styling. Make them more visually appealing and interactive.";
+          break;
+        case "social-media":
+          editInstructions = "Add social media icons for Facebook, Instagram, and Twitter to the website footer or contact section. Make them link to placeholder URLs.";
+          break;
+        default:
+          editInstructions = "";
+      }
+      
+      if (editInstructions) {
+        // Call the API to edit the website
+        const response = await fetch('/api/edit-website', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            instructions: editInstructions,
+            html: htmlContent,
+          }),
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to update website');
+        }
+        
+        // Get updated HTML
+        const result = await response.json();
+        
+        // Update localStorage with the new HTML
+        if (result && result.html) {
+          localStorage.setItem('generatedWebsiteHTML', result.html);
+          setHtmlContent(result.html);
+          
+          // Show success message
+          toast({
+            title: "Success!",
+            description: `The ${editType.replace('-', ' ')} has been updated.`,
+            duration: 3000,
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error updating website:', error);
+      
+      toast({
+        title: "Update Failed",
+        description: "There was a problem updating your website. Please try again.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
+      loadingToast.dismiss();
+    }
+  };
+  
   // Handle close preview
   const handleClose = () => {
     if (onClose) {
@@ -553,7 +628,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
               <Button 
                 variant="outline"
                 className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
-                onClick={() => setEditInstructions("Change the color scheme to blue and white")}
+                onClick={() => handlePresetEdit("color-scheme")}
               >
                 <div>
                   <span className="font-medium">Change Color Scheme</span>
@@ -564,7 +639,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
               <Button 
                 variant="outline"
                 className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
-                onClick={() => setEditInstructions("Add a contact form section at the bottom of the page")}
+                onClick={() => handlePresetEdit("contact-form")}
               >
                 <div>
                   <span className="font-medium">Add Contact Form</span>
@@ -575,7 +650,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
               <Button 
                 variant="outline"
                 className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
-                onClick={() => setEditInstructions("Make the buttons more prominent with rounded corners and a hover effect")}
+                onClick={() => handlePresetEdit("buttons")}
               >
                 <div>
                   <span className="font-medium">Improve Buttons</span>
