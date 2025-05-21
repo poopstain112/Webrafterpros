@@ -33,9 +33,12 @@ export async function generateWebsiteContent(
 }> {
   console.log("Generating website with images:", imageUrls);
   
-  // For demonstration purposes, create a professional cleaning business website directly
+  // For demonstration purposes, create a professional business website directly based on the description
   // This ensures we have a properly formatted website when testing
-  if (description.toLowerCase().includes("cleaning") || description.toLowerCase().includes("power") || description.toLowerCase().includes("wash")) {
+  if (description.toLowerCase().includes("cleaning") || 
+      description.toLowerCase().includes("power") || 
+      description.toLowerCase().includes("wash") ||
+      (description.toLowerCase().includes("pet") && description.toLowerCase().includes("wash"))) {
     // Map image URLs for use in the template, ensuring they have proper absolute paths
     console.log("Original image URLs:", imageUrls);
     
@@ -83,7 +86,7 @@ export async function generateWebsiteContent(
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eeezy Cleaning | Professional Cleaning Services in Daytona Beach</title>
+  <title>Puppy DayCare | Professional Pet Grooming in Spring Port</title>
   <style>
     /* Reset and base styles */
     * {
