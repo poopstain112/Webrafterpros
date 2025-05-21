@@ -137,15 +137,16 @@ export default function SimpleChat() {
 
   // Auto-scroll to latest message
   useEffect(() => {
-    // Using setTimeout to ensure scrolling happens after DOM update
-    setTimeout(() => {
-      if (messagesEndRef.current) {
-        messagesEndRef.current.scrollIntoView({ 
-          behavior: "smooth", 
-          block: "end" 
-        });
+    const scrollToBottom = () => {
+      const chatContainer = document.querySelector('.chat-messages-container');
+      if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
       }
-    }, 100);
+    };
+    
+    // Scroll immediately and then again after a short delay to catch any rendering delays
+    scrollToBottom();
+    setTimeout(scrollToBottom, 100);
   }, [messages]);
 
   // Keydown handler for enter key
@@ -194,7 +195,7 @@ export default function SimpleChat() {
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 chat-messages-container">
         {messages.map((message, i) => (
           <div
             key={i}
