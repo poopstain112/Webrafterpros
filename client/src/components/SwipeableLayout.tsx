@@ -75,13 +75,6 @@ const SwipeableLayout: React.FC<SwipeableLayoutProps> = ({ children }) => {
       <div className="flex-1 overflow-hidden">
         {children}
       </div>
-      
-      {/* Swipe instruction - only show when first loading */}
-      {currentIndex === 0 && (
-        <div className="fixed bottom-8 left-0 right-0 text-center text-sm text-white py-2 bg-blue-600 bg-opacity-80 rounded-full mx-auto w-48 pointer-events-none shadow-lg">
-          Swipe to navigate
-        </div>
-      )}
     </div>
   );
 };
