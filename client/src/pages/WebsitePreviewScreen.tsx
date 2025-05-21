@@ -3,7 +3,7 @@ import { ArrowLeft, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'wouter';
 import WebsitePreview from '@/components/WebsitePreview';
-import SimplePullToRefresh from '@/components/SimplePullToRefresh';
+import MobilePullToRefresh from '@/components/MobilePullToRefresh';
 
 const WebsitePreviewScreen = () => {
   const [websiteHtml, setWebsiteHtml] = useState<string | null>(null);
@@ -93,9 +93,9 @@ const WebsitePreviewScreen = () => {
       {/* Website Preview - with pull-to-refresh capability */}
       <div className="flex-1 bg-gray-100" style={{ height: 'calc(100vh - 56px)' }}>
         {websiteHtml ? (
-          <SimplePullToRefresh onRefresh={handleRefresh}>
+          <MobilePullToRefresh onRefresh={handleRefresh}>
             <WebsitePreview html={websiteHtml} />
-          </SimplePullToRefresh>
+          </MobilePullToRefresh>
         ) : (
           <div className="flex items-center justify-center h-full">
             <div className="text-center p-8">
