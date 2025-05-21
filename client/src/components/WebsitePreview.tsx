@@ -661,7 +661,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
               <Button 
                 variant="outline"
                 className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
-                onClick={() => setEditInstructions("Add social media links in the footer")}
+                onClick={() => handlePresetEdit("social-media")}
               >
                 <div>
                   <span className="font-medium">Add Social Media</span>
