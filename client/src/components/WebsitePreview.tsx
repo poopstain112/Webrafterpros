@@ -823,23 +823,24 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
           <div className="flex space-x-2">
             <Button 
               onClick={() => setIsSocialMediaEditMode(true)}
-              variant="outline"
-              className="text-white border-white hover:bg-blue-700"
+              variant="ghost"
+              className="text-white border-blue-400 border hover:bg-blue-700"
             >
               Social Media
             </Button>
             <Button 
               onClick={() => setIsEditMode(true)} 
-              variant="outline"
-              className="text-white border-white hover:bg-blue-700"
+              variant="ghost"
+              className="text-white border-blue-400 border hover:bg-blue-700"
             >
               Edit Website
             </Button>
             <Button 
               onClick={handleClose}
-              className="bg-white text-blue-600 hover:bg-blue-50"
+              variant="ghost"
+              className="text-white border-blue-400 border hover:bg-blue-700"
             >
-              Close
+              Back to Chat
             </Button>
           </div>
         </div>
