@@ -161,15 +161,23 @@ export default function SimpleChat() {
   return (
     <div className="flex flex-col h-[100dvh] overflow-hidden">
       {/* Header */}
-      <div className="p-4 flex items-center justify-between border-b">
-        <h1 className="text-xl font-semibold">Instant Website</h1>
-        <div className="flex items-center space-x-2">
+      <div className="p-4 flex items-center justify-between border-b shadow-sm bg-white">
+        <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+          Instant Website
+        </h1>
+        <div className="flex items-center space-x-3">
           {websiteStructure && (
-            <ViewWebsiteButton onClick={() => setShowWebsitePreview(true)} />
+            <button
+              onClick={() => setShowWebsitePreview(true)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm font-medium transition-colors"
+            >
+              <ExternalLink className="h-4 w-4" />
+              View Website
+            </button>
           )}
           <button
             onClick={() => setResetConfirmOpen(true)}
-            className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
+            className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
             aria-label="Reset chat"
           >
             <RefreshCw className="h-5 w-5" />
@@ -187,35 +195,36 @@ export default function SimpleChat() {
             }`}
           >
             <div
-              className={`max-w-[80%] rounded-lg p-3 ${
+              className={`max-w-[80%] rounded-lg p-4 shadow-sm ${
                 message.role === "user"
-                  ? "bg-blue-500 text-white rounded-br-none"
-                  : "bg-gray-200 text-gray-800 rounded-bl-none"
+                  ? "bg-blue-600 text-white rounded-br-none"
+                  : "bg-white text-gray-800 rounded-bl-none border border-gray-100"
               }`}
             >
-              <p className="whitespace-pre-wrap">{message.content}</p>
+              <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{message.content}</p>
               
               {/* Display images if any */}
               {message.images && message.images.length > 0 && (
-                <div className="grid grid-cols-2 gap-2 mt-2">
+                <div className="grid grid-cols-2 gap-3 mt-3">
                   {message.images.map((img, i) => (
-                    <img
-                      key={i}
-                      src={img.url}
-                      alt={`Uploaded content ${i + 1}`}
-                      className="rounded-md max-h-40 w-auto"
-                    />
+                    <div key={i} className="rounded-md overflow-hidden shadow-sm">
+                      <img
+                        src={img.url}
+                        alt={`Uploaded content ${i + 1}`}
+                        className="w-full h-auto object-cover transition-transform duration-300 hover:scale-105"
+                      />
+                    </div>
                   ))}
                 </div>
               )}
               
               {/* Loading indicator */}
               {message.isLoading && (
-                <div className="flex items-center mt-2">
-                  <div className="animate-pulse flex space-x-1">
-                    <div className="h-2 w-2 bg-gray-400 rounded-full"></div>
-                    <div className="h-2 w-2 bg-gray-400 rounded-full"></div>
-                    <div className="h-2 w-2 bg-gray-400 rounded-full"></div>
+                <div className="flex items-center justify-center mt-3 py-1">
+                  <div className="flex space-x-1.5">
+                    <div className="h-2.5 w-2.5 bg-blue-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
+                    <div className="h-2.5 w-2.5 bg-blue-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
+                    <div className="h-2.5 w-2.5 bg-blue-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
                   </div>
                 </div>
               )}
@@ -226,30 +235,30 @@ export default function SimpleChat() {
       </div>
 
       {/* Message Input */}
-      <div className="border-t p-4">
-        <div className="relative">
+      <div className="border-t p-4 bg-gray-50">
+        <div className="relative bg-white rounded-2xl shadow-sm">
           <textarea
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full p-3 pr-36 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 max-h-32 resize-none"
+            className="w-full p-4 pr-36 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 max-h-32 resize-none"
             placeholder="Type your message..."
             rows={1}
           />
           
-          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
             {/* Social Media Button */}
             <button
               onClick={() => setShowSocialMediaDialog(true)}
-              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
+              className="p-2.5 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
               title="Add social media links"
             >
-              <Facebook className="h-5 w-5 text-blue-500" />
+              <Facebook className="h-5 w-5 text-blue-600" />
             </button>
             
             {/* Upload Image Button */}
             <label 
-              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 cursor-pointer"
+              className="p-2.5 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors duration-200 cursor-pointer"
               title="Upload images"
             >
               <input
@@ -259,15 +268,15 @@ export default function SimpleChat() {
                 onChange={handleFileChange}
                 className="hidden"
               />
-              <ImageIcon className="h-5 w-5 text-blue-500" />
+              <ImageIcon className="h-5 w-5 text-blue-600" />
             </label>
             
             {/* Send Button */}
             <button
               onClick={sendMessage}
               disabled={!inputMessage.trim()}
-              className="w-10 h-10 rounded-full flex items-center justify-center text-white"
-              style={{ backgroundColor: inputMessage.trim() ? '#3b82f6' : '#d1d5db' }}
+              className="w-10 h-10 rounded-full flex items-center justify-center text-white transition-colors duration-200 shadow-sm"
+              style={{ backgroundColor: inputMessage.trim() ? '#2563eb' : '#d1d5db' }}
             >
               <Send className="h-5 w-5" />
             </button>
@@ -277,13 +286,22 @@ export default function SimpleChat() {
       
       {/* Generate Website Button */}
       {uploadedImages.length > 0 && (
-        <div className="p-4 pt-0">
+        <div className="px-4 pb-4 bg-gray-50">
           <Button 
             onClick={handleGenerateWebsite} 
             disabled={isGenerating} 
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 rounded-xl shadow-md font-medium text-lg transition-all duration-200 hover:shadow-lg"
           >
-            {isGenerating ? "Generating..." : "Create Your Website"}
+            {isGenerating ? (
+              <span className="flex items-center justify-center gap-2">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Generating...
+              </span>
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                Create Your Website
+              </span>
+            )}
           </Button>
         </div>
       )}
