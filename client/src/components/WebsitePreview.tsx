@@ -901,7 +901,19 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
       {isStandalone && !isEditMode && (
         <div className="absolute top-3 right-3 z-10">
           <Button 
-            onClick={() => setIsEditMode(true)} 
+            onClick={() => {
+              // Take user back to chat interface instead of showing edit form
+              if (onClose) {
+                onClose();
+                // Show a toast message after redirection
+                setTimeout(() => {
+                  toast({
+                    title: "Edit Website",
+                    description: "Tell the chatbot what changes you'd like to make to your website.",
+                  });
+                }, 300);
+              }
+            }}
             variant="outline"
             className="text-white border-white hover:bg-blue-700 font-medium"
           >
