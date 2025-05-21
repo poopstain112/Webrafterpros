@@ -99,9 +99,16 @@ export default function SimpleChat() {
         await handleImageUpload(files);
         event.target.value = ""; // Reset the input
         
-        // Skip directly to generation - no intermediate screen
+        // Construct description from chat messages
+        const chatSummary = messages
+          .filter(m => m.role === 'user')
+          .map(m => m.content)
+          .join(" | ");
+          
+        // Skip directly to generation with proper description
         navigate("/generating-website");
-        startGeneration(1); // Use website ID 1
+        // Pass website ID and a proper description built from all user messages
+        startGeneration(1, chatSummary || "Business website"); 
       } catch (error) {
         console.error("Error uploading images:", error);
         toast({
