@@ -242,7 +242,8 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
       const websiteContent = await generateWebsiteContent(
         description, 
         fullImageUrls,
-        businessType
+        businessType,
+        socialMedia
       );
       
       console.log("Website generated successfully");

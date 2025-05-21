@@ -795,6 +795,10 @@ export async function generateWebsiteContent(
     // Format image information
     const formattedImageUrls = imageUrls.map(url => ({ path: url }));
     
+    // Include social media links if provided
+    const socialMediaInfo = socialMedia || {};
+    console.log("Social media links for website:", socialMediaInfo);
+    
     // Generate premium theme based on business type
     const themeResponse = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -969,7 +973,8 @@ export async function generateWebsiteContent(
           content: JSON.stringify({
             businessInfo: businessInfo,
             imageCount: imageUrls.length,
-            themeInfo: themeInfo
+            themeInfo: themeInfo,
+            socialMedia: socialMediaInfo
           })
         }
       ],
@@ -1106,7 +1111,8 @@ const BUSINESS_QUESTIONS = [
 // Process user message and generate response
 export async function generateChatResponse(
   messages: { role: string; content: string }[],
-  isWebsiteEdit: boolean = false
+  isWebsiteEdit: boolean = false,
+  collectSocialMedia: boolean = false
 ): Promise<string> {
   try {
     // Special case for website editing
