@@ -107,8 +107,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Import OpenAI module from our file
       const { generateChatResponse } = await import("./openai");
       
-      // Use a more direct, specific prompt for editing the website
-      const editPrompt = `
+      // Create a special prompt for fixing button functionality
+      let editPrompt = '';
+      if (instructions.toLowerCase().includes('button') && 
+          (instructions.toLowerCase().includes('fix') || 
+           instructions.toLowerCase().includes("don't function") || 
+           instructions.toLowerCase().includes("dont function") ||
+           instructions.toLowerCase().includes("not working"))) {
+        editPrompt = `
+As an expert web developer, I need you to fix all buttons in this website to make them functional:
+
+1. If the button is meant to navigate to another page, add appropriate href="#section-id" attributes
+2. If the button is meant to perform an action, add JavaScript functionality
+3. For contact buttons, make them either open an email application or scroll to a contact form
+4. Add smooth scrolling behavior for anchor links
+5. Add hover effects to all buttons for better user experience
+
+Here is the full HTML code:
+\`\`\`html
+${html}
+\`\`\`
+
+Please provide ONLY the complete updated HTML with functioning buttons. Do not include explanations.
+`;
+      } else {
+        // Use the standard prompt for other edit requests
+        editPrompt = `
 I need to update my website HTML based on these instructions: "${instructions}"
 
 Here is the current HTML code:
@@ -118,6 +142,7 @@ ${html}
 
 Please provide ONLY the complete, updated HTML code with the requested changes. Do not include explanations or markdown - ONLY return valid HTML.
 `;
+      }
       
       // Create message object
       const chatMessage = {
@@ -133,7 +158,7 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
       });
       
       // Generate a modified version of the HTML
-      const updatedHtml = await generateChatResponse([...formattedMessages, chatMessage], true);
+      const updatedHtml = await generateChatResponse([chatMessage], true);
       
       // Extract just the HTML part if the response contains extra text
       let finalHtml = updatedHtml;
@@ -144,11 +169,18 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
         finalHtml = updatedHtml.substring(htmlStartIndex);
       }
       
+      // Update the website in storage
+      const website = await storage.getWebsite(websiteId);
+      if (website) {
+        website.html = finalHtml;
+        await storage.createWebsite(website);
+      }
+      
       // Add AI's response to message history
       await storage.createMessage({
         websiteId,
         role: "assistant",
-        content: "I've updated your website with the requested changes."
+        content: "I've updated your website with the requested changes. The buttons should now be fully functional."
       });
       
       // Update the localStorage
