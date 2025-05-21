@@ -151,9 +151,22 @@ export default function SimpleChat() {
       }
     };
     
-    // Scroll immediately and then again after a short delay to catch any rendering delays
+    // Scroll immediately and then again multiple times with different delays
+    // This helps ensure scrolling works even with slow rendering or dynamic content
     scrollToBottom();
-    setTimeout(scrollToBottom, 100);
+    
+    // Use multiple timers with different delays for better reliability
+    const timers = [
+      setTimeout(scrollToBottom, 50),
+      setTimeout(scrollToBottom, 100),
+      setTimeout(scrollToBottom, 300),
+      setTimeout(scrollToBottom, 500)
+    ];
+    
+    // Cleanup timers on unmount
+    return () => {
+      timers.forEach(timer => clearTimeout(timer));
+    };
   }, [messages]);
 
   // Keydown handler for enter key
