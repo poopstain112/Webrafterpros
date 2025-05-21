@@ -1126,7 +1126,7 @@ const BUSINESS_QUESTIONS = [
   "What are your business hours?",
   "What contact information should be on the website?",
   "What are your primary business colors (if you have brand colors)?",
-  "Please upload images for your website using the camera icon, and add any social media links using the social media icon below."
+  "Perfect! Now, please upload images for your website using the camera icon, and add any social media links using the social media icon below. Once you've uploaded your images, a 'Create Website' button will appear - click it to generate your professional website. The generation process takes about 45-60 seconds, so hang tight while we build your custom site!"
 ];
 
 // Process user message and generate response
