@@ -33,12 +33,9 @@ export async function generateWebsiteContent(
 }> {
   console.log("Generating website with images:", imageUrls);
   
-  // For demonstration purposes, create a professional business website directly based on the description
-  // This ensures we have a properly formatted website when testing
-  if (description.toLowerCase().includes("cleaning") || 
-      description.toLowerCase().includes("power") || 
-      description.toLowerCase().includes("wash") ||
-      (description.toLowerCase().includes("pet") && description.toLowerCase().includes("wash"))) {
+  // Create a professional business website directly based on user's description
+  // This ensures we have a properly formatted website that can adapt to any business type
+  {
     // Map image URLs for use in the template, ensuring they have proper absolute paths
     console.log("Original image URLs:", imageUrls);
     
@@ -86,7 +83,7 @@ export async function generateWebsiteContent(
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Puppy DayCare | Professional Pet Grooming in Spring Port</title>
+  <title>${description.split("|")[0] || "Business"} | Professional Services</title>
   <style>
     /* Reset and base styles */
     * {
@@ -546,7 +543,7 @@ export async function generateWebsiteContent(
   <!-- Header & Navigation -->
   <header>
     <div class="container header-container">
-      <a href="#" class="logo">Eeezy Cleaning</a>
+      <a href="#" class="logo">${description.split("|")[0] || "Business"}</a>
       <button class="mobile-menu-btn">&#9776;</button>
       <ul class="nav-menu">
         <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
@@ -561,8 +558,8 @@ export async function generateWebsiteContent(
   <section class="hero">
     <div class="container">
       <div class="hero-content">
-        <h1>Professional Cleaning Services in Daytona Beach</h1>
-        <p>We provide exceptional residential and commercial cleaning services that make your space shine. Available 24/7 for all your cleaning needs.</p>
+        <h1>${description.split("|")[1] || "Professional Services"}</h1>
+        <p>${description.split("|")[2] || "We offer high-quality professional services tailored to your specific needs. Contact us today to learn more about how we can help you."}</p>
         <a href="#contact" class="btn btn-primary">Get a Free Quote</a>
       </div>
     </div>
@@ -572,8 +569,8 @@ export async function generateWebsiteContent(
   <section id="services" class="section services">
     <div class="container">
       <div class="section-title">
-        <h2>Our Cleaning Services</h2>
-        <p>Professional solutions for all your cleaning needs</p>
+        <h2>Our Services</h2>
+        <p>Professional solutions tailored for your needs</p>
       </div>
       <div class="services-grid">
         <div class="service-card">
