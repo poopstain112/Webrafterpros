@@ -350,6 +350,17 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
     }
   });
 
+  // API endpoint to get images for a website
+  app.get("/api/websites/:id/images", async (req: Request, res: Response) => {
+    try {
+      const websiteId = parseInt(req.params.id);
+      const images = await storage.getImagesByWebsiteId(websiteId);
+      res.json(images);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // API endpoint to get chat messages for a website
   app.get("/api/websites/:id/messages", async (req: Request, res: Response) => {
     try {

@@ -23,7 +23,15 @@ const WebsiteLoadingScreen: React.FC = () => {
       try {
         console.log("Starting website generation from dedicated page");
         
-        // Make API call to generate website
+        // Fetch uploaded images for the current website
+        const imagesResponse = await fetch('/api/websites/1/images');
+        const websiteImages = imagesResponse.ok ? await imagesResponse.json() : [];
+        
+        // Extract image URLs for generation
+        const imageUrls = websiteImages.map(img => img.url);
+        console.log("Including images in website generation:", imageUrls);
+        
+        // Make API call to generate website with images
         const response = await fetch('/api/generate-website', {
           method: 'POST',
           headers: {
@@ -31,6 +39,7 @@ const WebsiteLoadingScreen: React.FC = () => {
           },
           body: JSON.stringify({
             description,
+            imageUrls,
             businessType: businessType || 'unspecified',
           }),
         });
