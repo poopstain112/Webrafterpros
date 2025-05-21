@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { X, ArrowLeft, RefreshCw } from 'lucide-react';
 import { useLocation } from 'wouter';
 import SimplePullToRefresh from './SimplePullToRefresh';
+import { useToast } from '@/hooks/use-toast';
 
 interface WebsitePreviewProps {
   websiteStructure?: {
@@ -25,6 +26,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
   const [recommendationText, setRecommendationText] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   
   // Load website content from props or localStorage
@@ -115,11 +117,79 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
   const fullHtml = processHtmlContent();
   
   // Handle submitting edit instructions
-  const handleSubmitEdit = () => {
-    if (editInstructions.trim() && onEdit) {
-      onEdit(editInstructions);
-      setIsEditMode(false);
-      setEditInstructions("");
+  const handleSubmitEdit = async () => {
+    if (editInstructions.trim()) {
+      try {
+        // If there's an external edit handler, use it
+        if (onEdit) {
+          onEdit(editInstructions);
+          setIsEditMode(false);
+          setEditInstructions("");
+          return;
+        }
+        
+        // Otherwise, make a direct API call to edit the website
+        setIsEditMode(false);
+        
+        // Show loading state
+        const loadingToast = toast({
+          title: "Updating Website",
+          description: "Please wait while we apply your changes...",
+          duration: 30000, // Long duration since this might take time
+        });
+        
+        // Get current HTML
+        const currentHtml = htmlContent;
+        
+        // Call the API to edit the website
+        const response = await fetch('/api/edit-website', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            instructions: editInstructions,
+            html: currentHtml,
+          }),
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to update website');
+        }
+        
+        // Get updated HTML
+        const result = await response.json();
+        
+        // Update localStorage with the new HTML
+        if (result && result.html) {
+          localStorage.setItem('generatedWebsiteHTML', result.html);
+          setHtmlContent(result.html);
+          
+          // Clear edit instructions
+          setEditInstructions("");
+          
+          // Show success message and dismiss loading toast
+          toast({
+            title: "Success!",
+            description: "Your website has been updated.",
+            duration: 3000,
+          });
+        }
+        
+        // Dismiss loading toast
+        loadingToast.dismiss();
+        
+      } catch (error) {
+        console.error('Error updating website:', error);
+        
+        // Show error message
+        toast({
+          title: "Update Failed",
+          description: "There was a problem updating your website. Please try again.",
+          variant: "destructive",
+          duration: 5000,
+        });
+      }
     }
   };
   

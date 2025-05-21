@@ -1089,9 +1089,36 @@ const BUSINESS_QUESTIONS = [
 
 // Process user message and generate response
 export async function generateChatResponse(
-  messages: { role: string; content: string }[]
+  messages: { role: string; content: string }[],
+  isWebsiteEdit: boolean = false
 ): Promise<string> {
   try {
+    // Special case for website editing
+    if (isWebsiteEdit) {
+      // Use OpenAI to edit the website HTML directly
+      const systemMessage = {
+        role: "system" as const, 
+        content: `You are an expert web developer specializing in HTML and CSS. 
+          Your task is to modify website HTML code based on the user's request. 
+          Return ONLY the complete updated HTML. Do not include explanations, commentary, or markdown formatting.`
+      };
+      
+      // Convert messages to the correct format
+      const formattedMessages = messages.map(msg => ({
+        role: msg.role as "user" | "assistant" | "system", 
+        content: msg.content
+      }));
+      
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024
+        messages: [systemMessage, ...formattedMessages],
+        max_tokens: 4000,
+      });
+      
+      return response.choices[0].message.content || "";
+    }
+    
+    // Regular chat flow
     // Get the count of user and assistant messages
     const userMessageCount = messages.filter(m => m.role === "user").length;
     const assistantMessageCount = messages.filter(m => m.role === "assistant").length;
