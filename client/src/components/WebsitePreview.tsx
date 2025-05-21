@@ -857,7 +857,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
                 }
               }} 
               variant="outline"
-              className="text-white border-white/30 hover:bg-blue-500 hover:border-white/70 transition-colors duration-200"
+              className="text-blue-600 bg-white border-white hover:bg-blue-50 font-medium transition-colors duration-200"
             >
               Edit Website
             </Button>
