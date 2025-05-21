@@ -569,31 +569,31 @@ export async function generateWebsiteContent(
   <section id="services" class="section services">
     <div class="container">
       <div class="section-title">
-        <h2>Our Services</h2>
-        <p>Professional solutions tailored for your needs</p>
+        <h2>Our Pet Grooming Services</h2>
+        <p>Professional pet care tailored for your furry friends</p>
       </div>
       <div class="services-grid">
         <div class="service-card">
-          <img src="${serviceImage1}" alt="Residential Cleaning" onerror="this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${serviceImage1}" alt="Basic Pet Grooming" onerror="this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>Primary Service</h3>
-            <p>Our core service offering designed to meet your essential needs with professional expertise and attention to detail.</p>
+            <h3>Basic Pet Grooming</h3>
+            <p>Full-service bath, blow dry, nail trimming, ear cleaning, and basic brushing for all pet types. Perfect for regular maintenance and keeping your pet looking their best.</p>
             <a href="#contact" class="btn btn-primary">Learn More</a>
           </div>
         </div>
         <div class="service-card">
-          <img src="${serviceImage2}" alt="Commercial Cleaning" onerror="this.src='https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${serviceImage2}" alt="Specialty Grooming" onerror="this.src='https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>Secondary Service</h3>
-            <p>Our complementary service that enhances our primary offering, providing additional value and solutions for more specialized requirements.</p>
+            <h3>Specialty Grooming</h3>
+            <p>Custom styling, breed-specific cuts, de-shedding treatments, and fur coloring. Our specialty services are tailored to your pet's specific needs and your style preferences.</p>
             <a href="#contact" class="btn btn-primary">Learn More</a>
           </div>
         </div>
         <div class="service-card">
-          <img src="${serviceImage3}" alt="Deep Cleaning" onerror="this.src='https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${serviceImage3}" alt="Premium Pet Spa" onerror="this.src='https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>Premium Service</h3>
-            <p>Our top-tier offering designed for clients with advanced needs, providing comprehensive solutions with exceptional attention to detail.</p>
+            <h3>Premium Pet Spa</h3>
+            <p>Luxury treatment including aromatherapy bath, massage, premium conditioning treatments, teeth brushing, and paw pad moisturizing. The ultimate pampering experience for your pet.</p>
             <a href="#contact" class="btn btn-primary">Learn More</a>
           </div>
         </div>
@@ -610,9 +610,9 @@ export async function generateWebsiteContent(
         </div>
         <div class="about-content">
           <h2>About Us</h2>
-          <p>${description.split("|")[0] || "Our Business"} is a dedicated service provider committed to excellence. We're focused on delivering the highest quality services tailored to our clients' specific needs.</p>
-          <p>As a ${description.split("|")[3] || "trusted local business"}, we understand the unique requirements of our customers. We take pride in our work and strive to exceed your expectations with every interaction.</p>
-          <p>What sets us apart is our commitment to quality and attention to detail. We aim to provide exceptional service and ensure complete customer satisfaction with every project we undertake.</p>
+          <p>${description.split("|")[0] || "Longs Pet Grooming"} is a dedicated pet grooming service committed to excellence. We're focused on delivering the highest quality pet care tailored to your furry friend's specific needs.</p>
+          <p>Our specialty is that we wash and groom any kind of pet. We understand the unique requirements of different animals and breeds. We take pride in our work and strive to exceed your expectations with every visit.</p>
+          <p>What sets us apart is our commitment to quality, gentle handling, and attention to detail. We aim to provide exceptional grooming services in a jungle-themed environment that both you and your pet will love.</p>
         </div>
       </div>
     </div>
