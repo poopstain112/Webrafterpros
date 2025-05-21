@@ -843,7 +843,19 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
               </span>
             </Button>
             <Button 
-              onClick={() => setIsEditMode(true)} 
+              onClick={() => {
+                // Instead of showing edit form, close preview and return to chat
+                if (onClose) {
+                  onClose();
+                  // Wait a moment before showing toast to ensure user sees it after transition
+                  setTimeout(() => {
+                    toast({
+                      title: "Edit Website",
+                      description: "Tell the chatbot what you'd like to change about your website.",
+                    });
+                  }, 300);
+                }
+              }} 
               variant="outline"
               className="text-white border-white/30 hover:bg-blue-500 hover:border-white/70 transition-colors duration-200"
             >
