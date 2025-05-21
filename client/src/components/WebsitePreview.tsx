@@ -111,25 +111,39 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = html;
       
-      // Add click events to all buttons
+      // Add click events to all buttons with specific functions
       const buttons = tempDiv.querySelectorAll('button');
       buttons.forEach(button => {
         // Make sure it has at least a basic onclick attribute
         if (!button.hasAttribute('onclick')) {
-          // If it has a class that suggests what it might do
-          if (button.textContent.toLowerCase().includes('contact')) {
+          const buttonText = button.textContent ? button.textContent.toLowerCase() : '';
+          
+          // Handle contact-related buttons
+          if (buttonText.includes('contact') || buttonText.includes('quote') || buttonText.includes('get in touch')) {
             // Contact buttons should scroll to contact section
-            button.setAttribute('onclick', "document.getElementById('contact') ? document.getElementById('contact').scrollIntoView({behavior: 'smooth'}) : alert('Contact section not found')");
-          } else if (button.textContent.toLowerCase().includes('learn more') || 
-                    button.textContent.toLowerCase().includes('about')) {
-            // About or Learn More buttons should go to about section
-            button.setAttribute('onclick', "document.getElementById('about') ? document.getElementById('about').scrollIntoView({behavior: 'smooth'}) : alert('About section not found')");
-          } else if (button.textContent.toLowerCase().includes('service')) {
+            button.setAttribute('onclick', "document.getElementById('contact') ? document.getElementById('contact').scrollIntoView({behavior: 'smooth'}) : false");
+          } 
+          // Handle about-related buttons
+          else if (buttonText.includes('learn more') || buttonText.includes('about') || buttonText.includes('our story')) {
+            // About buttons should go to about section
+            button.setAttribute('onclick', "document.getElementById('about') ? document.getElementById('about').scrollIntoView({behavior: 'smooth'}) : false");
+          } 
+          // Handle service-related buttons
+          else if (buttonText.includes('service') || buttonText.includes('what we do') || buttonText.includes('work')) {
             // Service buttons should go to services section
-            button.setAttribute('onclick', "document.getElementById('services') ? document.getElementById('services').scrollIntoView({behavior: 'smooth'}) : alert('Services section not found')");
-          } else {
-            // Generic button action
-            button.setAttribute('onclick', "alert('Button clicked: ' + this.textContent)");
+            button.setAttribute('onclick', "document.getElementById('services') ? document.getElementById('services').scrollIntoView({behavior: 'smooth'}) : false");
+          }
+          // Handle call buttons
+          else if (buttonText.includes('call') || buttonText.includes('phone')) {
+            button.setAttribute('onclick', "window.location.href = 'tel:+15551234567'");
+          }
+          // Handle email buttons
+          else if (buttonText.includes('email') || buttonText.includes('mail') || buttonText.includes('message')) {
+            button.setAttribute('onclick', "window.location.href = 'mailto:info@frontiermodeling.com'");
+          }
+          // Default to contact section for CTA buttons
+          else {
+            button.setAttribute('onclick', "document.getElementById('contact') ? document.getElementById('contact').scrollIntoView({behavior: 'smooth'}) : false");
           }
         }
       });
@@ -156,34 +170,65 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
               button.addEventListener('click', function() {
                 // Check if the button has a specific purpose based on its text
                 const text = button.textContent.toLowerCase();
-                if (text.includes('contact')) {
+                if (text.includes('contact') || text.includes('quote') || text.includes('get in touch')) {
                   const contactSection = document.getElementById('contact');
                   if (contactSection) contactSection.scrollIntoView({behavior: 'smooth'});
-                } else if (text.includes('learn') || text.includes('about')) {
+                } else if (text.includes('learn') || text.includes('about') || text.includes('our story')) {
                   const aboutSection = document.getElementById('about');
                   if (aboutSection) aboutSection.scrollIntoView({behavior: 'smooth'});
-                } else if (text.includes('service')) {
+                } else if (text.includes('service') || text.includes('what we do') || text.includes('work')) {
                   const servicesSection = document.getElementById('services');
                   if (servicesSection) servicesSection.scrollIntoView({behavior: 'smooth'});
+                } else if (text.includes('call') || text.includes('phone')) {
+                  window.location.href = 'tel:+15551234567';
+                } else if (text.includes('email') || text.includes('mail') || text.includes('message')) {
+                  window.location.href = 'mailto:info@frontiermodeling.com';
                 } else {
-                  console.log('Button clicked:', button.textContent);
+                  // Default to contact section for CTA buttons
+                  const contactSection = document.getElementById('contact');
+                  if (contactSection) contactSection.scrollIntoView({behavior: 'smooth'});
                 }
               });
             }
           });
           
-          // Find all anchor links and add smooth scrolling
-          document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-            anchor.addEventListener('click', function(e) {
-              const href = this.getAttribute('href');
-              if (href && href !== '#') {
+          // Find all anchor links and add smooth scrolling for internal links
+          document.querySelectorAll('a').forEach(function(anchor) {
+            const href = anchor.getAttribute('href');
+            
+            // Handle social media links
+            if (anchor.classList.contains('social-icon') || 
+                anchor.classList.contains('social-link') ||
+                (anchor.querySelector('i.fa-facebook') || anchor.querySelector('i.fab.fa-facebook') || 
+                 anchor.querySelector('svg.facebook') || anchor.innerHTML.includes('facebook'))) {
+              anchor.setAttribute('href', 'https://facebook.com/');
+              anchor.setAttribute('target', '_blank');
+              anchor.setAttribute('rel', 'noopener noreferrer');
+            }
+            else if (anchor.querySelector('i.fa-instagram') || anchor.querySelector('i.fab.fa-instagram') || 
+                     anchor.querySelector('svg.instagram') || anchor.innerHTML.includes('instagram')) {
+              anchor.setAttribute('href', 'https://instagram.com/');
+              anchor.setAttribute('target', '_blank');
+              anchor.setAttribute('rel', 'noopener noreferrer');
+            }
+            // Handle email links
+            else if (href && href.startsWith('mailto:')) {
+              // Email links already work by default
+            }
+            // Handle phone links
+            else if (href && href.startsWith('tel:')) {
+              // Phone links already work by default
+            }
+            // For internal anchor links, use smooth scrolling
+            else if (href && href.startsWith('#')) {
+              anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const targetElement = document.querySelector(href);
                 if (targetElement) {
                   targetElement.scrollIntoView({behavior: 'smooth'});
                 }
-              }
-            });
+              });
+            }
           });
         });
       `;
