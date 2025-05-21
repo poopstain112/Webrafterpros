@@ -186,18 +186,9 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
         </div>
       )}
       
-      {/* Show Refresh and Edit buttons in standalone mode (when on the dedicated preview page) */}
+      {/* Show only Edit button in standalone mode (when on the dedicated preview page) */}
       {isStandalone && !isEditMode && (
-        <div className="absolute top-3 right-3 z-10 flex gap-2">
-          <Button 
-            onClick={handleRefresh} 
-            variant="outline"
-            className="bg-white hover:bg-gray-100 text-blue-600 font-medium shadow-md flex items-center gap-1"
-            disabled={isRefreshing}
-          >
-            <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-            {isRefreshing ? 'Refreshing...' : 'Refresh'}
-          </Button>
+        <div className="absolute top-3 right-3 z-10">
           <Button 
             onClick={() => setIsEditMode(true)} 
             variant="default"
