@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Image as ImageIcon, ExternalLink, RefreshCw, AlertTriangle } from "lucide-react";
+import { Send, Image as ImageIcon, ExternalLink, RefreshCw, AlertTriangle, Facebook, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
 import { useChat } from "@/hooks/use-chat";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -17,11 +17,46 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function SimpleChat() {
   const [inputMessage, setInputMessage] = useState("");
   const [showWebsitePreview, setShowWebsitePreview] = useState(false);
   const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
+  const [showSocialMediaDialog, setShowSocialMediaDialog] = useState(false);
+  const [socialMedia, setSocialMedia] = useState({
+    facebook: "",
+    instagram: "",
+    twitter: "",
+    linkedin: "",
+    youtube: "",
+    tiktok: ""
+  });
+  
+  // Function to handle social media form submission
+  const handleSocialMediaSubmit = () => {
+    // Filter out empty values
+    const nonEmptySocials = Object.entries(socialMedia)
+      .filter(([_, value]) => value.trim() !== '')
+      .map(([platform, value]) => `${platform}: ${value}`)
+      .join(', ');
+    
+    if (nonEmptySocials) {
+      setInputMessage(`Our social media accounts are: ${nonEmptySocials}`);
+    }
+    setShowSocialMediaDialog(false);
+  };
+  
   const { startGeneration } = useWebsiteGeneration();
   const [showImagesReview, setShowImagesReview] = useState(false);
   const [uploadMode, setUploadMode] = useState<"chat" | "review">("chat");
@@ -554,7 +589,7 @@ export default function SimpleChat() {
           </button>
           
           <button
-            onClick={() => setInputMessage(prev => prev + " Our social media: facebook.com/mybusiness instagram.com/mybusiness ")}
+            onClick={() => setShowSocialMediaDialog(true)}
             className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center"
             title="Add Social Media Links"
           >
