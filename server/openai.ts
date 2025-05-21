@@ -576,24 +576,24 @@ export async function generateWebsiteContent(
         <div class="service-card">
           <img src="${serviceImage1}" alt="Residential Cleaning" onerror="this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>Residential Cleaning</h3>
-            <p>Comprehensive house cleaning services tailored to your home's needs. We handle everything from basic cleaning to deep cleaning.</p>
+            <h3>Primary Service</h3>
+            <p>Our core service offering designed to meet your essential needs with professional expertise and attention to detail.</p>
             <a href="#contact" class="btn btn-primary">Learn More</a>
           </div>
         </div>
         <div class="service-card">
           <img src="${serviceImage2}" alt="Commercial Cleaning" onerror="this.src='https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>Commercial Cleaning</h3>
-            <p>Professional cleaning services for offices, retail spaces, and other commercial properties. Maintain a clean and healthy work environment.</p>
+            <h3>Secondary Service</h3>
+            <p>Our complementary service that enhances our primary offering, providing additional value and solutions for more specialized requirements.</p>
             <a href="#contact" class="btn btn-primary">Learn More</a>
           </div>
         </div>
         <div class="service-card">
           <img src="${serviceImage3}" alt="Deep Cleaning" onerror="this.src='https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>Deep Cleaning</h3>
-            <p>Thorough cleaning for those special occasions or when your space needs extra attention. We'll reach every corner and crevice.</p>
+            <h3>Premium Service</h3>
+            <p>Our top-tier offering designed for clients with advanced needs, providing comprehensive solutions with exceptional attention to detail.</p>
             <a href="#contact" class="btn btn-primary">Learn More</a>
           </div>
         </div>
@@ -606,13 +606,13 @@ export async function generateWebsiteContent(
     <div class="container">
       <div class="about-grid">
         <div class="about-img">
-          <img src="${aboutImage}" alt="About Eeezy Cleaning" onerror="this.src='https://images.unsplash.com/photo-1595814432025-409872c11f8e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${aboutImage}" alt="About Our Business" onerror="this.src='https://images.unsplash.com/photo-1595814432025-409872c11f8e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
         </div>
         <div class="about-content">
-          <h2>About Eeezy Cleaning</h2>
-          <p>Eeezy Cleaning is a dedicated cleaning service based in Daytona Beach, Florida. We're committed to providing exceptional cleaning services to both residential and commercial clients.</p>
-          <p>As a local business, we understand the unique needs of Daytona Beach residents and businesses. We take pride in our work and strive to exceed your expectations with every clean.</p>
-          <p>What sets us apart is our reliability and attention to detail. We're available 24/7 to accommodate your busy schedule and ensure your space is always looking its best.</p>
+          <h2>About Us</h2>
+          <p>${description.split("|")[0] || "Our Business"} is a dedicated service provider committed to excellence. We're focused on delivering the highest quality services tailored to our clients' specific needs.</p>
+          <p>As a ${description.split("|")[3] || "trusted local business"}, we understand the unique requirements of our customers. We take pride in our work and strive to exceed your expectations with every interaction.</p>
+          <p>What sets us apart is our commitment to quality and attention to detail. We aim to provide exceptional service and ensure complete customer satisfaction with every project we undertake.</p>
         </div>
       </div>
     </div>
@@ -673,8 +673,8 @@ export async function generateWebsiteContent(
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col">
-          <h3>Eeezy Cleaning</h3>
-          <p>Professional cleaning services in Daytona Beach, FL. Available 24/7 for all your residential and commercial cleaning needs.</p>
+          <h3>${description.split("|")[0] || "Our Business"}</h3>
+          <p>${description.split("|")[1] || "Professional services"} in ${description.split("|")[3] ? description.split("|")[3].split(" ").pop() : "your area"}. Contact us today to learn how we can assist you with your specific needs.</p>
         </div>
         <div class="footer-col">
           <h3>Quick Links</h3>
@@ -704,7 +704,7 @@ export async function generateWebsiteContent(
         </div>
       </div>
       <div class="copyright">
-        <p>&copy; 2025 Eeezy Cleaning. All Rights Reserved.</p>
+        <p>&copy; 2025 ${description.split("|")[0] || "Our Business"}. All Rights Reserved.</p>
       </div>
     </div>
   </footer>
