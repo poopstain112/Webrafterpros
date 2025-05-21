@@ -272,21 +272,81 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
       {isEditMode ? (
         <div className="flex-1 flex flex-col bg-gray-100 p-4">
           <div className="mb-4">
-            <h3 className="text-lg font-semibold mb-2">Edit Your Website</h3>
+            <h3 className="text-xl font-bold mb-2">Edit Your Website</h3>
             <p className="text-sm text-gray-600 mb-4">
-              Describe the changes you want to make to your website and our AI will update it for you.
+              Choose from the options below or describe custom changes.
             </p>
-            <textarea
-              value={editInstructions}
-              onChange={(e) => setEditInstructions(e.target.value)}
-              placeholder="Example: Change the blue background to green, make the heading text larger, add a contact form section at the bottom..."
-              className="w-full h-32 p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <div className="mt-3 flex justify-end">
+            
+            {/* Quick edit options */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+              <Button 
+                variant="outline"
+                className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
+                onClick={() => setEditInstructions("Change the color scheme to blue and white")}
+              >
+                <div>
+                  <span className="font-medium">Change Color Scheme</span>
+                  <p className="text-xs text-gray-500 mt-1">Update to blue and white colors</p>
+                </div>
+              </Button>
+              
+              <Button 
+                variant="outline"
+                className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
+                onClick={() => setEditInstructions("Add a contact form section at the bottom of the page")}
+              >
+                <div>
+                  <span className="font-medium">Add Contact Form</span>
+                  <p className="text-xs text-gray-500 mt-1">Include form with name, email and message fields</p>
+                </div>
+              </Button>
+              
+              <Button 
+                variant="outline"
+                className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
+                onClick={() => setEditInstructions("Make the buttons more prominent with rounded corners and a hover effect")}
+              >
+                <div>
+                  <span className="font-medium">Improve Buttons</span>
+                  <p className="text-xs text-gray-500 mt-1">Add hover effects and rounded corners</p>
+                </div>
+              </Button>
+              
+              <Button 
+                variant="outline"
+                className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
+                onClick={() => setEditInstructions("Add social media links in the footer")}
+              >
+                <div>
+                  <span className="font-medium">Add Social Media</span>
+                  <p className="text-xs text-gray-500 mt-1">Include Facebook, Instagram, and Twitter icons</p>
+                </div>
+              </Button>
+            </div>
+            
+            {/* Custom edit option */}
+            <div className="mt-6">
+              <h4 className="font-medium mb-2">Custom Changes</h4>
+              <textarea
+                value={editInstructions}
+                onChange={(e) => setEditInstructions(e.target.value)}
+                placeholder="Describe what you'd like to change about your website..."
+                className="w-full h-24 p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            
+            <div className="mt-4 flex justify-end">
+              <Button 
+                onClick={() => setIsEditMode(false)} 
+                variant="outline"
+                className="mr-2"
+              >
+                Cancel
+              </Button>
               <Button 
                 onClick={handleSubmitEdit}
                 disabled={!editInstructions.trim()}
-                className="bg-blue-500 hover:bg-blue-600"
+                className="bg-blue-500 hover:bg-blue-600 font-medium"
               >
                 Apply Changes
               </Button>
@@ -294,11 +354,15 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
           </div>
           
           <div className="flex-1 bg-white border rounded overflow-hidden">
+            <div className="text-center py-2 bg-gray-50 border-b text-sm text-gray-500">
+              Preview (changes will appear after applying)
+            </div>
             <iframe 
               srcDoc={fullHtml}
               title="Website Preview"
               className="w-full h-full border-none"
               sandbox="allow-same-origin"
+              style={{ height: 'calc(100% - 30px)' }}
             />
           </div>
         </div>

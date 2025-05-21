@@ -107,11 +107,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Import OpenAI module from our file
       const { generateChatResponse } = await import("./openai");
       
-      // Use the chat system to generate a response
+      // Use a more direct, specific prompt for editing the website
       const editPrompt = `
-I'm looking at the website you generated for me, and I want to make some changes: ${instructions}
+I need to update my website HTML based on these instructions: "${instructions}"
 
-Please modify the website HTML to incorporate these changes.
+Here is the current HTML code:
+\`\`\`html
+${html}
+\`\`\`
+
+Please provide ONLY the complete, updated HTML code with the requested changes. Do not include explanations or markdown - ONLY return valid HTML.
 `;
       
       // Create message object
