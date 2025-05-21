@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { sendChatMessage, uploadImages, generateWebsite, getChatMessages } from '@/lib/openai';
+import { sendChatMessage, uploadImages, generateWebsite, getChatMessages, detectSocialMediaLinks } from '@/lib/openai';
 import { useToast } from '@/hooks/use-toast';
 import { Message, UploadedImage, WebsiteStructure } from '../types';
 

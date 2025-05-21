@@ -104,6 +104,51 @@ export async function sendChatMessage(
 }
 
 // Upload images
+// Utility function to detect social media links in text
+export function detectSocialMediaLinks(text: string): {
+  facebook?: string;
+  instagram?: string;
+  twitter?: string;
+  linkedin?: string;
+  youtube?: string;
+  tiktok?: string;
+} {
+  const socialMedia: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    youtube?: string;
+    tiktok?: string;
+  } = {};
+
+  // Regular expressions to detect social media links
+  const patterns = {
+    facebook: /(?:https?:\/\/)?(?:www\.)?facebook\.com\/([A-Za-z0-9_\-.]+)/i,
+    instagram: /(?:https?:\/\/)?(?:www\.)?instagram\.com\/([A-Za-z0-9_\-.]+)/i,
+    twitter: /(?:https?:\/\/)?(?:www\.)?(?:twitter|x)\.com\/([A-Za-z0-9_\-.]+)/i,
+    linkedin: /(?:https?:\/\/)?(?:www\.)?linkedin\.com\/(?:in|company)\/([A-Za-z0-9_\-.]+)/i,
+    youtube: /(?:https?:\/\/)?(?:www\.)?youtube\.com\/(?:channel|c|user)\/([A-Za-z0-9_\-.]+)/i,
+    tiktok: /(?:https?:\/\/)?(?:www\.)?tiktok\.com\/@([A-Za-z0-9_\-.]+)/i,
+  };
+
+  // Check for each social media platform
+  Object.entries(patterns).forEach(([platform, pattern]) => {
+    const match = text.match(pattern);
+    if (match && match[0]) {
+      // Ensure URL has proper https://
+      let url = match[0];
+      if (!url.startsWith('http')) {
+        url = 'https://' + url;
+      }
+      // Use type assertion to safely add the property
+      socialMedia[platform as keyof typeof socialMedia] = url;
+    }
+  });
+
+  return socialMedia;
+}
+
 export async function uploadImages(
   websiteId: number,
   files: File[]
