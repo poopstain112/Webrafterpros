@@ -83,7 +83,8 @@ export async function generateWebsiteContent(
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${description.split("|")[0] || "Business"} | Professional Services</title>
+  <title>${description.split("|")[0] || "Longs Pet Grooming"} | Professional Pet Grooming Services</title>
+  <meta name="description" content="Professional pet grooming services for all types of pets. We provide grooming, bathing, styling and specialized pet care in a jungle-themed environment.">
   <style>
     /* Reset and base styles */
     * {
@@ -558,9 +559,9 @@ export async function generateWebsiteContent(
   <section class="hero">
     <div class="container">
       <div class="hero-content">
-        <h1>${description.split("|")[1] || "Professional Services"}</h1>
-        <p>${description.split("|")[2] || "We offer high-quality professional services tailored to your specific needs. Contact us today to learn more about how we can help you."}</p>
-        <a href="#contact" class="btn btn-primary">Get a Free Quote</a>
+        <h1>${description.split("|")[1] || "Premier Pet Grooming"}</h1>
+        <p>${description.split("|")[2] || "We provide expert grooming services for all pets in our jungle-themed salon. From basic baths to premium styling, we treat your furry friends like family."}</p>
+        <a href="#contact" class="btn btn-primary">Book An Appointment</a>
       </div>
     </div>
   </section>
@@ -621,9 +622,9 @@ export async function generateWebsiteContent(
   <!-- Call to Action -->
   <section class="cta">
     <div class="container">
-      <h2>Ready for a Cleaner Space?</h2>
-      <p>Whether you need regular cleaning or a one-time service, we're here to help. Contact us today to schedule your cleaning appointment.</p>
-      <a href="#contact" class="btn btn-primary">Contact Us Now</a>
+      <h2>Ready to Pamper Your Pet?</h2>
+      <p>Whether your pet needs a basic bath or a premium spa treatment, we wash and groom any kind of pet! Contact us today to schedule your grooming appointment.</p>
+      <a href="#contact" class="btn btn-primary">Book Appointment</a>
     </div>
   </section>
 
