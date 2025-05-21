@@ -31,14 +31,26 @@ const WebsiteLoadingScreen: React.FC = () => {
         const imageUrls = websiteImages.map(img => img.url);
         console.log("Including images in website generation:", imageUrls);
         
-        // Make API call to generate website with images
+        // Fetch all messages to create a comprehensive description
+        const messagesResponse = await fetch('/api/websites/1/messages');
+        const messages = messagesResponse.ok ? await messagesResponse.json() : [];
+        
+        // Create a thorough description from all user messages
+        const fullDescription = messages
+          .filter((msg: any) => msg.role === 'user')
+          .map((msg: any) => msg.content)
+          .join(" | ");
+          
+        console.log("Creating description from user messages:", fullDescription);
+        
+        // Make API call to generate website with images and full description
         const response = await fetch('/api/generate-website', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            description,
+            description: fullDescription || description || "Professional business website",
             imageUrls,
             businessType: businessType || 'unspecified',
           }),
