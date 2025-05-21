@@ -194,6 +194,17 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
         document.addEventListener('DOMContentLoaded', function() {
           // Find all buttons and add click handlers
           document.querySelectorAll('button').forEach(function(button) {
+            // Apply blue text to white buttons for better visibility
+            if (getComputedStyle(button).backgroundColor === 'rgb(255, 255, 255)' || 
+                button.classList.contains('btn-light') || 
+                button.classList.contains('btn-white') ||
+                button.style.backgroundColor === 'white' ||
+                button.style.backgroundColor === '#fff' ||
+                button.style.backgroundColor === '#ffffff') {
+              button.style.color = '#0d6efd'; // Set text to blue
+              button.style.fontWeight = '500'; // Make text slightly bolder
+            }
+            
             if (!button.hasAttribute('onclick')) {
               button.addEventListener('click', function() {
                 // Check if the button has a specific purpose based on its text
