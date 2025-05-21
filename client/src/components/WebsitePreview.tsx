@@ -522,16 +522,16 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
       
       switch (editType) {
         case "color-scheme":
-          editInstructions = "Update the website's color scheme to use a professional blue and white color palette. Apply blue to headings, buttons, and section backgrounds, and use white for text and content areas.";
+          editInstructions = "Update the website's color scheme to use a professional blue and white color palette. Apply blue to headings, buttons, and section backgrounds, and use white for text and content areas. Ensure the website has a high-end, professional $2k look.";
           break;
         case "contact-form":
-          editInstructions = "Add a contact form to the website with fields for name, email, phone, and message. Place it in the contact section and style it to match the website's design.";
+          editInstructions = "Add a minimal but functional contact form to the website with fields for name, email, phone, and message. Place it in the contact section and style it to match the website's design. Keep it clean and elegant like a $2k professional website.";
           break;
         case "buttons":
-          editInstructions = "Improve all buttons on the website by adding hover effects, rounded corners, and consistent styling. Make them more visually appealing and interactive.";
+          editInstructions = "Simplify and improve all buttons on the website. Keep only essential buttons for email, phone, and social media (Facebook and Instagram). Ensure all buttons have real functionality - email buttons should link to mailto:info@frontiermodeling.com, phone buttons should link to tel:+15551234567, and social media buttons should link to the respective platforms. Add hover effects, rounded corners, and consistent styling. Make them visually appealing and fully functional.";
           break;
         case "social-media":
-          editInstructions = "Add social media icons for Facebook, Instagram, and Twitter to the website footer or contact section. Make them link to placeholder URLs.";
+          editInstructions = "Add minimal, elegant social media icons for Facebook and Instagram to the website footer or contact section. Ensure these are actually functional and link to the respective platforms. Remove any non-essential social media links like Twitter or LinkedIn unless specifically requested.";
           break;
         default:
           editInstructions = "";
