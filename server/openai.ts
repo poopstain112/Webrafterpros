@@ -570,8 +570,8 @@ export async function generateWebsiteContent(
   <section id="services" class="section services">
     <div class="container">
       <div class="section-title">
-        <h2>Our Pet Grooming Services</h2>
-        <p>Professional pet care tailored for your furry friends</p>
+        <h2>Our Services</h2>
+        <p>Professional solutions tailored to your needs</p>
       </div>
       <div class="services-grid">
         <div class="service-card">
