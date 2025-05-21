@@ -35,12 +35,21 @@ interface WebsitePreviewProps {
 
 export default function WebsitePreview({ websiteStructure, onClose, onEdit, html, socialMediaLinks }: WebsitePreviewProps) {
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isSocialMediaEditMode, setIsSocialMediaEditMode] = useState(false);
   const [editInstructions, setEditInstructions] = useState("");
   const [showRecommendation, setShowRecommendation] = useState(true);
   const [htmlContent, setHtmlContent] = useState('');
   const [cssContent, setCssContent] = useState('');
   const [recommendationText, setRecommendationText] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [customSocialMedia, setCustomSocialMedia] = useState<any>({
+    facebook: '',
+    instagram: '',
+    twitter: '',
+    linkedin: '',
+    youtube: '',
+    tiktok: ''
+  });
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const iframeRef = useRef<HTMLIFrameElement>(null);
