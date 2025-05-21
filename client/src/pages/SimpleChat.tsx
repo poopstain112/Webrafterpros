@@ -142,29 +142,11 @@ export default function SimpleChat() {
     }
   };
 
-  // Improved auto-scroll implementation for chat messages
+  // Auto-scroll for chat messages
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-    
-    // Extra safety - force scroll after small delays
-    const timer1 = setTimeout(() => {
-      if (messagesEndRef.current) {
-        messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
-      }
-    }, 100);
-    
-    const timer2 = setTimeout(() => {
-      if (messagesEndRef.current) {
-        messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
-      }
-    }, 300);
-    
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
   }, [messages]);
 
   // Keydown handler for enter key
