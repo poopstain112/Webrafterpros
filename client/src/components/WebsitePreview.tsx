@@ -11,13 +11,29 @@ interface WebsitePreviewProps {
     css: string;
     structure: any;
     recommendation?: string;
+    socialMedia?: {
+      facebook?: string;
+      instagram?: string;
+      twitter?: string;
+      linkedin?: string;
+      youtube?: string;
+      tiktok?: string;
+    };
   };
   onClose?: () => void;
-  onEdit?: (instructions?: string) => void;
+  onEdit?: (instructions?: string, socialMedia?: any) => void;
   html?: string;
+  socialMediaLinks?: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    youtube?: string;
+    tiktok?: string;
+  };
 }
 
-export default function WebsitePreview({ websiteStructure, onClose, onEdit, html }: WebsitePreviewProps) {
+export default function WebsitePreview({ websiteStructure, onClose, onEdit, html, socialMediaLinks }: WebsitePreviewProps) {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editInstructions, setEditInstructions] = useState("");
   const [showRecommendation, setShowRecommendation] = useState(true);

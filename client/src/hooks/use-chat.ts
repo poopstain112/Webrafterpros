@@ -447,6 +447,7 @@ export function useChat(initialWebsiteId: number = 1) {
     uploadedImages,
     websiteStructure,
     isGeneratingWebsite,
+    socialMediaLinks,
     sendMessage,
     handleImageUpload,
     generateWebsiteContent,
