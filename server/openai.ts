@@ -575,26 +575,26 @@ export async function generateWebsiteContent(
       </div>
       <div class="services-grid">
         <div class="service-card">
-          <img src="${serviceImage1}" alt="Basic Pet Grooming" onerror="this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${serviceImage1}" alt="Primary Service" onerror="this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>Basic Pet Grooming</h3>
-            <p>Full-service bath, blow dry, nail trimming, ear cleaning, and basic brushing for all pet types. Perfect for regular maintenance and keeping your pet looking their best.</p>
+            <h3>Primary Service</h3>
+            <p>Our core service offering designed to meet your essential needs with professional expertise and attention to detail.</p>
             <a href="#contact" class="btn btn-primary">Learn More</a>
           </div>
         </div>
         <div class="service-card">
-          <img src="${serviceImage2}" alt="Specialty Grooming" onerror="this.src='https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${serviceImage2}" alt="Secondary Service" onerror="this.src='https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>Specialty Grooming</h3>
-            <p>Custom styling, breed-specific cuts, de-shedding treatments, and fur coloring. Our specialty services are tailored to your pet's specific needs and your style preferences.</p>
+            <h3>Secondary Service</h3>
+            <p>Our complementary service that enhances our primary offering, providing additional value and solutions for more specialized requirements.</p>
             <a href="#contact" class="btn btn-primary">Learn More</a>
           </div>
         </div>
         <div class="service-card">
-          <img src="${serviceImage3}" alt="Premium Pet Spa" onerror="this.src='https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${serviceImage3}" alt="Premium Service" onerror="this.src='https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>Premium Pet Spa</h3>
-            <p>Luxury treatment including aromatherapy bath, massage, premium conditioning treatments, teeth brushing, and paw pad moisturizing. The ultimate pampering experience for your pet.</p>
+            <h3>Premium Service</h3>
+            <p>Our top-tier offering designed for clients with advanced needs, providing comprehensive solutions with exceptional attention to detail.</p>
             <a href="#contact" class="btn btn-primary">Learn More</a>
           </div>
         </div>
@@ -611,9 +611,9 @@ export async function generateWebsiteContent(
         </div>
         <div class="about-content">
           <h2>About Us</h2>
-          <p>${description.split("|")[0] || "Longs Pet Grooming"} is a dedicated pet grooming service committed to excellence. We're focused on delivering the highest quality pet care tailored to your furry friend's specific needs.</p>
-          <p>Our specialty is that we wash and groom any kind of pet. We understand the unique requirements of different animals and breeds. We take pride in our work and strive to exceed your expectations with every visit.</p>
-          <p>What sets us apart is our commitment to quality, gentle handling, and attention to detail. We aim to provide exceptional grooming services in a jungle-themed environment that both you and your pet will love.</p>
+          <p>${description.split("|")[0] || "Our Business"} is a dedicated service provider committed to excellence. We're focused on delivering the highest quality services tailored to our clients' specific needs.</p>
+          <p>As a ${description.split("|")[3] || "trusted local business"}, we understand the unique requirements of our customers. We take pride in our work and strive to exceed your expectations with every interaction.</p>
+          <p>What sets us apart is our commitment to quality and attention to detail. We aim to provide exceptional service and ensure complete customer satisfaction with every project we undertake.</p>
         </div>
       </div>
     </div>
@@ -622,9 +622,9 @@ export async function generateWebsiteContent(
   <!-- Call to Action -->
   <section class="cta">
     <div class="container">
-      <h2>Ready to Pamper Your Pet?</h2>
-      <p>Whether your pet needs a basic bath or a premium spa treatment, we wash and groom any kind of pet! Contact us today to schedule your grooming appointment.</p>
-      <a href="#contact" class="btn btn-primary">Book Appointment</a>
+      <h2>Ready to Get Started?</h2>
+      <p>Contact us today for a free consultation and quote. We're ready to provide the exceptional service you deserve.</p>
+      <a href="#contact" class="btn btn-primary">Contact Us Now</a>
     </div>
   </section>
 
@@ -638,10 +638,10 @@ export async function generateWebsiteContent(
       <div class="contact-grid">
         <div class="contact-info">
           <h3>Get In Touch</h3>
-          <p><strong>Phone:</strong> (386) 871-9200</p>
-          <p><strong>Email:</strong> info@eeezycleaning.com</p>
-          <p><strong>Address:</strong> Daytona Beach, FL</p>
-          <p><strong>Hours:</strong> 24/7 Service Available</p>
+          <p><strong>Phone:</strong> ${description.split("|")[7] || "(123) 456-7890"}</p>
+          <p><strong>Email:</strong> info@yourbusiness.com</p>
+          <p><strong>Address:</strong> ${description.split("|")[1] || "Your Business Location"}</p>
+          <p><strong>Hours:</strong> Monday-Friday, 9am-5pm</p>
           <div class="social-links">
             <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f">f</i></a>
             <a href="#" aria-label="Instagram"><i class="fab fa-instagram">i</i></a>
