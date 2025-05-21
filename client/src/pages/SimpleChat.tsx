@@ -230,10 +230,10 @@ export default function SimpleChat() {
             rows={1}
           />
           
-          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-1">
+          <div className="absolute right-16 top-1/2 transform -translate-y-1/2 flex space-x-3">
             {/* Upload Image Button */}
             <label 
-              className="p-2 rounded-full hover:bg-gray-100 cursor-pointer"
+              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 cursor-pointer"
               title="Upload images"
             >
               <input
@@ -243,29 +243,16 @@ export default function SimpleChat() {
                 onChange={handleFileChange}
                 className="hidden"
               />
-              <ImageIcon className="h-5 w-5 text-gray-500" />
+              <ImageIcon className="h-5 w-5 text-blue-500" />
             </label>
             
             {/* Social Media Button */}
             <button
               onClick={() => setShowSocialMediaDialog(true)}
-              className="p-2 rounded-full hover:bg-gray-100"
+              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
               title="Add social media links"
             >
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="20" 
-                height="20" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                className="text-gray-500"
-              >
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-              </svg>
+              <Facebook className="h-5 w-5 text-blue-500" />
             </button>
             
             {/* Send Button */}
