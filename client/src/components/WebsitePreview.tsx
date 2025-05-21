@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { X, ArrowLeft, RefreshCw } from 'lucide-react';
+import { X, ArrowLeft, RefreshCw, Facebook, Instagram, Twitter, Linkedin, Youtube } from 'lucide-react';
 import { useLocation } from 'wouter';
 import SimplePullToRefresh from './SimplePullToRefresh';
 import { useToast } from '@/hooks/use-toast';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 
 interface WebsitePreviewProps {
   websiteStructure?: {
@@ -640,8 +643,177 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
   // Check if this is standalone mode (from WebsitePreviewScreen)
   const isStandalone = !onClose;
 
+  // Function to handle social media links update
+  const handleSocialMediaUpdate = async () => {
+    const loadingToast = toast({
+      title: "Updating Website",
+      description: "Adding social media links to your website...",
+      duration: 30000,
+    });
+    
+    try {
+      // Create edit instructions for social media
+      let linksList = [];
+      if (customSocialMedia.facebook) linksList.push(`Facebook: ${customSocialMedia.facebook}`);
+      if (customSocialMedia.instagram) linksList.push(`Instagram: ${customSocialMedia.instagram}`);
+      if (customSocialMedia.twitter) linksList.push(`Twitter: ${customSocialMedia.twitter}`);
+      if (customSocialMedia.linkedin) linksList.push(`LinkedIn: ${customSocialMedia.linkedin}`);
+      if (customSocialMedia.youtube) linksList.push(`YouTube: ${customSocialMedia.youtube}`);
+      if (customSocialMedia.tiktok) linksList.push(`TikTok: ${customSocialMedia.tiktok}`);
+      
+      let editInstructions = "";
+      if (linksList.length > 0) {
+        editInstructions = `Add elegant social media icons to the website footer and header. Include links to the following accounts: ${linksList.join(', ')}. Make the icons visually appealing, properly spaced, and ensure they match the website's style. Add hover effects for better user experience.`;
+      } else {
+        editInstructions = "Add minimal, elegant social media icons for Facebook and Instagram to the website footer or contact section. Ensure these are actually functional and link to the respective platforms.";
+      }
+      
+      // Call the API to edit the website
+      const response = await fetch('/api/edit-website', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          instructions: editInstructions,
+          html: htmlContent,
+          socialMedia: customSocialMedia
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update website');
+      }
+      
+      // Get updated HTML
+      const result = await response.json();
+      
+      // Update localStorage with the new HTML
+      if (result && result.html) {
+        localStorage.setItem('generatedWebsiteHTML', result.html);
+        setHtmlContent(result.html);
+        
+        // Close the social media edit mode
+        setIsSocialMediaEditMode(false);
+        
+        // Show success message
+        toast({
+          title: "Success!",
+          description: "Your social media links have been added to the website.",
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      console.error('Error updating website:', error);
+      
+      toast({
+        title: "Update Failed",
+        description: "There was a problem adding your social media links. Please try again.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
+      loadingToast.dismiss();
+    }
+  };
+  
+  // Initialize social media links from props when available
+  useEffect(() => {
+    if (socialMediaLinks) {
+      setCustomSocialMedia({
+        facebook: socialMediaLinks.facebook || '',
+        instagram: socialMediaLinks.instagram || '',
+        twitter: socialMediaLinks.twitter || '',
+        linkedin: socialMediaLinks.linkedin || '',
+        youtube: socialMediaLinks.youtube || '',
+        tiktok: socialMediaLinks.tiktok || ''
+      });
+    }
+  }, [socialMediaLinks]);
+  
   return (
     <div className={`${isStandalone ? '' : 'fixed inset-0 bg-black/50 z-50'} flex flex-col h-full`}>
+      {/* Social Media Dialog */}
+      <Dialog open={isSocialMediaEditMode} onOpenChange={setIsSocialMediaEditMode}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit Social Media Links</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Facebook className="h-5 w-5 text-blue-600" />
+              <div className="col-span-3">
+                <Input 
+                  id="facebook" 
+                  placeholder="Facebook profile URL" 
+                  value={customSocialMedia.facebook} 
+                  onChange={(e) => setCustomSocialMedia({...customSocialMedia, facebook: e.target.value})}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Instagram className="h-5 w-5 text-pink-600" />
+              <div className="col-span-3">
+                <Input 
+                  id="instagram" 
+                  placeholder="Instagram profile URL" 
+                  value={customSocialMedia.instagram} 
+                  onChange={(e) => setCustomSocialMedia({...customSocialMedia, instagram: e.target.value})}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Twitter className="h-5 w-5 text-blue-400" />
+              <div className="col-span-3">
+                <Input 
+                  id="twitter" 
+                  placeholder="Twitter profile URL" 
+                  value={customSocialMedia.twitter} 
+                  onChange={(e) => setCustomSocialMedia({...customSocialMedia, twitter: e.target.value})}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Linkedin className="h-5 w-5 text-blue-700" />
+              <div className="col-span-3">
+                <Input 
+                  id="linkedin" 
+                  placeholder="LinkedIn profile URL" 
+                  value={customSocialMedia.linkedin} 
+                  onChange={(e) => setCustomSocialMedia({...customSocialMedia, linkedin: e.target.value})}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Youtube className="h-5 w-5 text-red-600" />
+              <div className="col-span-3">
+                <Input 
+                  id="youtube" 
+                  placeholder="YouTube channel URL" 
+                  value={customSocialMedia.youtube} 
+                  onChange={(e) => setCustomSocialMedia({...customSocialMedia, youtube: e.target.value})}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <div className="text-sm font-semibold">TikTok</div>
+              <div className="col-span-3">
+                <Input 
+                  id="tiktok" 
+                  placeholder="TikTok profile URL" 
+                  value={customSocialMedia.tiktok} 
+                  onChange={(e) => setCustomSocialMedia({...customSocialMedia, tiktok: e.target.value})}
+                />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsSocialMediaEditMode(false)}>Cancel</Button>
+            <Button onClick={handleSocialMediaUpdate}>Update Website</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
       {/* Only show header in popup mode, not in the dedicated preview screen */}
       {!isStandalone && !isEditMode && (
         <div className="bg-blue-600 text-white p-3 shadow-md flex items-center justify-between">
@@ -649,6 +821,13 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
             <h2 className="text-lg font-semibold">Website Preview</h2>
           </div>
           <div className="flex space-x-2">
+            <Button 
+              onClick={() => setIsSocialMediaEditMode(true)}
+              variant="outline"
+              className="text-white border-white hover:bg-blue-700"
+            >
+              Social Media
+            </Button>
             <Button 
               onClick={() => setIsEditMode(true)} 
               variant="outline"
