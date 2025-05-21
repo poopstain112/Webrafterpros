@@ -437,6 +437,32 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
         });
       }
       
+      // Special case for website generation messages
+      if (content && content.toLowerCase().includes('website has been generated')) {
+        console.log("Website generation message detected, handling specially");
+        
+        // Check if we already have a generation message to avoid duplicates
+        const hasGenerationMessage = allMessages.some(msg => 
+          msg.content && msg.content.toLowerCase().includes('website has been generated')
+        );
+        
+        if (hasGenerationMessage) {
+          console.log("Generation message already exists, not adding duplicate");
+          // Just return the existing message if we already have one
+          const existingMessage = allMessages.find(msg => 
+            msg.content && msg.content.toLowerCase().includes('website has been generated')
+          );
+          
+          return res.status(200).json({
+            userMessage,
+            aiMessage: existingMessage,
+          });
+        }
+        
+        // If we don't have a generation message, create one and continue
+        console.log("First generation message, proceeding normally");
+      }
+      
       // Define the fixed sequence of business questions - JUST QUESTIONS, no paragraphs
       const BUSINESS_QUESTIONS = [
         "What's the name of your business?",
