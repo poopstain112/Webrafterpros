@@ -653,8 +653,8 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
         <div className="absolute top-3 right-3 z-10">
           <Button 
             onClick={() => setIsEditMode(true)} 
-            variant="default"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-md"
+            variant="outline"
+            className="text-white border-white hover:bg-blue-700 font-medium"
           >
             Edit Website
           </Button>
