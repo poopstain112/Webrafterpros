@@ -1088,14 +1088,27 @@ export async function generateWebsiteContent(
       response_format: { type: "json_object" },
     });
 
-    const result = JSON.parse(websiteResponse.choices[0].message.content || "{}");
+    try {
+      const result = JSON.parse(websiteResponse.choices[0].message.content || "{}");
 
-    return {
-      html: result.html || "",
-      css: result.css || "",
-      structure: result.structure || {},
-      recommendation: result.recommendation || "",
-    };
+      return {
+        html: result.html || "",
+        css: result.css || "",
+        structure: result.structure || {},
+        recommendation: result.recommendation || "",
+      };
+    } catch (parseError) {
+      console.error("Error parsing OpenAI response:", parseError);
+      console.log("Raw response content:", websiteResponse.choices[0].message.content);
+      
+      // Provide a fallback response with error details
+      return {
+        html: "<div>Website generation encountered an error. Please try again.</div>",
+        css: "",
+        structure: {},
+        recommendation: "An error occurred during website generation. Please try again or modify your description.",
+      };
+    }
   } catch (error: any) {
     console.error("OpenAI API error:", error);
     throw new Error(`Failed to generate website content: ${error.message}`);

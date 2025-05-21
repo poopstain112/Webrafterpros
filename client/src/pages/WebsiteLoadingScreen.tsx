@@ -108,12 +108,25 @@ const WebsiteLoadingScreen: React.FC = () => {
         
       } catch (error) {
         console.error('Error generating website:', error);
+        
+        // More detailed error handling
+        let errorMessage = 'Failed to generate website. Please try again.';
+        
+        // Check if error is an Error object with a message
+        if (error instanceof Error) {
+          errorMessage = `Website generation failed: ${error.message}`;
+        }
+        
         toast({
           title: 'Generation Failed',
-          description: 'Failed to generate website. Please try again.',
+          description: errorMessage,
           variant: 'destructive',
         });
-        cancelGeneration();
+        
+        // Add a slight delay before canceling to ensure the user sees the toast
+        setTimeout(() => {
+          cancelGeneration();
+        }, 1500);
       }
     };
     
