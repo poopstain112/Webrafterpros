@@ -46,6 +46,43 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
       if (storedHtml) {
         setHtmlContent(storedHtml);
         setCssContent(''); // No CSS in localStorage version
+      } else {
+        // Set default example website if nothing is found
+        setHtmlContent(`
+          <div class="container py-5">
+            <header class="text-center mb-5">
+              <h1 class="display-4">Your Business Name</h1>
+              <p class="lead">Professional services for every need</p>
+            </header>
+            <section class="row">
+              <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body">
+                    <h3>Our Services</h3>
+                    <p>We provide top-quality services tailored to your needs.</p>
+                    <ul>
+                      <li>Professional Consultation</li>
+                      <li>Expert Solutions</li>
+                      <li>Customer Support</li>
+                    </ul>
+                    <button class="btn btn-primary">Learn More</button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body">
+                    <h3>About Us</h3>
+                    <p>With years of experience, our team is dedicated to delivering excellence.</p>
+                    <p>We take pride in our work and commitment to customer satisfaction.</p>
+                    <button class="btn btn-outline-primary">Contact Us</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        `);
+        setCssContent(''); 
       }
     }
   }, [websiteStructure, html]);
