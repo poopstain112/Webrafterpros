@@ -443,6 +443,49 @@ export function useChat(initialWebsiteId: number = 1) {
     });
   }, [toast, initialWebsiteId]);
 
+  // Complete reset of all data
+  const resetAll = useCallback(async () => {
+    // Reset the chat first
+    setMessages([
+      {
+        role: 'assistant',
+        content: "What's the name of your business?",
+      },
+    ]);
+    
+    // Clear all data
+    setUploadedImages([]);
+    setWebsiteStructure(null);
+    setSocialMediaLinks({});
+    
+    // Call reset_all endpoint to clean server state completely
+    try {
+      await fetch('/api/reset_all', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ websiteId: initialWebsiteId }),
+      });
+      
+      // Also clear localStorage
+      localStorage.removeItem('generatedWebsiteHTML');
+      localStorage.removeItem('websiteGeneratedAt');
+      
+      toast({
+        title: 'Complete Reset',
+        description: 'All data has been cleared. Starting fresh!',
+      });
+    } catch (error) {
+      console.error('Error performing full reset:', error);
+      toast({
+        title: 'Reset Error',
+        description: 'Failed to completely reset application data',
+        variant: 'destructive',
+      });
+    }
+  }, [toast, initialWebsiteId]);
+
   return {
     messages,
     isLoading,
@@ -456,6 +499,7 @@ export function useChat(initialWebsiteId: number = 1) {
     editWebsiteContent,
     clearUploadedImages,
     resetChat,
+    resetAll,
     fetchMessages,
   };
 }
