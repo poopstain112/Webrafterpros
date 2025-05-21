@@ -305,27 +305,29 @@ const WebsitePreviewScreen = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      {/* Header - Streamlined */}
-      <div className="flex items-center justify-between bg-blue-600 text-white p-3 shadow-md">
+      {/* Enhanced Header with Gradient */}
+      <div className="flex items-center justify-between bg-gradient-to-r from-blue-600 to-blue-400 text-white p-3 shadow-md">
         <div className="flex items-center">
           <Button 
             variant="ghost" 
             size="icon" 
             onClick={handleBackToChat}
-            className="text-white hover:bg-blue-700 mr-2"
+            className="text-white hover:bg-blue-700/50 mr-2 transition-all"
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-semibold">Website Preview</h1>
+          <h1 className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-100">
+            Website Preview
+          </h1>
         </div>
         
         <Button 
           variant="outline" 
           size="sm"
           onClick={handleBackToChat}
-          className="text-white border-white hover:bg-blue-700"
+          className="text-blue-600 bg-white border-white hover:bg-blue-50 shadow-sm transition-all font-medium"
         >
-          <Home className="h-4 w-4 mr-1" />
+          <Home className="h-4 w-4 mr-1.5" />
           Back to Chat
         </Button>
       </div>
