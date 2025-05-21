@@ -447,13 +447,7 @@ export default function SimpleChat() {
                   <p className="text-gray-600">
                     Review your images below. When you're ready, click "Create Website" to generate your website.
                   </p>
-                  <button
-                    onClick={createSampleWebsite}
-                    className="mt-3 px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
-                    type="button"
-                  >
-                    Create Sample Website for Testing
-                  </button>
+
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4 mb-24">
