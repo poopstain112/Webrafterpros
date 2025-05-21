@@ -149,10 +149,13 @@ export default function SimpleChat() {
     }
   };
 
-  // Auto-scroll for chat messages
+  // Auto-scroll for chat messages with improved behavior
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      // Add a small delay to ensure DOM is fully updated before scrolling
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }, 100);
     }
   }, [messages]);
 
