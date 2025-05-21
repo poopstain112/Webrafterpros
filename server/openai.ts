@@ -33,8 +33,8 @@ export async function generateWebsiteContent(
 }> {
   console.log("Generating website with images:", imageUrls);
   
-  // Create a professional business website directly based on user's description
-  // This ensures we have a properly formatted website that can adapt to any business type
+  // Create a professional business website with minimal customization options
+  // Focus on the essential elements: contact info, theme colors, images, and social media
   {
     // Map image URLs for use in the template, ensuring they have proper absolute paths
     console.log("Original image URLs:", imageUrls);
