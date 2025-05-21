@@ -79,6 +79,90 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // API endpoint to edit existing website
+  app.post("/api/edit-website", async (req: Request, res: Response) => {
+    try {
+      const { instructions, html } = req.body;
+      
+      if (!instructions || !html) {
+        return res.status(400).json({ message: "Instructions and current HTML are required" });
+      }
+      
+      console.log(`Editing website with instructions: ${instructions.substring(0, 100)}...`);
+      
+      // Get all messages as context for the website
+      const websiteId = 1; // Default website ID
+      const allMessages = await storage.getMessagesByWebsiteId(websiteId);
+      
+      // Format messages for AI input
+      const formattedMessages = allMessages.map(msg => ({
+        role: msg.role,
+        content: msg.content,
+      }));
+      
+      // Get all images for context
+      const websiteImages = await storage.getImagesByWebsiteId(websiteId);
+      const imageUrls = websiteImages.map(img => img.url);
+      
+      // Import OpenAI module from our file
+      const { generateChatResponse } = require("./openai");
+      
+      // Use the chat system to generate a response
+      const editPrompt = `
+I'm looking at the website you generated for me, and I want to make some changes: ${instructions}
+
+Please modify the website HTML to incorporate these changes.
+`;
+      
+      // Create message object
+      const chatMessage = {
+        role: "user",
+        content: editPrompt
+      };
+      
+      // Add edit request to the message history
+      await storage.createMessage({
+        websiteId,
+        role: "user",
+        content: `Website edit request: ${instructions}`
+      });
+      
+      // Generate a modified version of the HTML
+      const updatedHtml = await generateChatResponse([...formattedMessages, chatMessage], true);
+      
+      // Extract just the HTML part if the response contains extra text
+      let finalHtml = updatedHtml;
+      
+      // If the response contains HTML tags but also other text, try to extract just the HTML
+      if (updatedHtml.includes("<!DOCTYPE html>")) {
+        const htmlStartIndex = updatedHtml.indexOf("<!DOCTYPE html>");
+        finalHtml = updatedHtml.substring(htmlStartIndex);
+      }
+      
+      // Add AI's response to message history
+      await storage.createMessage({
+        websiteId,
+        role: "assistant",
+        content: "I've updated your website with the requested changes."
+      });
+      
+      // Update the localStorage
+      console.log("Website edited successfully");
+      
+      // Return the updated HTML
+      res.json({
+        html: finalHtml,
+        message: "Website updated successfully."
+      });
+    } catch (error: any) {
+      console.error("Website editing error:", error);
+      res.status(500).json({ 
+        message: error.message,
+        details: error.stack
+      });
+    }
+  });
+
   // API endpoint to generate professional website content
   app.post("/api/generate-website", async (req: Request, res: Response) => {
     try {
