@@ -90,11 +90,21 @@ export default function SimpleChat() {
     setShowSocialMediaDialog(false);
   };
 
-  // Function to send message
+  // Function to send message with improved mobile keyboard handling
   const sendMessage = async () => {
     if (inputMessage.trim()) {
-      await send(inputMessage.trim());
+      const messageText = inputMessage.trim();
       setInputMessage("");
+      
+      // Keep keyboard open on mobile by maintaining focus
+      setTimeout(() => {
+        const textarea = document.querySelector('textarea');
+        if (textarea) {
+          textarea.focus();
+        }
+      }, 10);
+      
+      await send(messageText);
     }
   };
 
@@ -149,13 +159,16 @@ export default function SimpleChat() {
     }
   };
 
-  // Auto-scroll for chat messages with improved behavior
+  // Enhanced auto-scroll with proper performance considerations
   useEffect(() => {
     if (messagesEndRef.current) {
-      // Add a small delay to ensure DOM is fully updated before scrolling
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-      }, 100);
+      // Using RAF for better timing and smoother scrolling
+      requestAnimationFrame(() => {
+        messagesEndRef.current?.scrollIntoView({ 
+          behavior: 'instant', // Using instant for better responsiveness on mobile
+          block: 'end' 
+        });
+      });
     }
   }, [messages]);
 
