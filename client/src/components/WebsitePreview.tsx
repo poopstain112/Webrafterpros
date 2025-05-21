@@ -594,7 +594,8 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
             </Button>
             <Button 
               onClick={handleClose}
-              className="bg-white text-blue-600 hover:bg-blue-50"
+              variant="outline"
+              className="text-white border-white hover:bg-blue-700"
             >
               Back to Chat
             </Button>
