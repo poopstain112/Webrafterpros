@@ -71,6 +71,32 @@ export function useChat(initialWebsiteId: number = 1) {
     async (content: string) => {
       if (!content || (typeof content === 'string' && !content.trim())) return;
 
+      // Check for social media links in the message
+      const detectedLinks = detectSocialMediaLinks(content);
+      if (Object.keys(detectedLinks).length > 0) {
+        console.log("Detected social media links:", detectedLinks);
+        
+        // Update social media links state by merging with existing links
+        setSocialMediaLinks(prev => ({
+          ...prev,
+          ...detectedLinks
+        }));
+        
+        // Display a toast to confirm detection
+        if (Object.keys(detectedLinks).length === 1) {
+          const platform = Object.keys(detectedLinks)[0];
+          toast({
+            title: 'Social Media Detected',
+            description: `Your ${platform} account will be added to your website.`,
+          });
+        } else {
+          toast({
+            title: 'Social Media Detected',
+            description: `${Object.keys(detectedLinks).length} social media accounts will be added to your website.`,
+          });
+        }
+      }
+
       // Optimistically add user message to UI
       const userMessage: Message = {
         role: 'user',
@@ -244,12 +270,13 @@ export function useChat(initialWebsiteId: number = 1) {
           },
         ]);
         
-        // Call the API with the current website structure and the edit instructions
+        // Call the API with the current website structure, social media links, and the edit instructions
         const updatedWebsiteData = await generateWebsite(
           instructions, 
           uploadedImages, 
           undefined, 
-          websiteStructure
+          websiteStructure,
+          socialMediaLinks
         );
         
         // Update the website structure with the new content
@@ -309,8 +336,14 @@ export function useChat(initialWebsiteId: number = 1) {
           description: 'Please wait while we generate your professional website...',
         });
         
-        // Include business type for better website generation
-        const websiteData = await generateWebsite(description, uploadedImages, businessType);
+        // Include business type and social media links for better website generation
+        const websiteData = await generateWebsite(
+          description, 
+          uploadedImages, 
+          businessType,
+          undefined,
+          socialMediaLinks
+        );
         setWebsiteStructure(websiteData);
 
         // Save the website HTML in localStorage for the preview page to access

@@ -1073,7 +1073,8 @@ export async function generateWebsiteContent(
             businessInfo: businessInfo,
             images: formattedImageUrls,
             theme: themeInfo,
-            content: contentInfo
+            content: contentInfo,
+            socialMedia: socialMediaInfo
           })
         }
       ],
