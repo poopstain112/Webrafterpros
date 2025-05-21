@@ -225,12 +225,21 @@ export default function SimpleChat() {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full p-3 pr-24 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 max-h-32 resize-none"
+            className="w-full p-3 pr-36 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 max-h-32 resize-none"
             placeholder="Type your message..."
             rows={1}
           />
           
-          <div className="absolute right-16 top-1/2 transform -translate-y-1/2 flex space-x-3">
+          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+            {/* Social Media Button */}
+            <button
+              onClick={() => setShowSocialMediaDialog(true)}
+              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
+              title="Add social media links"
+            >
+              <Facebook className="h-5 w-5 text-blue-500" />
+            </button>
+            
             {/* Upload Image Button */}
             <label 
               className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 cursor-pointer"
@@ -246,20 +255,11 @@ export default function SimpleChat() {
               <ImageIcon className="h-5 w-5 text-blue-500" />
             </label>
             
-            {/* Social Media Button */}
-            <button
-              onClick={() => setShowSocialMediaDialog(true)}
-              className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
-              title="Add social media links"
-            >
-              <Facebook className="h-5 w-5 text-blue-500" />
-            </button>
-            
             {/* Send Button */}
             <button
               onClick={sendMessage}
               disabled={!inputMessage.trim()}
-              className="absolute right-1 w-10 h-10 rounded-full flex items-center justify-center text-white"
+              className="w-10 h-10 rounded-full flex items-center justify-center text-white"
               style={{ backgroundColor: inputMessage.trim() ? '#3b82f6' : '#d1d5db' }}
             >
               <Send className="h-5 w-5" />
