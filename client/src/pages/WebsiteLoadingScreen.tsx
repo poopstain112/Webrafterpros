@@ -89,16 +89,22 @@ const WebsiteLoadingScreen: React.FC = () => {
           console.log("Enhanced HTML stored in localStorage:", enhancedHtml.length, "characters");
         }
         
-        // Allow the progress animation to complete
+        // Force immediate navigation to preview screen
+        toast({
+          title: 'Success!',
+          description: 'Your website has been generated successfully.',
+        });
+        
+        // Direct navigation to website preview screen
+        console.log("REDIRECTING to website preview page");
+        window.location.href = '/website-preview';
+        
+        // As a fallback, also call finishGeneration() after a short delay
         setTimeout(() => {
-          toast({
-            title: 'Success!',
-            description: 'Your website has been generated successfully.',
-          });
-          
-          // Return to the chat view which will now display the website
-          finishGeneration();
-        }, 2000);
+          if (window.location.pathname !== '/website-preview') {
+            finishGeneration();
+          }
+        }, 500);
         
       } catch (error) {
         console.error('Error generating website:', error);
