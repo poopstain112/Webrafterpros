@@ -899,109 +899,142 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
       )}
       
       {isEditMode ? (
-        <div className="flex-1 flex flex-col bg-gray-100 p-4">
-          <div className="mb-4">
-            <h3 className="text-xl font-bold mb-2">Edit Your Website</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Choose from the options below or describe custom changes.
+        <div className="flex-1 flex flex-col bg-gray-50 p-5">
+          <div className="mb-6 bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+            <h3 className="text-xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">Edit Your Website</h3>
+            <p className="text-sm text-gray-600 mb-5">
+              Choose from the quick options below or describe custom changes.
             </p>
             
             {/* Quick edit options */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
               <Button 
                 variant="outline"
-                className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
+                className="justify-start text-left p-4 h-auto border border-gray-200 rounded-lg shadow-sm hover:border-blue-400 hover:bg-blue-50 transition-colors duration-200"
                 onClick={() => handlePresetEdit("color-scheme")}
               >
-                <div>
-                  <span className="font-medium">Change Color Scheme</span>
-                  <p className="text-xs text-gray-500 mt-1">Update to blue and white colors</p>
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 p-2 bg-blue-100 rounded-md">
+                    <div className="w-4 h-4 bg-blue-600 rounded-full"></div>
+                  </div>
+                  <div>
+                    <span className="font-medium">Change Color Scheme</span>
+                    <p className="text-xs text-gray-500 mt-1">Update to blue and white colors</p>
+                  </div>
                 </div>
               </Button>
               <Button 
                 variant="outline"
-                className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
+                className="justify-start text-left p-4 h-auto border border-gray-200 rounded-lg shadow-sm hover:border-blue-400 hover:bg-blue-50 transition-colors duration-200"
                 onClick={() => handlePresetEdit("add-social-media")}
               >
-                <div>
-                  <span className="font-medium">Add Social Media</span>
-                  <p className="text-xs text-gray-500 mt-1">Add links to your social media accounts</p>
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 p-2 bg-blue-100 rounded-md">
+                    <Facebook className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <span className="font-medium">Add Social Media</span>
+                    <p className="text-xs text-gray-500 mt-1">Add links to your social media accounts</p>
+                  </div>
                 </div>
               </Button>
               
               <Button 
                 variant="outline"
-                className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
+                className="justify-start text-left p-4 h-auto border border-gray-200 rounded-lg shadow-sm hover:border-blue-400 hover:bg-blue-50 transition-colors duration-200"
                 onClick={() => handlePresetEdit("contact-form")}
               >
-                <div>
-                  <span className="font-medium">Add Contact Form</span>
-                  <p className="text-xs text-gray-500 mt-1">Include form with name, email and message fields</p>
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 p-2 bg-blue-100 rounded-md">
+                    <div className="w-4 h-4 flex items-center justify-center text-blue-600">@</div>
+                  </div>
+                  <div>
+                    <span className="font-medium">Add Contact Form</span>
+                    <p className="text-xs text-gray-500 mt-1">Include form with name, email and message fields</p>
+                  </div>
                 </div>
               </Button>
               
               <Button 
                 variant="outline"
-                className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
+                className="justify-start text-left p-4 h-auto border border-gray-200 rounded-lg shadow-sm hover:border-blue-400 hover:bg-blue-50 transition-colors duration-200"
                 onClick={() => handlePresetEdit("buttons")}
               >
-                <div>
-                  <span className="font-medium">Improve Buttons</span>
-                  <p className="text-xs text-gray-500 mt-1">Add hover effects and rounded corners</p>
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 p-2 bg-blue-100 rounded-md">
+                    <div className="w-4 h-4 flex items-center justify-center text-xs text-blue-600 border border-blue-600 rounded">B</div>
+                  </div>
+                  <div>
+                    <span className="font-medium">Improve Buttons</span>
+                    <p className="text-xs text-gray-500 mt-1">Add hover effects and rounded corners</p>
+                  </div>
                 </div>
               </Button>
               
               <Button 
                 variant="outline"
-                className="justify-start text-left p-4 h-auto border-gray-300 hover:border-blue-500 hover:bg-blue-50"
+                className="justify-start text-left p-4 h-auto border border-gray-200 rounded-lg shadow-sm hover:border-blue-400 hover:bg-blue-50 transition-colors duration-200"
                 onClick={() => handlePresetEdit("social-media")}
               >
-                <div>
-                  <span className="font-medium">Add Social Media</span>
-                  <p className="text-xs text-gray-500 mt-1">Include Facebook, Instagram, and Twitter icons</p>
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 p-2 bg-blue-100 rounded-md">
+                    <Instagram className="w-4 h-4 text-pink-600" />
+                  </div>
+                  <div>
+                    <span className="font-medium">Update Social Media</span>
+                    <p className="text-xs text-gray-500 mt-1">Include social media icons and links</p>
+                  </div>
                 </div>
               </Button>
             </div>
             
             {/* Custom edit option */}
-            <div className="mt-6">
-              <h4 className="font-medium mb-2">Custom Changes</h4>
+            <div className="mt-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
+              <h4 className="font-medium mb-2 text-blue-800">Custom Changes</h4>
+              <p className="text-xs text-blue-700 mb-3">Describe any specific changes you'd like to make to your website.</p>
               <textarea
                 value={editInstructions}
                 onChange={(e) => setEditInstructions(e.target.value)}
-                placeholder="Describe what you'd like to change about your website..."
-                className="w-full h-24 p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Example: 'Change the header image to show our boat rentals' or 'Add our business hours to the contact section'"
+                className="w-full h-28 p-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
               />
             </div>
             
-            <div className="mt-4 flex justify-end">
+            <div className="mt-6 flex justify-end gap-3">
               <Button 
                 onClick={() => setIsEditMode(false)} 
                 variant="outline"
-                className="mr-2"
+                className="px-4 font-medium text-gray-600 border-gray-300 hover:bg-gray-50"
               >
                 Cancel
               </Button>
               <Button 
                 onClick={handleSubmitEdit}
                 disabled={!editInstructions.trim()}
-                className="bg-blue-500 hover:bg-blue-600 font-medium"
+                className="px-5 bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm"
               >
-                Apply Changes
+                <span className="flex items-center gap-1.5">
+                  Apply Changes
+                </span>
               </Button>
             </div>
           </div>
           
-          <div className="flex-1 bg-white border rounded overflow-hidden">
-            <div className="text-center py-2 bg-gray-50 border-b text-sm text-gray-500">
-              Preview (changes will appear after applying)
+          <div className="flex-1 bg-white border rounded-lg overflow-hidden shadow-sm">
+            <div className="flex items-center justify-between py-2 px-3 bg-gradient-to-r from-gray-50 to-white border-b">
+              <div className="text-sm text-gray-500 font-medium">
+                Website Preview
+              </div>
+              <div className="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+                Changes will appear after applying
+              </div>
             </div>
             <iframe 
               srcDoc={fullHtml}
               title="Website Preview"
               className="w-full h-full border-none"
               sandbox="allow-same-origin"
-              style={{ height: 'calc(100% - 30px)' }}
+              style={{ height: 'calc(100% - 32px)' }}
             />
           </div>
         </div>
