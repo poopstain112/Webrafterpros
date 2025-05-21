@@ -142,29 +142,28 @@ export default function SimpleChat() {
     }
   };
 
-  // More aggressive auto-scroll to ensure messages are always visible
+  // Improved auto-scroll implementation for chat messages
   useEffect(() => {
-    const scrollToBottom = () => {
-      const chatContainer = document.querySelector('.chat-messages-container');
-      if (chatContainer) {
-        chatContainer.scrollTop = chatContainer.scrollHeight + 1000; // Add extra to ensure it's at bottom
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Extra safety - force scroll after small delays
+    const timer1 = setTimeout(() => {
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
       }
-    };
+    }, 100);
     
-    // Scroll multiple times with increasing delays to handle all scenarios
-    scrollToBottom();
+    const timer2 = setTimeout(() => {
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
+      }
+    }, 300);
     
-    const timers = [
-      setTimeout(scrollToBottom, 10),
-      setTimeout(scrollToBottom, 50),
-      setTimeout(scrollToBottom, 100),
-      setTimeout(scrollToBottom, 300),
-      setTimeout(scrollToBottom, 500)
-    ];
-    
-    // Cleanup timers on unmount
     return () => {
-      timers.forEach(timer => clearTimeout(timer));
+      clearTimeout(timer1);
+      clearTimeout(timer2);
     };
   }, [messages]);
 
