@@ -105,10 +105,102 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
   
   // Process HTML content - if it's already a full HTML document, use it as is
   const processHtmlContent = () => {
+    // Add JavaScript to make buttons functional
+    const makeButtonsFunctional = (html) => {
+      // Create a temporary div to parse the HTML
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      
+      // Add click events to all buttons
+      const buttons = tempDiv.querySelectorAll('button');
+      buttons.forEach(button => {
+        // Make sure it has at least a basic onclick attribute
+        if (!button.hasAttribute('onclick')) {
+          // If it has a class that suggests what it might do
+          if (button.textContent.toLowerCase().includes('contact')) {
+            // Contact buttons should scroll to contact section
+            button.setAttribute('onclick', "document.getElementById('contact') ? document.getElementById('contact').scrollIntoView({behavior: 'smooth'}) : alert('Contact section not found')");
+          } else if (button.textContent.toLowerCase().includes('learn more') || 
+                    button.textContent.toLowerCase().includes('about')) {
+            // About or Learn More buttons should go to about section
+            button.setAttribute('onclick', "document.getElementById('about') ? document.getElementById('about').scrollIntoView({behavior: 'smooth'}) : alert('About section not found')");
+          } else if (button.textContent.toLowerCase().includes('service')) {
+            // Service buttons should go to services section
+            button.setAttribute('onclick', "document.getElementById('services') ? document.getElementById('services').scrollIntoView({behavior: 'smooth'}) : alert('Services section not found')");
+          } else {
+            // Generic button action
+            button.setAttribute('onclick', "alert('Button clicked: ' + this.textContent)");
+          }
+        }
+      });
+      
+      // Also fix anchor links to use smooth scrolling
+      const links = tempDiv.querySelectorAll('a[href^="#"]');
+      links.forEach(link => {
+        if (!link.hasAttribute('onclick')) {
+          const href = link.getAttribute('href');
+          if (href && href !== '#') {
+            link.setAttribute('onclick', `event.preventDefault(); document.querySelector('${href}') ? document.querySelector('${href}').scrollIntoView({behavior: 'smooth'}) : window.location.href = '${href}'`);
+          }
+        }
+      });
+      
+      // Add JavaScript for smooth scrolling and button functionality
+      const scriptTag = document.createElement('script');
+      scriptTag.innerHTML = `
+        // Enable smooth scrolling
+        document.addEventListener('DOMContentLoaded', function() {
+          // Find all buttons and add click handlers
+          document.querySelectorAll('button').forEach(function(button) {
+            if (!button.hasAttribute('onclick')) {
+              button.addEventListener('click', function() {
+                // Check if the button has a specific purpose based on its text
+                const text = button.textContent.toLowerCase();
+                if (text.includes('contact')) {
+                  const contactSection = document.getElementById('contact');
+                  if (contactSection) contactSection.scrollIntoView({behavior: 'smooth'});
+                } else if (text.includes('learn') || text.includes('about')) {
+                  const aboutSection = document.getElementById('about');
+                  if (aboutSection) aboutSection.scrollIntoView({behavior: 'smooth'});
+                } else if (text.includes('service')) {
+                  const servicesSection = document.getElementById('services');
+                  if (servicesSection) servicesSection.scrollIntoView({behavior: 'smooth'});
+                } else {
+                  console.log('Button clicked:', button.textContent);
+                }
+              });
+            }
+          });
+          
+          // Find all anchor links and add smooth scrolling
+          document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function(e) {
+              const href = this.getAttribute('href');
+              if (href && href !== '#') {
+                e.preventDefault();
+                const targetElement = document.querySelector(href);
+                if (targetElement) {
+                  targetElement.scrollIntoView({behavior: 'smooth'});
+                }
+              }
+            });
+          });
+        });
+      `;
+      
+      // Add script to the end of the body
+      const bodyElement = tempDiv.querySelector('body');
+      if (bodyElement) {
+        bodyElement.appendChild(scriptTag);
+      }
+      
+      return tempDiv.innerHTML;
+    };
+    
     // If the content already has DOCTYPE or <html> tag, it's likely a complete document
     if (htmlContent && (htmlContent.trim().startsWith('<!DOCTYPE html>') || 
         htmlContent.trim().startsWith('<html'))) {
-      return htmlContent;
+      return makeButtonsFunctional(htmlContent);
     }
 
     // If there's no HTML content or it's very short, create a default website
@@ -241,7 +333,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
     }
 
     // Otherwise, wrap the content in a full HTML document
-    return `<!DOCTYPE html>
+    return makeButtonsFunctional(`<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -271,12 +363,25 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
       width: 100%;
       display: block;
     }
+    /* Add button hover effects for better UX */
+    button, .btn {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    button:hover, .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    /* Smooth scrolling for entire page */
+    html {
+      scroll-behavior: smooth;
+    }
   </style>
 </head>
 <body>
   ${htmlContent || '<div class="container"><h1>Website Preview</h1><p>Loading content...</p></div>'}
 </body>
-</html>`;
+</html>`);
   };
   
   // Create the final HTML document to display
