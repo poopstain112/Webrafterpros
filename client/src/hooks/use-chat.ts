@@ -9,6 +9,14 @@ export function useChat(initialWebsiteId: number = 1) {
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
   const [websiteStructure, setWebsiteStructure] = useState<WebsiteStructure | null>(null);
   const [isGeneratingWebsite, setIsGeneratingWebsite] = useState(false);
+  const [socialMediaLinks, setSocialMediaLinks] = useState<{
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    youtube?: string;
+    tiktok?: string;
+  }>({});
   const { toast } = useToast();
 
   // Fetch initial messages when component mounts

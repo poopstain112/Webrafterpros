@@ -7,13 +7,29 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
 export async function generateWebsiteContent(
   description: string,
   imageUrls: string[] = [],
-  businessType?: string
+  businessType?: string,
+  socialMedia?: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    youtube?: string;
+    tiktok?: string;
+  }
 ): Promise<{
   html: string;
   css: string;
   structure: any;
   recommendation: string;
   industrySpecificFeatures?: string[];
+  socialMedia?: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    youtube?: string;
+    tiktok?: string;
+  };
 }> {
   console.log("Generating website with images:", imageUrls);
   

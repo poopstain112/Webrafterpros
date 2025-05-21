@@ -20,4 +20,12 @@ export interface WebsiteStructure {
   structure: any;
   recommendation?: string;
   industrySpecificFeatures?: string[];
+  socialMedia?: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    youtube?: string;
+    tiktok?: string;
+  };
 }
