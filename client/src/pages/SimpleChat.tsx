@@ -70,7 +70,7 @@ export default function SimpleChat() {
   } = useChat();
 
   // Function to handle social media form submission
-  const handleSocialMediaSubmit = () => {
+  const handleSocialMediaSubmit = async () => {
     // Filter out empty values
     const nonEmptySocials = Object.entries(socialMedia)
       .filter(([_, value]) => value.trim() !== '')
@@ -78,7 +78,14 @@ export default function SimpleChat() {
       .join(', ');
     
     if (nonEmptySocials) {
-      setInputMessage(`Our social media accounts are: ${nonEmptySocials}`);
+      const socialMessage = `Our social media accounts are: ${nonEmptySocials}`;
+      // Automatically send the message instead of just setting input value
+      await send(socialMessage);
+      
+      toast({
+        title: "Social Media Added",
+        description: "Your social media accounts have been added to your website",
+      });
     }
     setShowSocialMediaDialog(false);
   };
