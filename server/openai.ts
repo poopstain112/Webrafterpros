@@ -1113,7 +1113,7 @@ const BUSINESS_QUESTIONS = [
   "What are your business hours?",
   "What contact information should be on the website?",
   "What are your primary business colors (if you have brand colors)?",
-  "Do you have any social media accounts to link on the website?"
+  "Please upload images and add any social media links for your website."
 ];
 
 // Process user message and generate response
