@@ -182,11 +182,12 @@ export default function SimpleChat() {
     fileInput.click();
   };
 
-  // Handle website editing with edit instructions
-  const handleEditWebsite = (editInstructions?: string) => {
+  // Handle website editing with edit instructions and social media links
+  const handleEditWebsite = (editInstructions?: string, socialMedia?: any) => {
     if (editInstructions) {
       setShowWebsitePreview(false);
-      editWebsiteContent(editInstructions);
+      // Pass both edit instructions and social media links (if provided)
+      editWebsiteContent(editInstructions, socialMedia || socialMediaLinks);
     }
   };
   

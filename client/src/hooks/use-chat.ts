@@ -255,8 +255,10 @@ export function useChat(initialWebsiteId: number = 1) {
 
   // Edit the generated website based on user instructions
   const editWebsiteContent = useCallback(
-    async (instructions: string) => {
+    async (instructions: string, customSocialMediaLinks?: any) => {
       if (!instructions.trim() || !websiteStructure) return;
+      
+      // Use custom social media links if provided, otherwise use the ones from chat
       
       setIsGeneratingWebsite(true);
       
@@ -276,7 +278,7 @@ export function useChat(initialWebsiteId: number = 1) {
           uploadedImages, 
           undefined, 
           websiteStructure,
-          socialMediaLinks
+          customSocialMediaLinks || socialMediaLinks
         );
         
         // Update the website structure with the new content
@@ -319,7 +321,7 @@ export function useChat(initialWebsiteId: number = 1) {
         setIsGeneratingWebsite(false);
       }
     },
-    [uploadedImages, websiteStructure, toast]
+    [uploadedImages, websiteStructure, socialMediaLinks, toast]
   );
   
   // Generate website based on description
