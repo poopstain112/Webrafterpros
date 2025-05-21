@@ -515,8 +515,7 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
         "What's your business slogan or tagline (if you have one)?",
         "What are your business hours?",
         "What contact information should be on the website?",
-        "What are your primary business colors (if you have brand colors)?",
-        "Do you have any social media accounts to link on the website?"
+        "What are your primary business colors (if you have brand colors)?"
       ];
       
       // Simple solution - count the number of user messages (excluding the current one)
@@ -539,8 +538,8 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
         // Get the next question directly from the array
         aiResponse = BUSINESS_QUESTIONS[nextQuestionIndex];
       } else if (nextQuestionIndex === BUSINESS_QUESTIONS.length) {
-        // After final question, prompt for image upload - simple prompt only
-        aiResponse = "Please upload images for your website.";
+        // After final question, prompt for social media and then images
+        aiResponse = "Please add your social media links using the social media button, and then upload images for your website.";
       } else {
         // After images upload, respond to any additional questions
         // Format messages for OpenAI
