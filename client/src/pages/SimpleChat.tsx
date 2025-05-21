@@ -96,13 +96,31 @@ export default function SimpleChat() {
       const messageText = inputMessage.trim();
       setInputMessage("");
       
-      // Keep keyboard open on mobile by maintaining focus
-      setTimeout(() => {
+      // Keep keyboard open on mobile by maintaining focus with improved handling
+      // Using a more reliable approach for mobile devices
+      if (navigator.userAgent.match(/iPhone|iPad|iPod|Android/i)) {
+        // For mobile devices, use a more aggressive approach
         const textarea = document.querySelector('textarea');
         if (textarea) {
-          textarea.focus();
+          // Prevent blur event temporarily
+          textarea.addEventListener('blur', function preventBlur(e) {
+            e.preventDefault();
+            textarea.focus();
+            textarea.removeEventListener('blur', preventBlur);
+          });
+          
+          // Double ensure focus is maintained
+          requestAnimationFrame(() => {
+            textarea.focus();
+          });
         }
-      }, 10);
+      } else {
+        // For desktop, a simple focus is sufficient
+        setTimeout(() => {
+          const textarea = document.querySelector('textarea');
+          if (textarea) textarea.focus();
+        }, 10);
+      }
       
       await send(messageText);
     }
@@ -172,11 +190,32 @@ export default function SimpleChat() {
     }
   }, [messages]);
 
-  // Keydown handler for enter key
+  // Enhanced keydown handler for better mobile experience
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      sendMessage();
+      // Store current state of textarea
+      const textarea = e.target as HTMLTextAreaElement;
+      if (textarea) {
+        // Save text position for refocusing
+        const position = textarea.selectionStart;
+        
+        // Process message
+        sendMessage();
+        
+        // Make sure the textarea stays in focus
+        setTimeout(() => {
+          textarea.focus();
+          try {
+            // Try to restore cursor position
+            textarea.setSelectionRange(position, position);
+          } catch (err) {
+            // Ignore errors in older browsers
+          }
+        }, 0);
+      } else {
+        sendMessage();
+      }
     }
   };
 
