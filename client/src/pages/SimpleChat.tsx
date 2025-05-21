@@ -36,6 +36,7 @@ export default function SimpleChat() {
     uploadedImages,
     websiteStructure,
     isGeneratingWebsite: isGenerating,
+    socialMediaLinks,
     generateWebsiteContent,
     editWebsiteContent
   } = useChat();
@@ -312,6 +313,7 @@ export default function SimpleChat() {
           websiteStructure={websiteStructure}
           onClose={() => setShowWebsitePreview(false)}
           onEdit={handleEditWebsite}
+          socialMediaLinks={socialMediaLinks}
         />
       )}
       
