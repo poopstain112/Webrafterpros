@@ -99,8 +99,9 @@ export default function SimpleChat() {
         await handleImageUpload(files);
         event.target.value = ""; // Reset the input
         
-        // Skip the upload screen and go directly to the generating website screen
-        handleGenerateWebsite();
+        // Skip directly to generation - no intermediate screen
+        navigate("/generating-website");
+        startGeneration(websiteId);
       } catch (error) {
         console.error("Error uploading images:", error);
         toast({
