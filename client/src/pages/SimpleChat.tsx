@@ -101,7 +101,7 @@ export default function SimpleChat() {
         
         // Skip directly to generation - no intermediate screen
         navigate("/generating-website");
-        startGeneration(websiteId);
+        startGeneration(1); // Use website ID 1
       } catch (error) {
         console.error("Error uploading images:", error);
         toast({

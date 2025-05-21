@@ -6,7 +6,8 @@ interface WebsiteGenerationContextType {
   isGenerating: boolean;
   description: string;
   businessType: string;
-  startGeneration: (description: string, businessType: string) => void;
+  websiteId?: number;
+  startGeneration: (descriptionOrWebsiteId: string | number, businessType?: string) => void;
   cancelGeneration: () => void;
   finishGeneration: () => void;
 }
@@ -19,11 +20,22 @@ export const WebsiteGenerationProvider: React.FC<{ children: ReactNode }> = ({ c
   const [isGenerating, setIsGenerating] = useState(false);
   const [description, setDescription] = useState('');
   const [businessType, setBusinessType] = useState('');
+  const [websiteId, setWebsiteId] = useState<number | undefined>(undefined);
   const [, setLocation] = useLocation();
 
-  const startGeneration = (description: string, businessType: string) => {
-    setDescription(description);
-    setBusinessType(businessType);
+  const startGeneration = (descriptionOrWebsiteId: string | number, businessType?: string) => {
+    if (typeof descriptionOrWebsiteId === 'number') {
+      // If first parameter is a number, it's a websiteId
+      setWebsiteId(descriptionOrWebsiteId);
+      setDescription('');
+      setBusinessType('');
+    } else {
+      // Otherwise it's a description string with business type
+      setDescription(descriptionOrWebsiteId);
+      setBusinessType(businessType || '');
+      setWebsiteId(undefined);
+    }
+    
     setIsGenerating(true);
     // Navigate to the loading screen
     setLocation('/generating-website');
@@ -49,6 +61,7 @@ export const WebsiteGenerationProvider: React.FC<{ children: ReactNode }> = ({ c
         isGenerating,
         description,
         businessType,
+        websiteId,
         startGeneration,
         cancelGeneration,
         finishGeneration,
