@@ -1037,6 +1037,13 @@ export async function generateWebsiteContent(
           - Create adaptive layouts that maximize each screen size
           - Design mobile-specific interactions appropriate to the business type
           
+          SOCIAL MEDIA INTEGRATION:
+          - If social media links are provided, create prominent, functional buttons in the website
+          - Position social media links in both the header and footer for maximum visibility
+          - Use appropriate icons for each social platform (Facebook, Instagram, Twitter, LinkedIn, YouTube, TikTok)
+          - Ensure all social media links open in new tabs and have proper hover effects
+          - Apply cohesive styling to social media buttons that matches the website's design language
+          
           BUSINESS-SPECIFIC ADAPTATIONS:
           - For retail/e-commerce: Create product showcases, galleries, and shopping features
           - For services: Emphasize process, benefits, and client outcomes

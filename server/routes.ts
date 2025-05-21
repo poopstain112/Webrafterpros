@@ -82,13 +82,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // API endpoint to edit existing website
   app.post("/api/edit-website", async (req: Request, res: Response) => {
     try {
-      const { instructions, html } = req.body;
+      const { instructions, html, socialMedia } = req.body;
       
       if (!instructions || !html) {
         return res.status(400).json({ message: "Instructions and current HTML are required" });
       }
       
       console.log(`Editing website with instructions: ${instructions.substring(0, 100)}...`);
+      console.log(`Social media links for editing:`, socialMedia);
       
       // Get all messages as context for the website
       const websiteId = 1; // Default website ID
@@ -107,9 +108,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Import OpenAI module from our file
       const { generateChatResponse } = await import("./openai");
       
-      // Create a special prompt for fixing button functionality
+      // Create special prompts for common edit requests
       let editPrompt = '';
-      if (instructions.toLowerCase().includes('button') && 
+      
+      // Check for social media edits first
+      if (instructions.toLowerCase().includes('social media') || 
+          (instructions.toLowerCase().includes('add') && 
+          (instructions.toLowerCase().includes('facebook') || 
+           instructions.toLowerCase().includes('instagram') || 
+           instructions.toLowerCase().includes('twitter') ||
+           instructions.toLowerCase().includes('linkedin') ||
+           instructions.toLowerCase().includes('youtube') ||
+           instructions.toLowerCase().includes('tiktok')))) {
+        
+        // Get social media links from request body if available
+        const socialMedia = req.body.socialMedia || {};
+        
+        editPrompt = `
+As an expert web developer, I need you to add or update social media links on this website:
+
+${Object.keys(socialMedia).length > 0 ? 
+`Add the following social media links with proper icons and styling:
+${Object.entries(socialMedia).map(([platform, url]) => `- ${platform}: ${url}`).join('\n')}` : 
+`Add placeholders for common social media links with proper icons.`}
+
+Implementation requirements:
+1. Add social media icons in both the header and footer areas
+2. Use proper icons for each platform (Facebook, Instagram, Twitter, etc.)
+3. Make sure all links have target="_blank" to open in new tabs
+4. Add hover effects that match the website's design language
+5. Ensure icons are mobile-friendly and properly sized for touch
+6. Maintain the existing design language and color scheme
+
+Here is the full HTML code:
+\`\`\`html
+${html}
+\`\`\`
+
+Please provide ONLY the complete updated HTML with social media functionality. Do not include explanations.
+`;
+      } 
+      // Check for button functionality fixes
+      else if (instructions.toLowerCase().includes('button') && 
           (instructions.toLowerCase().includes('fix') || 
            instructions.toLowerCase().includes("don't function") || 
            instructions.toLowerCase().includes("dont function") ||

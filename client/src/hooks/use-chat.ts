@@ -417,9 +417,10 @@ export function useChat(initialWebsiteId: number = 1) {
         content: "What's the name of your business?",
       },
     ]);
-    // Clear any uploaded images and website structure
+    // Clear any uploaded images, website structure, and social media links
     setUploadedImages([]);
     setWebsiteStructure(null);
+    setSocialMediaLinks({});
     
     // Call reset endpoint to clean server state
     try {
