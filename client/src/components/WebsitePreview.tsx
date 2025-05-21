@@ -827,29 +827,32 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
       
       {/* Only show header in popup mode, not in the dedicated preview screen */}
       {!isStandalone && !isEditMode && (
-        <div className="bg-blue-600 text-white p-3 shadow-md flex items-center justify-between">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 shadow-md flex items-center justify-between">
           <div className="flex items-center">
-            <h2 className="text-lg font-semibold">Website Preview</h2>
+            <h2 className="text-lg font-bold">Website Preview</h2>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex space-x-3">
             <Button 
               onClick={() => setIsSocialMediaEditMode(true)}
-              variant="ghost"
-              className="text-white border-blue-400 border hover:bg-blue-700"
+              variant="outline"
+              className="text-white border-white/30 hover:bg-blue-500 hover:border-white/70 transition-colors duration-200"
             >
-              Social Media
+              <span className="flex items-center gap-1.5">
+                <Facebook className="h-4 w-4" />
+                Social Media
+              </span>
             </Button>
             <Button 
               onClick={() => setIsEditMode(true)} 
-              variant="ghost"
-              className="text-white border-blue-400 border hover:bg-blue-700"
+              variant="outline"
+              className="text-white border-white/30 hover:bg-blue-500 hover:border-white/70 transition-colors duration-200"
             >
               Edit Website
             </Button>
             <Button 
               onClick={handleClose}
-              variant="ghost"
-              className="text-white border-blue-400 border hover:bg-blue-700"
+              variant="outline" 
+              className="text-white border-white/30 hover:bg-blue-500 hover:border-white/70 transition-colors duration-200"
             >
               Back to Chat
             </Button>
