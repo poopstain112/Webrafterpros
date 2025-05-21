@@ -297,19 +297,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (content.toLowerCase().includes("website has been generated") || 
           content.toLowerCase().includes("look at the preview")) {
         
-        // Use a consistent response for website generation messages
-        const aiResponse = "Great! Your website has been generated. You can view it in the preview tab. Let me know if you'd like to make any changes to the design or content.";
+        // This should be an AI message, not a user message
+        // Delete the user message that was incorrectly created
+        await storage.deleteMessagesByWebsiteId(websiteId);
         
-        // Save the response
+        // Create the AI message for website generation notification
         const aiMessage = await storage.createMessage({
           websiteId,
-          content: aiResponse,
+          content: "Your website has been generated! You can view it in the preview tab. Let me know if you'd like to make any changes to the design or content.",
           role: "assistant",
         });
         
-        // Return immediately with special response
+        // Return the AI message as both user and AI message to maintain the UI flow
+        // The client should display this properly without both messages appearing
         return res.status(201).json({
-          userMessage,
+          userMessage: null, // Don't return a user message
           aiMessage,
         });
       }

@@ -85,13 +85,27 @@ export function useChat(initialWebsiteId: number = 1) {
         // Send message to API including uploaded images
         const response = await sendChatMessage(initialWebsiteId, content, 'user', uploadedImages);
 
-        // Replace loading message with AI response, don't add a second user message
-        setMessages(prev => {
-          // Remove the loading message
-          const withoutLoading = prev.filter(m => !m.isLoading);
-          // Add the AI response
-          return [...withoutLoading, response.aiMessage];
-        });
+        // Check if we received a user message in the response (null means it was a website generation notification)
+        // For website generation messages, the backend will only return the AI message
+        if (!response.userMessage) {
+          // This is a website generation notification, only add the AI message
+          setMessages(prev => {
+            // Remove the loading message and the last user message (which was added optimistically)
+            const withoutLoadingAndLastUser = prev.filter((m, i, arr) => 
+              !m.isLoading && !(i === arr.length - 2 && m.role === 'user')
+            );
+            // Add the AI response
+            return [...withoutLoadingAndLastUser, response.aiMessage];
+          });
+        } else {
+          // Regular message flow - replace loading message with AI response
+          setMessages(prev => {
+            // Remove the loading message
+            const withoutLoading = prev.filter(m => !m.isLoading);
+            // Add the AI response
+            return [...withoutLoading, response.aiMessage];
+          });
+        }
 
         // Clear uploaded images after sending
         setUploadedImages([]);
