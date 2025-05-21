@@ -105,7 +105,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const imageUrls = websiteImages.map(img => img.url);
       
       // Import OpenAI module from our file
-      const { generateChatResponse } = require("./openai");
+      const { generateChatResponse } = await import("./openai");
       
       // Use the chat system to generate a response
       const editPrompt = `
