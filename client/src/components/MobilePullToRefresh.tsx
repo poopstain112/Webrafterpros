@@ -79,8 +79,8 @@ const MobilePullToRefresh: React.FC<PullToRefreshProps> = ({
   useEffect(() => {
     const container = containerRef.current;
     if (container) {
-      container.addEventListener('touchstart', handleTouchStart, { passive: false });
-      container.addEventListener('touchmove', handleTouchMove, { passive: false });
+      container.addEventListener('touchstart', handleTouchStart, { passive: true });
+      container.addEventListener('touchmove', handleTouchMove, { passive: true });
       container.addEventListener('touchend', handleTouchEnd);
       
       return () => {
