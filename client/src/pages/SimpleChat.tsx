@@ -75,9 +75,45 @@ export default function SimpleChat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Mobile keyboard handling - scroll to input when keyboard appears
+  const scrollToInput = () => {
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    }, 300); // Give keyboard time to appear
+  };
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Handle mobile keyboard events
+  useEffect(() => {
+    let initialHeight = window.innerHeight;
+    
+    const handleResize = () => {
+      scrollToInput();
+    };
+
+    const handleViewportChange = () => {
+      scrollToInput();
+    };
+
+    // Modern approach with Visual Viewport API
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleViewportChange);
+    } else {
+      // Fallback for older browsers
+      window.addEventListener('resize', handleResize);
+    }
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleViewportChange);
+      } else {
+        window.removeEventListener('resize', handleResize);
+      }
+    };
+  }, []);
 
   // Always start fresh when page loads
   useEffect(() => {
