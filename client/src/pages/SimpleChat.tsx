@@ -90,20 +90,26 @@ export default function SimpleChat() {
     setShowSocialMediaDialog(false);
   };
 
-  // Function to send message - keeps keyboard visible
+  // Function to send message - with proper mobile keyboard handling
   const sendMessage = async () => {
     if (inputMessage.trim()) {
       const messageText = inputMessage.trim();
+      
+      // Keep focus before clearing input
       const textarea = document.querySelector('textarea') as HTMLTextAreaElement;
       
-      setInputMessage("");
+      // Send message while keeping focus
       await send(messageText);
+      setInputMessage("");
       
-      // Keep keyboard visible by immediately refocusing
+      // Force focus to stay - this is the key for mobile
       if (textarea) {
+        textarea.focus();
+        // Prevent the browser from hiding keyboard
+        textarea.style.transform = "translateZ(0)";
         setTimeout(() => {
-          textarea.focus();
-        }, 50);
+          textarea.style.transform = "";
+        }, 100);
       }
     }
   };
