@@ -206,27 +206,48 @@ export async function generateWebsiteContent(
     
     /* Hero Section */
     .hero {
-      background: linear-gradient(rgba(13, 71, 161, 0.8), rgba(13, 71, 161, 0.9)), url('${heroImage}') no-repeat center/cover;
-      height: 80vh;
+      background: linear-gradient(rgba(30, 64, 175, 0.85), rgba(30, 64, 175, 0.9)), url('${heroImage}') no-repeat center/cover;
+      height: 85vh;
       display: flex;
       align-items: center;
       color: #fff;
       margin-top: 70px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+      z-index: 1;
     }
     
     .hero-content {
       max-width: 800px;
+      position: relative;
+      z-index: 2;
     }
     
     .hero h1 {
-      font-size: 3rem;
+      font-size: 3.25rem;
       margin-bottom: 1.5rem;
       color: #fff;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
     }
     
     .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
+      font-size: 1.25rem;
+      margin-bottom: 2.5rem;
+      opacity: 0.95;
+      line-height: 1.7;
+      max-width: 600px;
     }
     
     .btn {
@@ -271,22 +292,30 @@ export async function generateWebsiteContent(
     }
     
     .service-card {
-      background-color: #f9f9f9;
+      background-color: #ffffff;
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04), 0 2px 10px rgba(0, 0, 0, 0.05);
+      transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s;
+      border: 1px solid rgba(0, 0, 0, 0.04);
     }
     
     .service-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      transform: translateY(-12px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.06);
     }
     
     .service-card img {
       width: 100%;
-      height: 200px;
+      height: 240px;
       object-fit: cover;
+      transition: transform 0.5s ease;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+    
+    .service-card:hover img {
+      transform: scale(1.05);
     }
     
     .service-content {
@@ -580,9 +609,9 @@ export async function generateWebsiteContent(
   <section class="hero">
     <div class="container">
       <div class="hero-content">
-        <h1>${description.split("|")[1] || "Premier Pet Grooming"}</h1>
-        <p>${description.split("|")[2] || "We provide expert grooming services for all pets in our jungle-themed salon. From basic baths to premium styling, we treat your furry friends like family."}</p>
-        <a href="#contact" class="btn btn-primary">Book An Appointment</a>
+        <h1>${description.split("|")[1] || (businessType === 'car dealership' ? "Quality Used Cars at Affordable Prices" : "Premier Business Services")}</h1>
+        <p>${description.split("|")[2] || (businessType === 'car dealership' ? "Discover our selection of quality pre-owned vehicles. We offer competitive pricing, financing options, and exceptional customer service to help you find the perfect car." : "We provide expert services tailored to your specific needs. From basic options to premium solutions, we treat every customer with professionalism and care.")}</p>
+        <a href="#contact" class="btn btn-primary">${businessType === 'car dealership' ? 'View Our Inventory' : 'Book An Appointment'}</a>
       </div>
     </div>
   </section>
@@ -598,24 +627,24 @@ export async function generateWebsiteContent(
         <div class="service-card">
           <img src="${serviceImage1}" alt="Primary Service" onerror="this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>Primary Service</h3>
-            <p>Our core service offering designed to meet your essential needs with professional expertise and attention to detail.</p>
-            <a href="#contact" class="btn btn-primary">Learn More</a>
+            <h3>${businessType === 'car dealership' ? 'Used Vehicles' : 'Primary Service'}</h3>
+            <p>${businessType === 'car dealership' ? 'Browse our extensive inventory of quality used cars, trucks, and SUVs. Each vehicle undergoes thorough inspection to ensure reliability and performance.' : 'Our core service offering designed to meet your essential needs with professional expertise and attention to detail.'}</p>
+            <a href="#contact" class="btn btn-primary">${businessType === 'car dealership' ? 'View Inventory' : 'Learn More'}</a>
           </div>
         </div>
         <div class="service-card">
-          <img src="${serviceImage2}" alt="Secondary Service" onerror="this.src='https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${serviceImage2}" alt="${businessType === 'car dealership' ? 'Financing Options' : 'Secondary Service'}" onerror="this.src='https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>Secondary Service</h3>
-            <p>Our complementary service that enhances our primary offering, providing additional value and solutions for more specialized requirements.</p>
-            <a href="#contact" class="btn btn-primary">Learn More</a>
+            <h3>${businessType === 'car dealership' ? 'Financing Options' : 'Secondary Service'}</h3>
+            <p>${businessType === 'car dealership' ? 'We offer competitive financing options to fit your budget. Our finance team works with multiple lenders to find the best rates and terms for your situation.' : 'Our complementary service that enhances our primary offering, providing additional value and solutions for more specialized requirements.'}</p>
+            <a href="#contact" class="btn btn-primary">${businessType === 'car dealership' ? 'Apply Today' : 'Learn More'}</a>
           </div>
         </div>
         <div class="service-card">
-          <img src="${serviceImage3}" alt="Premium Service" onerror="this.src='https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${serviceImage3}" alt="${businessType === 'car dealership' ? 'Vehicle Service' : 'Premium Service'}" onerror="this.src='https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>Premium Service</h3>
-            <p>Our top-tier offering designed for clients with advanced needs, providing comprehensive solutions with exceptional attention to detail.</p>
+            <h3>${businessType === 'car dealership' ? 'Vehicle Service' : 'Premium Service'}</h3>
+            <p>${businessType === 'car dealership' ? 'Our certified technicians provide quality maintenance and repair services to keep your vehicle running smoothly. From oil changes to major repairs, we have got you covered.' : 'Our top-tier offering designed for clients with advanced needs, providing comprehensive solutions with exceptional attention to detail.'}</p>
             <a href="#contact" class="btn btn-primary">Learn More</a>
           </div>
         </div>
