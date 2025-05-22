@@ -245,9 +245,27 @@ export default function SimpleChat() {
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 chat-messages-container">
-        {messages.map((message, i) => (
-          <div
+      <ChatMessages 
+        messages={messages} 
+        onShowSocialMedia={() => setShowSocialMediaDialog(true)} 
+      />
+
+      {/* Website Controls */}
+      <WebsiteControls
+        uploadedImages={uploadedImages}
+        onImageUpload={handleImageUpload}
+        onGenerateWebsite={handleGenerateWebsite}
+        onViewWebsite={() => setShowWebsitePreview(true)}
+        hasWebsite={websiteStructure !== null}
+        isGenerating={isGenerating}
+      />
+
+      {/* Chat Input */}
+      <ChatInput
+        onSendMessage={sendMessage}
+        disabled={isGenerating}
+        placeholder="Type your message..."
+      />
             key={i}
             className={`flex ${
               message.role === "user" ? "justify-end" : "justify-start"
