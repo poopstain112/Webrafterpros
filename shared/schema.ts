@@ -60,8 +60,7 @@ export const messages = pgTable("messages", {
   websiteId: integer("website_id").notNull().references(() => websites.id),
   content: text("content").notNull(),
   role: text("role").notNull(), // 'user' or 'assistant'
-  images: jsonb("images"), // Store image data for messages
-  isLoading: integer("is_loading", { mode: 'boolean' }), // For loading states
+
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
