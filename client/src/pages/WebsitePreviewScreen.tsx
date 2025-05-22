@@ -13,9 +13,9 @@ const WebsitePreviewScreen = () => {
   const { socialMediaLinks, editWebsiteContent } = useChat();
   const { toast } = useToast();
 
-  // Load website HTML from API if not in localStorage
+  // Load website HTML - only check localStorage, don't auto-regenerate
   const loadWebsiteHTML = async () => {
-    // Try localStorage first
+    // Try localStorage first  
     const possibleKeys = ['generatedWebsiteHTML', 'websiteHtml', 'enhancedHTML'];
     
     for (const key of possibleKeys) {
@@ -27,28 +27,7 @@ const WebsitePreviewScreen = () => {
       }
     }
     
-    // If not in localStorage, generate a new one from chat data
-    try {
-      console.log("No HTML in localStorage, generating new website...");
-      const response = await fetch('/api/generate-website', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ websiteId: 1 })
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        if (data.html) {
-          console.log(`Generated new HTML, length: ${data.html.length}`);
-          setWebsiteHtml(data.html);
-          return true;
-        }
-      }
-    } catch (error) {
-      console.error("Error generating website:", error);
-    }
-    
-    console.log("No HTML found and generation failed");
+    console.log("No HTML found in localStorage");
     return false;
   };
   
