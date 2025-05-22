@@ -25,7 +25,7 @@ export const websites = pgTable("websites", {
   description: text("description").notNull(),
   websiteJson: jsonb("website_json").notNull(),
   sectionOptions: jsonb("section_options"), // Store multiple section options for editing
-  generatedHtml: text("generated_html"), // Store the complete HTML website
+  generatedHtml: text("generatedhtml"), // Store the complete HTML website
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

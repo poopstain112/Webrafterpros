@@ -336,7 +336,7 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
   });
 
   // API endpoint to upload images - completely simplified version
-  app.post("/api/upload", upload.array("images", 20), async (req: Request, res: Response) => {
+  app.post("/api/upload", upload.array("images", 5), async (req: Request, res: Response) => {
     try {
       console.log("Upload request received");
       
