@@ -90,20 +90,23 @@ export default function SimpleChat() {
     setShowSocialMediaDialog(false);
   };
 
-  // Function to send message - simplified for better reliability
+  // Function to send message - with proper mobile keyboard handling
   const sendMessage = async () => {
     if (inputMessage.trim()) {
       const messageText = inputMessage.trim();
+      
+      // Keep reference to the textarea before clearing
+      const textarea = document.querySelector('textarea') as HTMLTextAreaElement;
+      
       setInputMessage("");
       await send(messageText);
       
-      // Keep keyboard open on mobile by refocusing
-      setTimeout(() => {
-        const textarea = document.querySelector('textarea') as HTMLTextAreaElement;
-        if (textarea) {
-          textarea.focus();
-        }
-      }, 100);
+      // Immediately refocus to keep keyboard open (modern app behavior)
+      if (textarea) {
+        textarea.focus();
+        // Ensure cursor is at the end
+        textarea.setSelectionRange(0, 0);
+      }
     }
   };
 
@@ -172,28 +175,8 @@ export default function SimpleChat() {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      // Store current state of textarea
-      const textarea = e.target as HTMLTextAreaElement;
-      if (textarea) {
-        // Save text position for refocusing
-        const position = textarea.selectionStart;
-        
-        // Process message
-        sendMessage();
-        
-        // Make sure the textarea stays in focus
-        setTimeout(() => {
-          textarea.focus();
-          try {
-            // Try to restore cursor position
-            textarea.setSelectionRange(position, position);
-          } catch (err) {
-            // Ignore errors in older browsers
-          }
-        }, 0);
-      } else {
-        sendMessage();
-      }
+      sendMessage();
+      // Focus handling is now in sendMessage function
     }
   };
 
