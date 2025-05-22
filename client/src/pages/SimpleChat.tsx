@@ -311,29 +311,27 @@ export default function SimpleChat() {
         <div ref={messagesEndRef}></div>
       </div>
 
-      {/* Message Input */}
-      <div className="border-t p-4 bg-gray-50">
-        <div className="relative bg-white rounded-2xl shadow-sm">
-          <input
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="w-full p-4 pr-16 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Type your message..."
-          />
-          
-          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center">
-            {/* Send Button - Now the only button in the input area */}
-            <button
-              onClick={sendMessage}
-              disabled={!inputMessage.trim()}
-              className="w-10 h-10 rounded-full flex items-center justify-center text-white transition-colors duration-200 shadow-sm"
-              style={{ backgroundColor: inputMessage.trim() ? '#2563eb' : '#d1d5db' }}
-            >
-              <Send className="h-5 w-5" />
-            </button>
+      {/* Message Input - Fixed like modern messaging apps */}
+      <div className="sticky bottom-0 bg-white border-t border-gray-200 p-3 safe-area-pb">
+        <div className="flex items-center gap-3 max-w-4xl mx-auto">
+          <div className="flex-1 relative">
+            <input
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="w-full px-4 py-3 bg-gray-100 rounded-full border-none focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 text-base"
+              placeholder="Type your message..."
+            />
           </div>
+          <button
+            onClick={sendMessage}
+            disabled={!inputMessage.trim()}
+            className="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all duration-200 shadow-md hover:shadow-lg"
+            style={{ backgroundColor: inputMessage.trim() ? '#2563eb' : '#d1d5db' }}
+          >
+            <Send className="h-5 w-5" />
+          </button>
         </div>
       </div>
       
