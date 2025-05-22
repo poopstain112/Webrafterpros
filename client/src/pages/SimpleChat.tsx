@@ -366,11 +366,9 @@ export default function SimpleChat() {
                 </div>
               )}
               
-              {/* Image Upload Button in Message - shown only for assistant messages about images */}
+              {/* Image Upload Button in Message - shown only for the FINAL question about uploading photos */}
               {message.role === "assistant" && 
-               (message.content.toLowerCase().includes("image") || 
-                message.content.toLowerCase().includes("photo") || 
-                message.content.toLowerCase().includes("picture")) && (
+               message.content.includes("Perfect! I have everything I need to create your professional website. Now please upload") && (
                 <div className="mt-3">
                   <label 
                     className="px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg flex items-center gap-2 transition-colors duration-200 cursor-pointer"
