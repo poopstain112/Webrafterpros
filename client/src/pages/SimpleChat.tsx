@@ -49,7 +49,7 @@ export default function SimpleChat() {
     scrollToBottom();
   }, [messages]);
 
-  // Load initial conversation
+  // Load initial conversation or start with chatbot greeting
   useEffect(() => {
     const loadConversation = async () => {
       try {
@@ -57,9 +57,28 @@ export default function SimpleChat() {
         if (response.ok) {
           const loadedMessages = await response.json();
           setMessages(loadedMessages);
+        } else {
+          // If we can't load messages, start with the chatbot greeting
+          const greetingMessage = {
+            id: 1,
+            role: "assistant",
+            content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nLet's create an extraordinary website that captures the essence of your business perfectly! First, what's your business name and what industry or field are you in? (For example: restaurant, tech startup, medical practice, specialty bar, consulting firm, retail store, etc.)",
+            websiteId: 1,
+            createdAt: new Date().toISOString(),
+          };
+          setMessages([greetingMessage]);
         }
       } catch (error) {
         console.error('Error loading conversation:', error);
+        // Start with greeting on error
+        const greetingMessage = {
+          id: 1,
+          role: "assistant",
+          content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nLet's create an extraordinary website that captures the essence of your business perfectly! First, what's your business name and what industry or field are you in? (For example: restaurant, tech startup, medical practice, specialty bar, consulting firm, retail store, etc.)",
+          websiteId: 1,
+          createdAt: new Date().toISOString(),
+        };
+        setMessages([greetingMessage]);
       }
     };
     
