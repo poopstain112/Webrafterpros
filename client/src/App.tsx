@@ -20,7 +20,7 @@ function App() {
         <WebsiteGenerationProvider>
           <SwipeableLayout>
             <Switch>
-              <Route path="/" component={ChatPage} />
+              <Route path="/" component={SimpleChat} />
               {/* Removed /upload route to skip that screen entirely */}
               <Route path="/generating-website" component={WebsiteLoadingScreen} />
               <Route path="/website-preview" component={WebsitePreviewScreen} />
