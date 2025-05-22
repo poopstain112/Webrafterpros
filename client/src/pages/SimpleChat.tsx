@@ -90,12 +90,21 @@ export default function SimpleChat() {
     setShowSocialMediaDialog(false);
   };
 
-  // Function to send message - simple and reliable
+  // Function to send message - keeps keyboard visible
   const sendMessage = async () => {
     if (inputMessage.trim()) {
       const messageText = inputMessage.trim();
+      const textarea = document.querySelector('textarea') as HTMLTextAreaElement;
+      
       setInputMessage("");
       await send(messageText);
+      
+      // Keep keyboard visible by immediately refocusing
+      if (textarea) {
+        setTimeout(() => {
+          textarea.focus();
+        }, 50);
+      }
     }
   };
 
