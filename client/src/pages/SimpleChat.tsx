@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import type { Message, Website } from "@shared/schema";
-import { WebsitePreview } from "@/components/WebsitePreview";
+import WebsitePreview from "@/components/WebsitePreview";
 
 interface UploadedImage {
   url: string;
