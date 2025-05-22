@@ -39,7 +39,7 @@ export type Website = typeof websites.$inferSelect;
 // Images schema for storing uploaded images
 export const images = pgTable("images", {
   id: serial("id").primaryKey(),
-  websiteId: serial("website_id").references(() => websites.id),
+  websiteId: integer("website_id").notNull().references(() => websites.id),
   filename: text("filename").notNull(),
   url: text("url").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -56,7 +56,7 @@ export type Image = typeof images.$inferSelect;
 // Message schema for storing chat messages
 export const messages = pgTable("messages", {
   id: serial("id").primaryKey(),
-  websiteId: serial("website_id").notNull().references(() => websites.id),
+  websiteId: integer("website_id").notNull().references(() => websites.id),
   content: text("content").notNull(),
   role: text("role").notNull(), // 'user' or 'assistant'
   createdAt: timestamp("created_at").defaultNow().notNull(),
