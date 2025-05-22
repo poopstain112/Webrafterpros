@@ -83,12 +83,7 @@ const WebsitePreviewScreen = () => {
           <Button 
             variant="outline" 
             size="sm"
-            onClick={() => {
-              const instructions = prompt("What would you like to change about the website?");
-              if (instructions) {
-                editWebsiteContent(instructions);
-              }
-            }}
+            onClick={() => setLocation('/edit-website')}
             className="text-blue-600 bg-white border-white hover:bg-blue-50 shadow-sm transition-all font-medium"
           >
             Edit Website
