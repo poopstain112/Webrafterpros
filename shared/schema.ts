@@ -1,4 +1,4 @@
-import { pgTable, text, serial, jsonb, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, jsonb, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -56,7 +56,7 @@ export type Image = typeof images.$inferSelect;
 // Message schema for storing chat messages
 export const messages = pgTable("messages", {
   id: serial("id").primaryKey(),
-  websiteId: serial("website_id").references(() => websites.id),
+  websiteId: serial("website_id").notNull().references(() => websites.id),
   content: text("content").notNull(),
   role: text("role").notNull(), // 'user' or 'assistant'
   createdAt: timestamp("created_at").defaultNow().notNull(),
