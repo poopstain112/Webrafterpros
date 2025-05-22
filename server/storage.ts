@@ -4,6 +4,8 @@ import {
   messages, type Message, type InsertMessage,
   images, type Image, type InsertImage
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 // Interface with CRUD methods for all entities
 export interface IStorage {
@@ -27,6 +29,70 @@ export interface IStorage {
   createImage(image: InsertImage): Promise<Image>;
 }
 
+export class DatabaseStorage implements IStorage {
+  // User methods
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db.insert(users).values(insertUser).returning();
+    return user;
+  }
+  
+  // Website methods
+  async getAllWebsites(): Promise<Website[]> {
+    return await db.select().from(websites);
+  }
+  
+  async getWebsite(id: number): Promise<Website | undefined> {
+    const [website] = await db.select().from(websites).where(eq(websites.id, id));
+    return website;
+  }
+  
+  async createWebsite(insertWebsite: InsertWebsite): Promise<Website> {
+    const [website] = await db.insert(websites).values(insertWebsite).returning();
+    return website;
+  }
+  
+  // Message methods
+  async getMessagesByWebsiteId(websiteId: number): Promise<Message[]> {
+    return await db.select()
+      .from(messages)
+      .where(eq(messages.websiteId, websiteId))
+      .orderBy(messages.createdAt);
+  }
+  
+  async createMessage(insertMessage: InsertMessage): Promise<Message> {
+    const [message] = await db.insert(messages).values(insertMessage).returning();
+    return message;
+  }
+  
+  async deleteMessagesByWebsiteId(websiteId: number): Promise<void> {
+    console.log(`RESET: Deleting all messages for website ID ${websiteId}`);
+    await db.delete(messages).where(eq(messages.websiteId, websiteId));
+  }
+  
+  // Image methods
+  async getImagesByWebsiteId(websiteId: number): Promise<Image[]> {
+    return await db.select()
+      .from(images)
+      .where(eq(images.websiteId, websiteId));
+  }
+  
+  async createImage(insertImage: InsertImage): Promise<Image> {
+    const [image] = await db.insert(images).values(insertImage).returning();
+    return image;
+  }
+}
+
+// Keep the MemStorage for now as a fallback but use DatabaseStorage
 export class MemStorage implements IStorage {
   // Made messages accessible so we can force-clear if needed
   users: Map<number, User>;
@@ -63,7 +129,7 @@ export class MemStorage implements IStorage {
           footer: {}
         }
       },
-      createdAt: new Date().toISOString()
+      createdAt: new Date()
     };
     this.websites.set(1, defaultWebsite);
   }
@@ -100,7 +166,7 @@ export class MemStorage implements IStorage {
     const website: Website = {
       ...insertWebsite,
       id,
-      createdAt: new Date().toISOString()
+      createdAt: new Date()
     };
     this.websites.set(id, website);
     return website;
@@ -122,7 +188,7 @@ export class MemStorage implements IStorage {
     const message: Message = {
       ...insertMessage,
       id,
-      createdAt: new Date().toISOString()
+      createdAt: new Date()
     };
     this.messages.set(id, message);
     return message;
@@ -151,11 +217,12 @@ export class MemStorage implements IStorage {
     const image: Image = {
       ...insertImage,
       id,
-      createdAt: new Date().toISOString()
+      createdAt: new Date()
     };
     this.images.set(id, image);
     return image;
   }
 }
 
-export const storage = new MemStorage();
+// Use DatabaseStorage for production
+export const storage = new DatabaseStorage();
