@@ -330,14 +330,20 @@ export default function SimpleChat() {
       <div className="sticky bottom-0 bg-white border-t border-gray-200 p-3 safe-area-pb">
         <div className="flex items-center gap-3 max-w-4xl mx-auto">
           <div className="flex-1 relative">
-            <input
+            <textarea
               id="chat-input"
-              type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full px-4 py-3 bg-gray-100 rounded-full border-none focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 text-base"
+              className="w-full px-4 py-3 bg-gray-100 rounded-2xl border-none focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 text-base resize-none min-h-[48px] max-h-32 overflow-y-auto"
               placeholder="Type your message..."
+              rows={1}
+              style={{ height: 'auto' }}
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = 'auto';
+                target.style.height = Math.min(target.scrollHeight, 128) + 'px';
+              }}
             />
           </div>
           <button
