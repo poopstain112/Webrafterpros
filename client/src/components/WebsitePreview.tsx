@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { X, ArrowLeft, RefreshCw, Facebook, Instagram, Twitter, Linkedin, Youtube } from 'lucide-react';
+import { X, ArrowLeft, RefreshCw, Facebook, Instagram, Twitter, Linkedin, Youtube, LayoutTemplate } from 'lucide-react';
 import { useLocation } from 'wouter';
 import SimplePullToRefresh from './SimplePullToRefresh';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import SectionEditor from './SectionEditor';
 
 interface WebsitePreviewProps {
   websiteStructure?: {
@@ -47,13 +48,13 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSocialMediaEditMode, setIsSocialMediaEditMode] = useState(false);
   const [isSectionEditMode, setIsSectionEditMode] = useState(false);
+  const [activeSectionName, setActiveSectionName] = useState<string | null>(null);
   const [editInstructions, setEditInstructions] = useState("");
   const [showRecommendation, setShowRecommendation] = useState(true);
   const [htmlContent, setHtmlContent] = useState('');
   const [cssContent, setCssContent] = useState('');
   const [recommendationText, setRecommendationText] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [activeSectionName, setActiveSectionName] = useState<string | null>(null);
   const [customSocialMedia, setCustomSocialMedia] = useState<any>({
     facebook: '',
     instagram: '',
