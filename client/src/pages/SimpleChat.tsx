@@ -109,12 +109,12 @@ export default function SimpleChat() {
         throw new Error('Failed to send message');
       }
 
-      const assistantMessage = await response.json();
+      const data = await response.json();
       
-      // Remove loading message and add real response
+      // Remove loading message and add both user and AI messages
       setMessages(prev => {
         const filtered = prev.filter(msg => !msg.isLoading);
-        return [...filtered, assistantMessage];
+        return [...filtered, data.aiMessage];
       });
 
     } catch (error) {
