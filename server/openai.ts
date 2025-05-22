@@ -1380,76 +1380,31 @@ export async function generateChatResponse(
       return "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\n" + BUSINESS_QUESTIONS[0];
     }
     
-    // PRIORITY: Check if we should be asking sequential questions
-    // Ensure we always alternate: assistant asks a question, user answers, then assistant asks next question
-    if (userMessageCount > assistantMessageCount && userMessageCount <= BUSINESS_QUESTIONS.length) {
-      // User just responded, so ask the next question
+    // PRIORITY: During question sequence, ONLY use approved questions
+    if (userMessageCount <= BUSINESS_QUESTIONS.length) {
       const nextQuestionIndex = userMessageCount - 1;
-      console.log(`User messages count: ${userMessageCount} Next question index: ${nextQuestionIndex}`);
-      console.log(`Question to return: ${BUSINESS_QUESTIONS[nextQuestionIndex]}`);
-      if (nextQuestionIndex < BUSINESS_QUESTIONS.length) {
-        console.log(`RETURNING APPROVED QUESTION: ${BUSINESS_QUESTIONS[nextQuestionIndex]}`);
+      console.log(`QUESTION SEQUENCE: User count ${userMessageCount}, Question index ${nextQuestionIndex}`);
+      
+      if (nextQuestionIndex >= 0 && nextQuestionIndex < BUSINESS_QUESTIONS.length) {
+        console.log(`RETURNING QUESTION: ${BUSINESS_QUESTIONS[nextQuestionIndex]}`);
         return BUSINESS_QUESTIONS[nextQuestionIndex];
       }
     }
 
-    // Check if we've just finished all the questions and should prompt for images
-    if (userMessageCount === BUSINESS_QUESTIONS.length + 1 && 
-        assistantMessageCount === BUSINESS_QUESTIONS.length) {
-      return "Thank you for providing all that information! Now, please upload some images for your website. " +
-             "High-quality images are essential for creating a premium website. " +
-             "Once you've uploaded your images, click the 'Create Website' button to see a preview.";
+    // After all questions, prompt for images
+    if (userMessageCount === BUSINESS_QUESTIONS.length + 1) {
+      return "Perfect! I have everything I need to create your professional website. Now please upload 1-5 high-quality photos of your work, location, or team so I can build a site that truly represents your business.";
     }
     
-    // Check if the previous message is from a user (we're responding to user input)
-    const isRespondingToUser = messages[messages.length - 1].role === "user";
+    // Only use OpenAI for post-question conversations
+    const systemPrompt = `You are a premium website design consultant. The user has completed the question sequence and you're now helping with final details or changes.`;
     
-    let systemPrompt = "";
-    
-    if (isRespondingToUser) {
-      // If we've gathered all business info and now the user is asking questions or requesting changes
-      if (userMessageCount > BUSINESS_QUESTIONS.length + 1) {
-        systemPrompt = `You are a premium website design consultant working with a client on their $20,000 custom website.
-        
-        The client might ask for design changes, request feature adjustments, or ask questions about their website.
-        
-        Respond with expertise and confidence, explaining how you'll implement any requested changes or answering
-        their questions thoughtfully. Always maintain a tone of luxury and exclusivity.
-        
-        If they request a change, acknowledge it and explain how you'll enhance their website with their feedback.
-        
-        Keep your responses concise, professional, and focused on helping them get the perfect website.`;
-      } else {
-        // We're still gathering business information, so enhance their answers into professional copy
-        systemPrompt = `You are a professional website consultant that helps users create premium, $20,000-caliber websites.
-        
-        Take the user's input and enhance it into compelling, professional website copy. 
-        Transform simple answers into polished, engaging content that could appear directly on a premium website.
-        
-        For example, if a user says "We sell shoes", you should respond with elegant marketing copy like:
-        "Perfect. I've refined that into: 'Discover unparalleled craftsmanship with our curated collection of luxury footwear. Each pair is meticulously designed to combine timeless elegance with modern comfort, ensuring you make a statement with every step.'"
-        
-        After acknowledging their input and providing your enhanced version, ask the NEXT QUESTION from the sequence.
-        This creates a guided interview flow where you're helping the user build their website one step at a time.`;
-      }
-    } else {
-      // Default chatbot behavior
-      systemPrompt = `You are a helpful AI assistant specializing in premium website creation. 
-        Provide concise yet valuable responses about creating high-end websites.
-        If asked about technical details, explain the sophisticated techniques used in modern web development.
-        Maintain a tone that reflects expertise in premium design and development.`;
-    }
-    
-    // Properly type the messages for OpenAI API
     const typedMessages = [
-      {
-        role: "system" as const,
-        content: systemPrompt
-      },
+      { role: "system" as const, content: systemPrompt },
       ...messages.map(msg => ({
         role: (msg.role === "user" || msg.role === "assistant" || msg.role === "system") 
           ? msg.role as "user" | "assistant" | "system" 
-          : "user" as const, // fallback to user if unknown role
+          : "user" as const,
         content: msg.content
       }))
     ];
@@ -1459,10 +1414,7 @@ export async function generateChatResponse(
       messages: typedMessages
     });
 
-    let responseContent = response.choices[0].message.content || "";
-    
-    // This logic is handled above - remove duplicate
-    return responseContent;
+    return response.choices[0].message.content || "";
   } catch (error: any) {
     console.error("OpenAI API error:", error);
     throw new Error(`Failed to generate chat response: ${error.message}`);
