@@ -62,7 +62,7 @@ export default function SimpleChat() {
           const greetingMessage = {
             id: 1,
             role: "assistant",
-            content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nLet's create an extraordinary website that captures the essence of your business perfectly! First, what's your business name and what industry or field are you in? (For example: restaurant, tech startup, medical practice, specialty bar, consulting firm, retail store, etc.)",
+            content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nFirst, tell me what type of business you have and we'll build from there. Are you in hospitality, services, retail, healthcare, or something else?",
             websiteId: 1,
             createdAt: new Date().toISOString(),
           };
@@ -74,7 +74,7 @@ export default function SimpleChat() {
         const greetingMessage = {
           id: 1,
           role: "assistant",
-          content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nLet's create an extraordinary website that captures the essence of your business perfectly! First, what's your business name and what industry or field are you in? (For example: restaurant, tech startup, medical practice, specialty bar, consulting firm, retail store, etc.)",
+          content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nFirst, tell me what type of business you have and we'll build from there. Are you in hospitality, services, retail, healthcare, or something else?",
           websiteId: 1,
           createdAt: new Date().toISOString(),
         };
@@ -248,7 +248,7 @@ export default function SimpleChat() {
       const greetingMessage = {
         id: 1,
         role: "assistant",
-        content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nLet's create an extraordinary website that captures the essence of your business perfectly! First, what's your business name and what industry or field are you in? (For example: restaurant, tech startup, medical practice, specialty bar, consulting firm, retail store, etc.)",
+        content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nFirst, tell me what type of business you have and we'll build from there. Are you in hospitality, services, retail, healthcare, or something else?",
         websiteId: 1,
         createdAt: new Date().toISOString(),
       };

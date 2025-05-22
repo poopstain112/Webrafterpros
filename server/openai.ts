@@ -1317,25 +1317,25 @@ In addition to the main website, for each major section (hero, about, services, 
 
 // Profound strategic questions that gather ALL essential information for perfect websites
 const BUSINESS_QUESTIONS = [
-  "Let's create an extraordinary website that captures the essence of your business perfectly! First, what's your business name and what industry or field are you in? (For example: restaurant, tech startup, medical practice, specialty bar, consulting firm, retail store, etc.)",
+  "Perfect! Now that I know what type of business we're designing for, what's your business name?",
   
-  "Now, tell me about your unique value proposition: What specific problem do you solve for your customers that no one else does? What's your signature approach, methodology, or concept that makes customers choose YOU over every competitor?",
+  "Great! Now help me understand what makes your business special. What's the main problem you solve for customers, and what's your unique approach that sets you apart from competitors?",
   
-  "Describe your ideal customer in vivid detail: What does their typical day look like? What challenges keep them up at night? What emotions do they feel before and after experiencing your business? What specific outcomes are they desperately seeking?",
+  "That's excellent. Who is your ideal customer? Paint me a picture - what do they do for work, what challenges are they facing, and what are they really hoping to achieve when they find your business?",
   
-  "What's your complete service or product offering? Don't just list what you do - explain the transformation you provide. What's the journey a customer takes with you from first contact to final result? Include any premium or signature offerings that showcase your expertise.",
+  "Now tell me about your services. What exactly do you offer, and more importantly, what's the experience like for your customers from start to finish? Do you have any signature services that really showcase your expertise?",
   
-  "What's your business location and service area? Are you local, regional, national, or global? Do customers come to you, do you go to them, or is it hybrid? This affects how we position your accessibility and reach.",
+  "Where are you located and what area do you serve? Do customers come to you, do you go to them, or both?",
   
-  "Tell me about your brand personality and customer experience: Are you luxury and exclusive? Friendly and approachable? Professional and authoritative? Fun and energetic? Describe the exact feeling you want visitors to have when they experience your brand.",
+  "What's the personality of your brand? Are you more professional and trustworthy, friendly and approachable, or maybe premium and exclusive? How do you want people to feel when they interact with your business?",
   
-  "What are your primary contact methods and business hours? Include phone, email, address, and any specific scheduling or booking information. Also, what's the best way for urgent vs. non-urgent inquiries?",
+  "What's the best way for customers to reach you? I'll need your phone number, email, address, and business hours. Also, do you prefer calls, texts, emails, or online booking?",
   
-  "Do you have any existing brand elements? This includes business colors, logo style preferences, taglines, or specific design aesthetics that represent your brand identity. If not, describe the visual style that would attract your ideal customers.",
+  "Do you have specific brand colors, a logo, or any design preferences? If not, what style would appeal to your ideal customers - modern and clean, warm and welcoming, bold and vibrant?",
   
-  "What specific call-to-action do you want visitors to take? Book a consultation? Make a purchase? Request a quote? Schedule a visit? Call immediately? This determines how we structure your entire website flow.",
+  "Finally, what's the main action you want website visitors to take? Call you immediately, book an appointment, request a quote, or something else?",
   
-  "Perfect! I now have everything needed to create your exceptional website. Please upload 1-5 high-quality images that represent your business (photos of your work, location, products, team, or customers enjoying your services). Then I'll generate a custom website that converts visitors into customers. Upload your images and let's create something amazing!"
+  "Perfect! I have everything I need to create your professional website. Now please upload 1-5 high-quality photos of your work, location, or team so I can build a site that truly represents your business."
 ];
 
 // Process user message and generate response
