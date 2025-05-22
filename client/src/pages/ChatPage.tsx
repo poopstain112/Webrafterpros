@@ -239,40 +239,7 @@ export default function ChatPage() {
         </div>
       )}
 
-      {/* Bottom navigation bar (only on mobile) */}
-      <div className="sm:hidden bg-white border-t border-gray-200 py-2 px-4 flex justify-center">
-        <div className="flex gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex-col text-xs"
-            onClick={() => navigate('/')}
-          >
-            <ArrowLeft className="h-5 w-5 mb-1" />
-            Home
-          </Button>
-          
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex-col text-xs text-blue-500 border-t-2 border-blue-500 rounded-none"
-          >
-            <MessageSquare className="h-5 w-5 mb-1" />
-            Chat
-          </Button>
-          
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex-col text-xs"
-            onClick={() => navigate('/website')}
-            disabled={uploadedImages.length === 0}
-          >
-            <LayoutTemplate className="h-5 w-5 mb-1" />
-            Website
-          </Button>
-        </div>
-      </div>
+
     </div>
   );
 }
