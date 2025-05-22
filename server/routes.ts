@@ -286,6 +286,36 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
         socialMedia
       );
       
+      // Store website with section options in the database
+      const existingWebsite = await storage.getWebsite(websiteId);
+      
+      if (existingWebsite) {
+        // Update existing website with new content including section options
+        const updatedWebsite = {
+          ...existingWebsite,
+          websiteJson: {
+            html: websiteContent.html,
+            css: websiteContent.css,
+            structure: websiteContent.structure || {},
+          },
+          sectionOptions: websiteContent.sectionOptions || {}
+        };
+        await storage.updateWebsite(updatedWebsite);
+      } else {
+        // Create a new website with section options
+        await storage.createWebsite({
+          name: businessType || "My Website",
+          userId: 1, // Default user ID
+          description: description,
+          websiteJson: {
+            html: websiteContent.html,
+            css: websiteContent.css,
+            structure: websiteContent.structure || {},
+          },
+          sectionOptions: websiteContent.sectionOptions || {}
+        });
+      }
+      
       console.log("Website generated successfully");
       res.json(websiteContent);
     } catch (error: any) {

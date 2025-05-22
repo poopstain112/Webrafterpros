@@ -128,6 +128,7 @@ export async function generateWebsiteContent(
   css: string;
   structure: any;
   recommendation: string;
+  sectionOptions?: any;
   industrySpecificFeatures?: string[];
   socialMedia?: {
     facebook?: string;

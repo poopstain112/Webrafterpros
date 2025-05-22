@@ -18,6 +18,7 @@ export interface IStorage {
   getAllWebsites(): Promise<Website[]>;
   getWebsite(id: number): Promise<Website | undefined>;
   createWebsite(website: InsertWebsite): Promise<Website>;
+  updateWebsite(website: Website): Promise<Website>;
   
   // Message methods
   getMessagesByWebsiteId(websiteId: number): Promise<Message[]>;
@@ -59,6 +60,16 @@ export class DatabaseStorage implements IStorage {
   async createWebsite(insertWebsite: InsertWebsite): Promise<Website> {
     const [website] = await db.insert(websites).values(insertWebsite).returning();
     return website;
+  }
+  
+  async updateWebsite(website: Website): Promise<Website> {
+    const { id, ...updateData } = website;
+    const [updatedWebsite] = await db
+      .update(websites)
+      .set(updateData)
+      .where(eq(websites.id, id))
+      .returning();
+    return updatedWebsite;
   }
   
   // Message methods
@@ -169,6 +180,11 @@ export class MemStorage implements IStorage {
       createdAt: new Date()
     };
     this.websites.set(id, website);
+    return website;
+  }
+  
+  async updateWebsite(website: Website): Promise<Website> {
+    this.websites.set(website.id, website);
     return website;
   }
   
