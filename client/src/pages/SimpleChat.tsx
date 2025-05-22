@@ -291,12 +291,24 @@ export default function SimpleChat() {
       const result = await response.json();
       setWebsiteStructure(result);
       
+      // Store the website data in localStorage for the preview page
+      if (result.html) {
+        localStorage.setItem('generatedWebsiteHTML', result.html);
+        localStorage.setItem('websiteGeneratedAt', new Date().toISOString());
+        console.log("Website HTML saved to localStorage for preview");
+      }
+      
       toast({
         title: "Website generated successfully!",
-        description: "Your custom website is ready to view.",
+        description: "Your custom website is ready to view. Redirecting...",
       });
       
-      setShowWebsitePreview(true);
+      // Redirect to the website preview page
+      setTimeout(() => {
+        console.log("Redirecting to website preview page");
+        window.location.href = '/website-preview';
+      }, 1000);
+      
     } catch (error) {
       console.error('Error generating website:', error);
       toast({
