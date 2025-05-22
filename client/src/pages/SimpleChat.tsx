@@ -189,12 +189,17 @@ export default function SimpleChat() {
       return;
     }
 
+    // Create a business description from the conversation
+    const businessInfo = extractBusinessInfo(messages);
+    const description = `${businessInfo.name || 'My Business'} - ${businessInfo.services || 'Professional services'} located in ${businessInfo.location || 'our area'}. ${businessInfo.uniqueSellingPoint || 'We provide exceptional service'} for ${businessInfo.targetCustomers || 'our customers'}.`;
+
     setIsGenerating(true);
     try {
       const response = await fetch('/api/generate-website', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          description,
           websiteId: 1,
           socialMedia,
         }),
