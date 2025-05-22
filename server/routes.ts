@@ -212,8 +212,16 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
       // Update the website in storage
       const website = await storage.getWebsite(websiteId);
       if (website) {
-        website.html = finalHtml;
-        await storage.createWebsite(website);
+        // Update the HTML in the website JSON
+        const websiteJson = website.websiteJson as any;
+        const updatedWebsite = {
+          ...website,
+          websiteJson: {
+            ...websiteJson,
+            html: finalHtml
+          }
+        };
+        await storage.updateWebsite(updatedWebsite);
       }
       
       // Add AI's response to message history
@@ -387,6 +395,80 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
       const images = await storage.getImagesByWebsiteId(websiteId);
       res.json(images);
     } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // API endpoint to switch section options
+  app.post("/api/websites/:id/switch-section", async (req: Request, res: Response) => {
+    try {
+      const websiteId = parseInt(req.params.id);
+      const { sectionName, optionIndex } = req.body;
+      
+      if (!sectionName || optionIndex === undefined) {
+        return res.status(400).json({ message: "Section name and option index are required" });
+      }
+      
+      // Get the current website
+      const website = await storage.getWebsite(websiteId);
+      if (!website) {
+        return res.status(404).json({ message: "Website not found" });
+      }
+      
+      // Get the section options
+      const sectionOptions = website.sectionOptions as any || {};
+      const websiteJson = website.websiteJson as any || {};
+      const originalHtml = websiteJson.html || '';
+      
+      // If we don't have options for this section, return an error
+      if (!sectionOptions[sectionName] || !Array.isArray(sectionOptions[sectionName]) || !sectionOptions[sectionName][optionIndex]) {
+        return res.status(400).json({ message: `No options available for section "${sectionName}" at index ${optionIndex}` });
+      }
+      
+      // Generate updated HTML using OpenAI that replaces the current section with the selected option
+      const { generateChatResponse } = await import("./openai");
+      
+      const chatMessage = {
+        role: "user",
+        content: `
+I need to update a specific section of my website HTML.
+
+Replace the "${sectionName}" section with option ${optionIndex + 1}.
+
+Here is the current HTML:
+\`\`\`html
+${originalHtml}
+\`\`\`
+
+Here is the replacement content for the "${sectionName}" section:
+\`\`\`html
+${JSON.stringify(sectionOptions[sectionName][optionIndex])}
+\`\`\`
+
+Please return the complete updated HTML with the new section in place. Do not include any explanations, only the HTML.
+`
+      };
+      
+      // Get updated HTML
+      const updatedHtml = await generateChatResponse([chatMessage], true);
+      
+      // Update website with new HTML
+      const updatedWebsite = {
+        ...website,
+        websiteJson: {
+          ...(websiteJson),
+          html: updatedHtml
+        }
+      };
+      
+      await storage.updateWebsite(updatedWebsite);
+      
+      res.json({
+        html: updatedHtml,
+        message: `Section "${sectionName}" updated to option ${optionIndex + 1}`
+      });
+    } catch (error: any) {
+      console.error("Error switching section option:", error);
       res.status(500).json({ message: error.message });
     }
   });

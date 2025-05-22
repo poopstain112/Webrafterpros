@@ -140,6 +140,13 @@ export class MemStorage implements IStorage {
           footer: {}
         }
       },
+      sectionOptions: {
+        hero: [{}, {}, {}],
+        about: [{}, {}, {}],
+        services: [{}, {}, {}],
+        testimonials: [{}, {}, {}],
+        contact: [{}, {}, {}]
+      },
       createdAt: new Date()
     };
     this.websites.set(1, defaultWebsite);

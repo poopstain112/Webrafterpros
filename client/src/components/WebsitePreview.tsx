@@ -14,6 +14,13 @@ interface WebsitePreviewProps {
     css: string;
     structure: any;
     recommendation?: string;
+    sectionOptions?: {
+      hero: any[];
+      about: any[];
+      services: any[];
+      testimonials: any[];
+      contact: any[];
+    };
     socialMedia?: {
       facebook?: string;
       instagram?: string;
@@ -39,12 +46,14 @@ interface WebsitePreviewProps {
 export default function WebsitePreview({ websiteStructure, onClose, onEdit, html, socialMediaLinks }: WebsitePreviewProps) {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSocialMediaEditMode, setIsSocialMediaEditMode] = useState(false);
+  const [isSectionEditMode, setIsSectionEditMode] = useState(false);
   const [editInstructions, setEditInstructions] = useState("");
   const [showRecommendation, setShowRecommendation] = useState(true);
   const [htmlContent, setHtmlContent] = useState('');
   const [cssContent, setCssContent] = useState('');
   const [recommendationText, setRecommendationText] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [activeSectionName, setActiveSectionName] = useState<string | null>(null);
   const [customSocialMedia, setCustomSocialMedia] = useState<any>({
     facebook: '',
     instagram: '',
