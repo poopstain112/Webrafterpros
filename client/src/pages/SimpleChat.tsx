@@ -161,15 +161,22 @@ export default function SimpleChat() {
     }
   };
 
-  // Smooth auto-scroll
+  // Smooth auto-scroll - improved for mobile
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'end' 
-      });
-    }
-  }, [messages]);
+    const scrollToBottom = () => {
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'end',
+          inline: 'nearest'
+        });
+      }
+    };
+    
+    // Small delay to ensure DOM is updated
+    const timer = setTimeout(scrollToBottom, 100);
+    return () => clearTimeout(timer);
+  }, [messages, isLoading]);
 
   // Enhanced keydown handler for better mobile experience
   const handleKeyDown = (e: React.KeyboardEvent) => {
