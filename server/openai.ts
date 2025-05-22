@@ -1315,19 +1315,27 @@ In addition to the main website, for each major section (hero, about, services, 
   }
 }
 
-// Business questions the chatbot will ask in sequence to gather information
+// Profound strategic questions that gather ALL essential information for perfect websites
 const BUSINESS_QUESTIONS = [
-  "What's the name of your business?",
-  "What type of business is this? (For example: restaurant, retail store, pet grooming, bar, consulting, etc.)",
-  "Where is your business located?",
-  "What specific products or services do you offer? Please be detailed about what makes your offering special.",
-  "What makes your business unique? What's your concept or special approach that sets you apart?",
-  "Who is your target audience? Describe your ideal customers in detail.",
-  "What's your business slogan or tagline (if you have one)?",
-  "What are your business hours?",
-  "What contact information should be on the website?",
-  "What are your primary business colors (if you have brand colors)?",
-  "Perfect! Now, please upload images for your website using the camera icon, and add any social media links using the social media icon below. Once you've uploaded your images, a 'Create Website' button will appear - click it to generate your professional website. The generation process takes about 45-60 seconds, so hang tight while we build your custom site!"
+  "Let's create an extraordinary website that captures the essence of your business perfectly! First, what's your business name and what industry or field are you in? (For example: restaurant, tech startup, medical practice, specialty bar, consulting firm, retail store, etc.)",
+  
+  "Now, tell me about your unique value proposition: What specific problem do you solve for your customers that no one else does? What's your signature approach, methodology, or concept that makes customers choose YOU over every competitor?",
+  
+  "Describe your ideal customer in vivid detail: What does their typical day look like? What challenges keep them up at night? What emotions do they feel before and after experiencing your business? What specific outcomes are they desperately seeking?",
+  
+  "What's your complete service or product offering? Don't just list what you do - explain the transformation you provide. What's the journey a customer takes with you from first contact to final result? Include any premium or signature offerings that showcase your expertise.",
+  
+  "What's your business location and service area? Are you local, regional, national, or global? Do customers come to you, do you go to them, or is it hybrid? This affects how we position your accessibility and reach.",
+  
+  "Tell me about your brand personality and customer experience: Are you luxury and exclusive? Friendly and approachable? Professional and authoritative? Fun and energetic? Describe the exact feeling you want visitors to have when they experience your brand.",
+  
+  "What are your primary contact methods and business hours? Include phone, email, address, and any specific scheduling or booking information. Also, what's the best way for urgent vs. non-urgent inquiries?",
+  
+  "Do you have any existing brand elements? This includes business colors, logo style preferences, taglines, or specific design aesthetics that represent your brand identity. If not, describe the visual style that would attract your ideal customers.",
+  
+  "What specific call-to-action do you want visitors to take? Book a consultation? Make a purchase? Request a quote? Schedule a visit? Call immediately? This determines how we structure your entire website flow.",
+  
+  "Perfect! I now have everything needed to create your exceptional website. Please upload 1-5 high-quality images that represent your business (photos of your work, location, products, team, or customers enjoying your services). Then I'll generate a custom website that converts visitors into customers. Upload your images and let's create something amazing!"
 ];
 
 // Process user message and generate response
