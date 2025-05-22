@@ -1382,10 +1382,13 @@ export async function generateChatResponse(
     
     // Check if we should be asking sequential questions
     // Ensure we always alternate: assistant asks a question, user answers, then assistant asks next question
-    if (userMessageCount === assistantMessageCount && userMessageCount <= BUSINESS_QUESTIONS.length) {
-      // We're in question-asking mode and it's time to ask the next question
-      // Return the next question in sequence
-      return BUSINESS_QUESTIONS[assistantMessageCount];
+    if (userMessageCount > assistantMessageCount && userMessageCount <= BUSINESS_QUESTIONS.length) {
+      // User just responded, so ask the next question
+      const nextQuestionIndex = userMessageCount - 1;
+      console.log(`User messages count: ${userMessageCount} Next question index: ${nextQuestionIndex}`);
+      if (nextQuestionIndex < BUSINESS_QUESTIONS.length) {
+        return BUSINESS_QUESTIONS[nextQuestionIndex];
+      }
     }
 
     // Check if we've just finished all the questions and should prompt for images
