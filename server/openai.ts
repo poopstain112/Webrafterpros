@@ -1151,6 +1151,8 @@ export async function generateWebsiteContent(
         {
           role: "system",
           content: `You are an award-winning frontend architect who creates revolutionary digital experiences for businesses across ALL industries. Your websites are taught in design schools worldwide and set new standards for digital excellence regardless of the business type.
+          
+In addition to the main website, for each major section (hero, about, services, testimonials, contact), generate 3 alternative versions with different styles, layouts, and content approaches. Structure these alternatives in a way that allows easy swapping between versions.
 
           YOUR TASK: Create a COMPLETE HTML FILE containing a professional business website. The output must begin with <!DOCTYPE html> and be fully functional when viewed in a browser.
           
@@ -1251,12 +1253,35 @@ export async function generateWebsiteContent(
 
     try {
       const result = JSON.parse(websiteResponse.choices[0].message.content || "{}");
+      
+      // Extract section options if they exist
+      const sectionOptions = result.sectionOptions || {
+        hero: [result.sections?.hero || {}],
+        about: [result.sections?.about || {}],
+        services: [result.sections?.services || {}],
+        testimonials: [result.sections?.testimonials || {}],
+        contact: [result.sections?.contact || {}]
+      };
+      
+      // If no section options were generated, create default placeholder options
+      Object.keys(sectionOptions).forEach(sectionKey => {
+        if (!Array.isArray(sectionOptions[sectionKey]) || sectionOptions[sectionKey].length === 0) {
+          sectionOptions[sectionKey] = [{}];
+        }
+        
+        // Ensure we have 3 options for each section
+        while (sectionOptions[sectionKey].length < 3) {
+          // Create empty placeholders that will be filled later when editing
+          sectionOptions[sectionKey].push({...sectionOptions[sectionKey][0]});
+        }
+      });
 
       return {
         html: result.html || "",
         css: result.css || "",
         structure: result.structure || {},
         recommendation: result.recommendation || "",
+        sectionOptions: sectionOptions
       };
     } catch (parseError) {
       console.error("Error parsing OpenAI response:", parseError);
@@ -1268,6 +1293,7 @@ export async function generateWebsiteContent(
         css: "",
         structure: {},
         recommendation: "An error occurred during website generation. Please try again or modify your description.",
+        sectionOptions: {}
       };
     }
   } catch (error: any) {

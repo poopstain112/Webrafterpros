@@ -24,6 +24,7 @@ export const websites = pgTable("websites", {
   userId: serial("user_id").references(() => users.id),
   description: text("description").notNull(),
   websiteJson: jsonb("website_json").notNull(),
+  sectionOptions: jsonb("section_options"), // Store multiple section options for editing
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
