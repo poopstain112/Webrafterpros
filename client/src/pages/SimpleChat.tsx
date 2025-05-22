@@ -166,11 +166,21 @@ export default function SimpleChat() {
     }
   };
 
-  // Auto-scroll to bottom when new messages arrive
+  // Enhanced auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    // Use requestAnimationFrame for better timing
+    const scrollToBottom = () => {
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'end'
+        });
+      }
+    };
+    
+    // Double scroll for reliability
+    setTimeout(scrollToBottom, 50);
+    setTimeout(scrollToBottom, 200);
   }, [messages]);
 
   // Enhanced keydown handler for better mobile experience
@@ -309,6 +319,7 @@ export default function SimpleChat() {
         <div className="flex items-center gap-3 max-w-4xl mx-auto">
           <div className="flex-1 relative">
             <input
+              id="chat-input"
               type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
