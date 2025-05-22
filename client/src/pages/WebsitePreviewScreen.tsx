@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 const WebsitePreviewScreen = () => {
   const [websiteHtml, setWebsiteHtml] = useState<string | null>(null);
   const [, setLocation] = useLocation();
-  const { socialMediaLinks } = useChat();
+  const { socialMediaLinks, editWebsiteContent } = useChat();
   const { toast } = useToast();
 
   // Safely load website HTML from localStorage
@@ -89,7 +89,11 @@ const WebsitePreviewScreen = () => {
       <div className="flex-1 bg-gray-100" style={{ height: 'calc(100vh - 56px)' }}>
         {websiteHtml ? (
           <MobilePullToRefresh onRefresh={handleRefresh}>
-            <WebsitePreview html={websiteHtml} socialMediaLinks={socialMediaLinks} />
+            <WebsitePreview 
+              html={websiteHtml} 
+              socialMediaLinks={socialMediaLinks}
+              onEdit={editWebsite}
+            />
           </MobilePullToRefresh>
         ) : (
           <div className="flex items-center justify-center h-full">
