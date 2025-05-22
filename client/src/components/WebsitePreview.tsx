@@ -59,21 +59,40 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
   
   // Load website content from props or localStorage
   useEffect(() => {
+    // Reset content first to prevent mixing old and new content
+    setHtmlContent('');
+    setCssContent('');
+    setRecommendationText('');
+    
     if (html) {
       // If direct HTML is provided
       setHtmlContent(html);
       setCssContent('');
+      console.log("WebsitePreview: Using directly provided HTML content");
     } else if (websiteStructure) {
       // Use passed website structure if available
       setHtmlContent(websiteStructure.html || '');
       setCssContent(websiteStructure.css || '');
       setRecommendationText(websiteStructure.recommendation || '');
+      console.log("WebsitePreview: Using provided website structure");
     } else {
       // Try to load from localStorage
       const storedHtml = localStorage.getItem('generatedWebsiteHTML');
-      if (storedHtml) {
-        setHtmlContent(storedHtml);
-        setCssContent(''); // No CSS in localStorage version
+      const generatedAt = localStorage.getItem('websiteGeneratedAt');
+      
+      if (storedHtml && generatedAt) {
+        const generationTime = new Date(generatedAt).getTime();
+        const now = new Date().getTime();
+        // Only use stored HTML if it was generated in the last hour
+        if (now - generationTime < 60 * 60 * 1000) {
+          console.log("WebsitePreview: Using recently stored HTML from localStorage");
+          setHtmlContent(storedHtml);
+          setCssContent(''); // No CSS in localStorage version
+        } else {
+          console.log("WebsitePreview: Stored HTML is too old, not using it");
+          localStorage.removeItem('generatedWebsiteHTML');
+          localStorage.removeItem('websiteGeneratedAt');
+        }
       } else {
         // Set default example website if nothing is found
         setHtmlContent(`
@@ -119,13 +138,47 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
   const handleRefresh = () => {
     setIsRefreshing(true);
     
+    // Clear current content to prevent mixing
+    setHtmlContent('');
+    setCssContent('');
+    
     // Re-fetch content from localStorage
     const storedHtml = localStorage.getItem('generatedWebsiteHTML');
-    if (storedHtml) {
-      setHtmlContent(storedHtml);
+    const generatedAt = localStorage.getItem('websiteGeneratedAt');
+    
+    if (storedHtml && generatedAt) {
+      const generationTime = new Date(generatedAt).getTime();
+      const now = new Date().getTime();
+      
+      // Only use stored HTML if it was generated in the last hour
+      if (now - generationTime < 60 * 60 * 1000) {
+        console.log("WebsitePreview (refresh): Using recently stored HTML from localStorage");
+        setHtmlContent(storedHtml);
+      } else {
+        console.log("WebsitePreview (refresh): Stored HTML is too old, clearing it");
+        localStorage.removeItem('generatedWebsiteHTML');
+        localStorage.removeItem('websiteGeneratedAt');
+        // Return to chat to generate a new website
+        toast({
+          title: 'Website data expired',
+          description: 'Your previous website data is no longer available. Please generate a new website.',
+        });
+        setTimeout(() => setLocation('/'), 1500);
+      }
+    } else if (websiteStructure) {
+      // If no localStorage but we have websiteStructure, reuse it
+      setHtmlContent(websiteStructure.html || '');
+      setCssContent(websiteStructure.css || '');
+    } else {
+      // If no content available, return to chat
+      toast({
+        title: 'No website data',
+        description: 'No website data found. Please generate a new website.',
+      });
+      setTimeout(() => setLocation('/'), 1500);
     }
     
-    // Simulate loading time
+    // Complete the refresh animation
     setTimeout(() => {
       setIsRefreshing(false);
     }, 1000);

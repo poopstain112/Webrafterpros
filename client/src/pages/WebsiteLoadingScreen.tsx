@@ -25,8 +25,12 @@ const WebsiteLoadingScreen: React.FC = () => {
     
     const generateWebsite = async () => {
       try {
-        // Reset any previous errors
+        // Reset any previous errors and clear any previous website data
         setError(null);
+        
+        // Clear any previous website data from localStorage
+        localStorage.removeItem('generatedWebsiteHTML');
+        localStorage.removeItem('websiteGeneratedAt');
         
         // Start the progress animation
         progressInterval = setInterval(() => {
