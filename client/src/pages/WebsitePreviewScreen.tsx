@@ -92,7 +92,7 @@ const WebsitePreviewScreen = () => {
             <WebsitePreview 
               html={websiteHtml} 
               socialMediaLinks={socialMediaLinks}
-              onEdit={editWebsite}
+              onEdit={(instructions) => editWebsiteContent(instructions)}
             />
           </MobilePullToRefresh>
         ) : (

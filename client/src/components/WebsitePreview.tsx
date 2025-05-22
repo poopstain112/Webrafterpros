@@ -24,7 +24,7 @@ interface WebsitePreviewProps {
     };
   };
   onClose?: () => void;
-  onEdit?: (instructions?: string, socialMedia?: any) => void;
+  onEdit?: (instructions: string, socialMedia?: any) => Promise<void>;
   html?: string;
   socialMediaLinks?: {
     facebook?: string;
@@ -187,7 +187,7 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
   // Process HTML content - if it's already a full HTML document, use it as is
   const processHtmlContent = () => {
     // Add JavaScript to make buttons functional
-    const makeButtonsFunctional = (html) => {
+    const makeButtonsFunctional = (html: string) => {
       // Create a temporary div to parse the HTML
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = html;
@@ -647,30 +647,15 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
       }
       
       if (editInstructions) {
-        // Call the API to edit the website
-        const response = await fetch('/api/edit-website', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            instructions: editInstructions,
-            html: htmlContent,
-            socialMedia: socialMediaLinks
-          }),
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to update website');
-        }
-        
-        // Get updated HTML
-        const result = await response.json();
-        
-        // Update localStorage with the new HTML
-        if (result && result.html) {
-          localStorage.setItem('generatedWebsiteHTML', result.html);
-          setHtmlContent(result.html);
+        // Use the onEdit prop from parent component if available
+        if (onEdit) {
+          await onEdit(editInstructions);
+          
+          // Reload the HTML content from localStorage after editing
+          const updatedHtml = localStorage.getItem('generatedWebsiteHTML');
+          if (updatedHtml) {
+            setHtmlContent(updatedHtml);
+          }
           
           // Show success message
           toast({
@@ -678,6 +663,39 @@ export default function WebsitePreview({ websiteStructure, onClose, onEdit, html
             description: `The ${editType.replace('-', ' ')} has been updated.`,
             duration: 3000,
           });
+        } else {
+          // Fallback to API call if onEdit is not provided
+          const response = await fetch('/api/edit-website', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              instructions: editInstructions,
+              html: htmlContent,
+              socialMedia: socialMediaLinks
+            }),
+          });
+          
+          if (!response.ok) {
+            throw new Error('Failed to update website');
+          }
+          
+          // Get updated HTML
+          const result = await response.json();
+          
+          // Update localStorage with the new HTML
+          if (result && result.html) {
+            localStorage.setItem('generatedWebsiteHTML', result.html);
+            setHtmlContent(result.html);
+            
+            // Show success message
+            toast({
+              title: "Success!",
+              description: `The ${editType.replace('-', ' ')} has been updated.`,
+              duration: 3000,
+            });
+          }
         }
       }
     } catch (error) {
