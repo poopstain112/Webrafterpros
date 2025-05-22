@@ -268,51 +268,38 @@ export default function SimpleChat() {
       return;
     }
 
-    // Create a business description from the conversation
-    const businessInfo = extractBusinessInfo(messages);
-    const description = `${businessInfo.name || 'My Business'} - ${businessInfo.services || 'Professional services'} located in ${businessInfo.location || 'our area'}. ${businessInfo.uniqueSellingPoint || 'We provide exceptional service'} for ${businessInfo.targetCustomers || 'our customers'}.`;
-
     setIsGenerating(true);
+    
     try {
+      // Get all the conversation data
+      const allMessages = messages.filter(m => m.role === 'user').map(m => m.content).join(' | ');
+      
+      console.log("Starting website generation with conversation data:", allMessages);
+      
+      // Simple API call - no complex logic
       const response = await fetch('/api/generate-website', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          description,
+          description: allMessages || "Professional business website",
           websiteId: 1,
-          socialMedia,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Website generation failed');
+        throw new Error('Failed to generate website');
       }
 
       const result = await response.json();
-      setWebsiteStructure(result);
+      console.log("Website generated successfully, redirecting...");
       
-      // Store the website data in localStorage for the preview page
-      if (result.html) {
-        localStorage.setItem('generatedWebsiteHTML', result.html);
-        localStorage.setItem('websiteGeneratedAt', new Date().toISOString());
-        console.log("Website HTML saved to localStorage for preview");
-      }
-      
-      toast({
-        title: "Website generated successfully!",
-        description: "Your custom website is ready to view. Redirecting...",
-      });
-      
-      // Redirect to the website preview page
-      setTimeout(() => {
-        console.log("Redirecting to website preview page");
-        window.location.href = '/website-preview';
-      }, 1000);
+      // Simple redirect - no delays, no localStorage complexity
+      window.location.href = '/website-preview';
       
     } catch (error) {
-      console.error('Error generating website:', error);
+      console.error('Website generation error:', error);
       toast({
-        title: "Generation failed",
+        title: "Generation failed", 
         description: "Please try again.",
         variant: "destructive",
       });
