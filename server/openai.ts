@@ -58,13 +58,13 @@ export async function generateWebsiteContent(
     
     console.log("Mapped image URLs:", mappedImages);
     
-    // Use backup images from Unsplash in case the uploaded images aren't available
+    // Use high-quality backup images from Unsplash in case the uploaded images aren't available
     const defaultImages = [
-      'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-      'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-      'https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-      'https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-      'https://images.unsplash.com/photo-1595814432025-409872c11f8e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+      'https://images.unsplash.com/photo-1568992687947-868a62a9f521?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=85',
+      'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=85',
+      'https://images.unsplash.com/photo-1606836576983-8b458e75221d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=85',
+      'https://images.unsplash.com/photo-1626897793786-c4b3d9d0cf93?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=85',
+      'https://images.unsplash.com/photo-1606857521015-7f9fcf423740?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=85'
     ];
     
     // Log image details for debugging
@@ -94,10 +94,12 @@ export async function generateWebsiteContent(
     }
     
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       line-height: 1.6;
-      color: #333;
-      background-color: #f9f9f9;
+      color: #1e293b;
+      background-color: #f8fafc;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     
     /* Typography */
@@ -229,23 +231,32 @@ export async function generateWebsiteContent(
     
     .btn {
       display: inline-block;
-      padding: 0.8rem 2rem;
-      border-radius: 50px;
+      padding: 0.85rem 2.25rem;
+      border-radius: 8px;
       text-decoration: none;
-      font-weight: 700;
-      transition: all 0.3s;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
       text-align: center;
+      box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
     }
     
     .btn-primary {
-      background-color: #fff;
-      color: #0d47a1;
+      background-color: #2563eb;
+      color: #fff;
+      border: none;
     }
     
     .btn-primary:hover {
-      background-color: #f1f1f1;
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      background-color: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(1px);
     }
     
     /* Services Section */
@@ -384,15 +395,25 @@ export async function generateWebsiteContent(
     }
     
     .btn-submit {
-      background-color: #0d47a1;
+      background-color: #2563eb;
       color: #fff;
       border: none;
       cursor: pointer;
       width: 100%;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
     
     .btn-submit:hover {
-      background-color: #0a3d8f;
+      background-color: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+    
+    .btn-submit:active {
+      transform: translateY(1px);
     }
     
     /* Footer */
