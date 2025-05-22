@@ -661,6 +661,7 @@ Please return the complete updated HTML with the new section in place. Do not in
       if (nextQuestionIndex >= 0 && nextQuestionIndex < BUSINESS_QUESTIONS.length) {
         // Get the next question directly from the array
         aiResponse = BUSINESS_QUESTIONS[nextQuestionIndex];
+        console.log(`USING QUESTION ${nextQuestionIndex}: ${aiResponse}`);
       } else if (nextQuestionIndex === BUSINESS_QUESTIONS.length) {
         // After final question, prompt for social media and then images with a cleaner message
         aiResponse = "Great! Now let's finalize your website. Please add your social media links and upload images using the buttons below.";
