@@ -28,6 +28,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import ChatMessages from "@/components/ChatMessages";
+import ChatInput from "@/components/ChatInput";
+import WebsiteControls from "@/components/WebsiteControls";
 
 export default function SimpleChat() {
   // Chat state
