@@ -119,6 +119,18 @@ export default function SimpleChat() {
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const files = Array.from(event.target.files);
+      
+      // Check if user selected more than 5 images
+      if (files.length > 5) {
+        toast({
+          variant: "destructive",
+          title: "Too many images",
+          description: "Please select only 5 images maximum. You selected " + files.length + " images.",
+        });
+        event.target.value = ""; // Reset the input
+        return;
+      }
+      
       try {
         await handleImageUpload(files);
         event.target.value = ""; // Reset the input
