@@ -90,23 +90,12 @@ export default function SimpleChat() {
     setShowSocialMediaDialog(false);
   };
 
-  // Function to send message - with proper mobile keyboard handling
+  // Function to send message - simple and reliable
   const sendMessage = async () => {
     if (inputMessage.trim()) {
       const messageText = inputMessage.trim();
-      
-      // Keep reference to the textarea before clearing
-      const textarea = document.querySelector('textarea') as HTMLTextAreaElement;
-      
       setInputMessage("");
       await send(messageText);
-      
-      // Immediately refocus to keep keyboard open (modern app behavior)
-      if (textarea) {
-        textarea.focus();
-        // Ensure cursor is at the end
-        textarea.setSelectionRange(0, 0);
-      }
     }
   };
 
@@ -161,22 +150,12 @@ export default function SimpleChat() {
     }
   };
 
-  // Smooth auto-scroll - improved for mobile
+  // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    const scrollToBottom = () => {
-      if (messagesEndRef.current) {
-        messagesEndRef.current.scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'end',
-          inline: 'nearest'
-        });
-      }
-    };
-    
-    // Small delay to ensure DOM is updated
-    const timer = setTimeout(scrollToBottom, 100);
-    return () => clearTimeout(timer);
-  }, [messages, isLoading]);
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
 
   // Enhanced keydown handler for better mobile experience
   const handleKeyDown = (e: React.KeyboardEvent) => {
