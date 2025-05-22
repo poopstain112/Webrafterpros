@@ -243,7 +243,17 @@ export default function SimpleChat() {
   const confirmReset = async () => {
     try {
       await fetch('/api/reset_all', { method: 'POST' });
-      setMessages([]);
+      
+      // Set the enhanced strategic greeting message
+      const greetingMessage = {
+        id: 1,
+        role: "assistant",
+        content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nLet's create an extraordinary website that captures the essence of your business perfectly! First, what's your business name and what industry or field are you in? (For example: restaurant, tech startup, medical practice, specialty bar, consulting firm, retail store, etc.)",
+        websiteId: 1,
+        createdAt: new Date().toISOString(),
+      };
+      
+      setMessages([greetingMessage]);
       setUploadedImages([]);
       setWebsiteStructure(null);
       setShowWebsitePreview(false);
