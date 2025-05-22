@@ -54,14 +54,6 @@ export default function ChatPage() {
     if (message.trim()) {
       sendMessage(message);
       setMessage('');
-      
-      // Keep keyboard open and input focused on mobile
-      setTimeout(() => {
-        const input = document.querySelector('input[type="text"]') as HTMLInputElement;
-        if (input) {
-          input.focus();
-        }
-      }, 100);
     }
   };
   
