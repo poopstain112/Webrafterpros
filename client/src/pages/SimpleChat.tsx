@@ -150,15 +150,12 @@ export default function SimpleChat() {
     }
   };
 
-  // Enhanced auto-scroll with proper performance considerations
+  // Smooth auto-scroll
   useEffect(() => {
     if (messagesEndRef.current) {
-      // Using RAF for better timing and smoother scrolling
-      requestAnimationFrame(() => {
-        messagesEndRef.current?.scrollIntoView({ 
-          behavior: 'instant', // Using instant for better responsiveness on mobile
-          block: 'end' 
-        });
+      messagesEndRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'end' 
       });
     }
   }, [messages]);
@@ -317,13 +314,13 @@ export default function SimpleChat() {
       {/* Message Input */}
       <div className="border-t p-4 bg-gray-50">
         <div className="relative bg-white rounded-2xl shadow-sm">
-          <textarea
+          <input
+            type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full p-4 pr-36 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 max-h-32 resize-none"
+            className="w-full p-4 pr-16 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Type your message..."
-            rows={1}
           />
           
           <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center">
