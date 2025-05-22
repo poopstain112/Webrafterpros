@@ -78,7 +78,20 @@ export default function SimpleChat() {
   // Mobile keyboard handling - scroll to input when keyboard appears
   const scrollToInput = () => {
     setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+      // More aggressive scrolling to ensure it fully bottoms out
+      messagesEndRef.current?.scrollIntoView({ 
+        behavior: "smooth", 
+        block: "end",
+        inline: "nearest" 
+      });
+      
+      // Additional fallback to ensure we get all the way to bottom
+      setTimeout(() => {
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: "smooth"
+        });
+      }, 100);
     }, 300); // Give keyboard time to appear
   };
 
