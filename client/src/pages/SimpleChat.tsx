@@ -90,38 +90,11 @@ export default function SimpleChat() {
     setShowSocialMediaDialog(false);
   };
 
-  // Function to send message with improved mobile keyboard handling
+  // Function to send message - simplified for better reliability
   const sendMessage = async () => {
     if (inputMessage.trim()) {
       const messageText = inputMessage.trim();
       setInputMessage("");
-      
-      // Keep keyboard open on mobile by maintaining focus with improved handling
-      // Using a more reliable approach for mobile devices
-      if (navigator.userAgent.match(/iPhone|iPad|iPod|Android/i)) {
-        // For mobile devices, use a more aggressive approach
-        const textarea = document.querySelector('textarea');
-        if (textarea) {
-          // Prevent blur event temporarily
-          textarea.addEventListener('blur', function preventBlur(e) {
-            e.preventDefault();
-            textarea.focus();
-            textarea.removeEventListener('blur', preventBlur);
-          });
-          
-          // Double ensure focus is maintained
-          requestAnimationFrame(() => {
-            textarea.focus();
-          });
-        }
-      } else {
-        // For desktop, a simple focus is sufficient
-        setTimeout(() => {
-          const textarea = document.querySelector('textarea');
-          if (textarea) textarea.focus();
-        }, 10);
-      }
-      
       await send(messageText);
     }
   };
