@@ -40,6 +40,36 @@ export default function SimpleChat() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // Function to extract business info from conversation messages
+  const extractBusinessInfo = (messages: any[]) => {
+    const businessInfo: any = {};
+    
+    // Simple pattern matching to extract key information
+    for (let i = 0; i < messages.length; i++) {
+      const message = messages[i];
+      const prevMessage = messages[i-1];
+      
+      if (message.role === "user" && prevMessage?.role === "assistant") {
+        const question = prevMessage.content.toLowerCase();
+        const answer = message.content;
+        
+        if (question.includes("business name")) {
+          businessInfo.name = answer;
+        } else if (question.includes("located") || question.includes("location")) {
+          businessInfo.location = answer;
+        } else if (question.includes("services") || question.includes("offer")) {
+          businessInfo.services = answer;
+        } else if (question.includes("unique") || question.includes("special")) {
+          businessInfo.uniqueSellingPoint = answer;
+        } else if (question.includes("ideal customer") || question.includes("target")) {
+          businessInfo.targetCustomers = answer;
+        }
+      }
+    }
+    
+    return businessInfo;
+  };
+
   // Auto-scroll to bottom when new messages arrive
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
