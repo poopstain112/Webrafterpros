@@ -538,11 +538,12 @@ Please return the complete updated HTML with the new section in place. Do not in
       // Completely reset all data in memory storage
       await storage.deleteMessagesByWebsiteId(websiteId);
       
-      // Reset default initial message
+      // Import centralized greeting and reset to initial message
+      const { INITIAL_GREETING } = await import("@shared/questions");
       const initialMessage = {
         websiteId: websiteId,
         role: "assistant",
-        content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nFirst, tell me what type of business you have and we'll build from there. Are you in hospitality, services, retail, healthcare, or something else?"
+        content: INITIAL_GREETING
       };
       
       await storage.createMessage(initialMessage);

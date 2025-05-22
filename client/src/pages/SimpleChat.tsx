@@ -49,40 +49,25 @@ export default function SimpleChat() {
     scrollToBottom();
   }, [messages]);
 
-  // Load initial conversation or start with chatbot greeting
+  // Always start fresh when page loads
   useEffect(() => {
-    const loadConversation = async () => {
+    const startFresh = async () => {
       try {
+        // Reset the conversation to start fresh
+        await fetch('/api/reset_all', { method: 'POST' });
+        
+        // Load the fresh initial message
         const response = await fetch('/api/websites/1/messages');
         if (response.ok) {
           const loadedMessages = await response.json();
           setMessages(loadedMessages);
-        } else {
-          // If we can't load messages, start with the chatbot greeting
-          const greetingMessage = {
-            id: 1,
-            role: "assistant",
-            content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nFirst, tell me what type of business you have and we'll build from there. Are you in hospitality, services, retail, healthcare, or something else?",
-            websiteId: 1,
-            createdAt: new Date().toISOString(),
-          };
-          setMessages([greetingMessage]);
         }
       } catch (error) {
-        console.error('Error loading conversation:', error);
-        // Start with greeting on error
-        const greetingMessage = {
-          id: 1,
-          role: "assistant",
-          content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nFirst, tell me what type of business you have and we'll build from there. Are you in hospitality, services, retail, healthcare, or something else?",
-          websiteId: 1,
-          createdAt: new Date().toISOString(),
-        };
-        setMessages([greetingMessage]);
+        console.error('Error starting fresh conversation:', error);
       }
     };
     
-    loadConversation();
+    startFresh();
   }, []);
 
   const sendMessage = async () => {
