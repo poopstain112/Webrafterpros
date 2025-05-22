@@ -1380,7 +1380,7 @@ export async function generateChatResponse(
       return "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\n" + BUSINESS_QUESTIONS[0];
     }
     
-    // Check if we should be asking sequential questions
+    // PRIORITY: Check if we should be asking sequential questions
     // Ensure we always alternate: assistant asks a question, user answers, then assistant asks next question
     if (userMessageCount > assistantMessageCount && userMessageCount <= BUSINESS_QUESTIONS.length) {
       // User just responded, so ask the next question
@@ -1388,6 +1388,7 @@ export async function generateChatResponse(
       console.log(`User messages count: ${userMessageCount} Next question index: ${nextQuestionIndex}`);
       console.log(`Question to return: ${BUSINESS_QUESTIONS[nextQuestionIndex]}`);
       if (nextQuestionIndex < BUSINESS_QUESTIONS.length) {
+        console.log(`RETURNING APPROVED QUESTION: ${BUSINESS_QUESTIONS[nextQuestionIndex]}`);
         return BUSINESS_QUESTIONS[nextQuestionIndex];
       }
     }
@@ -1460,19 +1461,7 @@ export async function generateChatResponse(
 
     let responseContent = response.choices[0].message.content || "";
     
-    // ALWAYS return just the next question with no additional commentary
-    // Completely ignore the GPT response and just send the next question directly
-    if (isRespondingToUser) {
-      // If we're within the question sequence, return the next question
-      if (assistantMessageCount < BUSINESS_QUESTIONS.length) {
-        return BUSINESS_QUESTIONS[assistantMessageCount];
-      } 
-      // If we've gone through all questions, prompt for social media and images
-      else if (assistantMessageCount === BUSINESS_QUESTIONS.length) {
-        return "Great! Now let's finalize your website. Please add your social media links and upload images using the buttons below.";
-      }
-    }
-
+    // This logic is handled above - remove duplicate
     return responseContent;
   } catch (error: any) {
     console.error("OpenAI API error:", error);
