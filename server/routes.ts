@@ -628,17 +628,18 @@ Please return the complete updated HTML with the new section in place. Do not in
         console.log("First generation message, proceeding normally");
       }
       
-      // Define the fixed sequence of business questions - JUST QUESTIONS, no paragraphs
+      // Define the approved sequence of business questions
       const BUSINESS_QUESTIONS = [
-        "What's the name of your business?",
-        "Where is your business located?",
-        "What products or services do you offer?",
-        "What makes your business unique compared to competitors?",
-        "Who is your ideal customer?",
-        "What's your business slogan or tagline (if you have one)?",
-        "What are your business hours?",
-        "What contact information should be on the website?",
-        "What are your primary business colors (if you have brand colors)?"
+        "Perfect! Now that I know what type of business we're designing for, what's your business name?",
+        "Great! Now help me understand what makes your business special. What's the main problem you solve for customers, and what's your unique approach that sets you apart from competitors?",
+        "That's excellent. Who is your ideal customer? Paint me a picture - what do they do for work, what challenges are they facing, and what are they really hoping to achieve when they find your business?",
+        "Now tell me about your services. What exactly do you offer, and more importantly, what's the experience like for your customers from start to finish? Do you have any signature services that really showcase your expertise?",
+        "Where are you located and what area do you serve? Do customers come to you, do you go to them, or both?",
+        "What's the personality of your brand? Are you more professional and trustworthy, friendly and approachable, or maybe premium and exclusive? How do you want people to feel when they interact with your business?",
+        "What's the best way for customers to reach you? I'll need your phone number, email, address, and business hours. Also, do you prefer calls, texts, emails, or online booking?",
+        "Do you have specific brand colors, a logo, or any design preferences? If not, what style would appeal to your ideal customers - modern and clean, warm and welcoming, bold and vibrant?",
+        "Finally, what's the main action you want website visitors to take? Call you immediately, book an appointment, request a quote, or something else?",
+        "Perfect! I have everything I need to create your professional website. Now please upload 1-5 high-quality photos of your work, location, or team so I can build a site that truly represents your business."
       ];
       
       // Simple solution - count the number of user messages (excluding the current one)
@@ -647,7 +648,7 @@ Please return the complete updated HTML with the new section in place. Do not in
       
       // We're on the nth question (0-indexed), where n is the number of user messages we've seen
       // Since we just added a user message, we want to use that index to get the next question
-      const nextQuestionIndex = userMessagesCount;
+      const nextQuestionIndex = userMessagesCount - 1;
       
       // Print helpful debug information
       console.log("All messages:", allMessages.map(m => ({ role: m.role, content: m.content.substring(0, 30) })));
