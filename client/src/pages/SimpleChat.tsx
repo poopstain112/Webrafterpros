@@ -69,7 +69,7 @@ export default function SimpleChat() {
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
 
-    const userMessage: Message = {
+    const userMessage: any = {
       id: Date.now(),
       websiteId: 1,
       role: "user",
@@ -81,7 +81,7 @@ export default function SimpleChat() {
     setInputMessage("");
 
     // Add loading message
-    const loadingMessage: Message = {
+    const loadingMessage: any = {
       id: Date.now() + 1,
       websiteId: 1,
       role: "assistant",
