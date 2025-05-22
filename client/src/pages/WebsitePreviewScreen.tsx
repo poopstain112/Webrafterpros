@@ -100,15 +100,30 @@ const WebsitePreviewScreen = () => {
           </h1>
         </div>
         
-        <Button 
-          variant="outline" 
-          size="sm"
-          onClick={handleBackToChat}
-          className="text-blue-600 bg-white border-white hover:bg-blue-50 shadow-sm transition-all font-medium"
-        >
-          <Home className="h-4 w-4 mr-1.5" />
-          Back to Chat
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => {
+              const instructions = prompt("What would you like to change about the website?");
+              if (instructions) {
+                editWebsiteContent(instructions);
+              }
+            }}
+            className="text-blue-600 bg-white border-white hover:bg-blue-50 shadow-sm transition-all font-medium"
+          >
+            Edit Website
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={handleBackToChat}
+            className="text-blue-600 bg-white border-white hover:bg-blue-50 shadow-sm transition-all font-medium"
+          >
+            <Home className="h-4 w-4 mr-1.5" />
+            Back to Chat
+          </Button>
+        </div>
       </div>
       
       {/* Website Preview with pull-to-refresh */}
