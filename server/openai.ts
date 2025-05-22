@@ -1386,6 +1386,7 @@ export async function generateChatResponse(
       // User just responded, so ask the next question
       const nextQuestionIndex = userMessageCount - 1;
       console.log(`User messages count: ${userMessageCount} Next question index: ${nextQuestionIndex}`);
+      console.log(`Question to return: ${BUSINESS_QUESTIONS[nextQuestionIndex]}`);
       if (nextQuestionIndex < BUSINESS_QUESTIONS.length) {
         return BUSINESS_QUESTIONS[nextQuestionIndex];
       }
