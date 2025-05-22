@@ -1375,12 +1375,17 @@ export async function generateChatResponse(
     const userMessageCount = messages.filter(m => m.role === "user").length;
     const assistantMessageCount = messages.filter(m => m.role === "assistant").length;
     
+    // If this is the very first message (no messages yet), start the conversation
+    if (messages.length === 0 || (userMessageCount === 0 && assistantMessageCount === 0)) {
+      return "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\n" + BUSINESS_QUESTIONS[0];
+    }
+    
     // Check if we should be asking sequential questions
     // Ensure we always alternate: assistant asks a question, user answers, then assistant asks next question
     if (userMessageCount === assistantMessageCount && userMessageCount <= BUSINESS_QUESTIONS.length) {
       // We're in question-asking mode and it's time to ask the next question
       // Return the next question in sequence
-      return BUSINESS_QUESTIONS[assistantMessageCount - 1];
+      return BUSINESS_QUESTIONS[assistantMessageCount];
     }
 
     // Check if we've just finished all the questions and should prompt for images
