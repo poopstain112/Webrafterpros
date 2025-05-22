@@ -95,20 +95,21 @@ export default function SimpleChat() {
     if (inputMessage.trim()) {
       const messageText = inputMessage.trim();
       
-      // Keep focus before clearing input
-      const textarea = document.querySelector('textarea') as HTMLTextAreaElement;
+      // Keep focus before clearing input - find the actual input field
+      const inputField = document.querySelector('#chat-input') as HTMLInputElement;
       
       // Send message while keeping focus
       await send(messageText);
       setInputMessage("");
       
       // Force focus to stay - this is the key for mobile
-      if (textarea) {
-        textarea.focus();
+      if (inputField) {
+        inputField.focus();
         // Prevent the browser from hiding keyboard
-        textarea.style.transform = "translateZ(0)";
+        inputField.style.transform = "translateZ(0)";
         setTimeout(() => {
-          textarea.style.transform = "";
+          inputField.style.transform = "";
+          inputField.focus(); // Double focus for mobile
         }, 100);
       }
     }
