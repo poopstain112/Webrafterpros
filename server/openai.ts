@@ -3,6 +3,113 @@ import OpenAI from "openai";
 // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
 
+// Function to get business-specific content based on business type
+function getBusinessSpecificContent(businessType: string) {
+  const businessTypes = {
+    'car dealership': {
+      heroTitle: 'Quality Vehicles at Competitive Prices',
+      heroDescription: 'Discover our extensive selection of quality vehicles. We offer competitive pricing, financing options, and exceptional customer service to help you find your perfect match.',
+      ctaText: 'View Inventory',
+      services: [
+        {
+          title: 'Vehicle Sales',
+          description: 'Browse our extensive inventory of quality vehicles. Each one undergoes thorough inspection to ensure reliability and performance.',
+          cta: 'Browse Inventory'
+        },
+        {
+          title: 'Financing Options',
+          description: 'We offer competitive financing options to fit your budget. Our finance team works with multiple lenders to find the best rates and terms for your situation.',
+          cta: 'Apply Today'
+        },
+        {
+          title: 'Service Department',
+          description: 'Our certified technicians provide quality maintenance and repair services to keep your vehicle running smoothly. From oil changes to major repairs, we have got you covered.',
+          cta: 'Schedule Service'
+        }
+      ]
+    },
+    'restaurant': {
+      heroTitle: 'Exceptional Dining Experience',
+      heroDescription: 'Enjoy our carefully crafted menu featuring fresh, locally-sourced ingredients. Our passionate chefs create memorable dishes in a welcoming atmosphere.',
+      ctaText: 'View Menu',
+      services: [
+        {
+          title: 'Signature Dishes',
+          description: 'Explore our selection of chef-crafted signature dishes prepared with the finest ingredients and culinary expertise.',
+          cta: 'View Menu'
+        },
+        {
+          title: 'Catering Services',
+          description: 'Let us cater your next event with our customized menu options. From corporate events to private parties, we deliver exceptional food and service.',
+          cta: 'Get Quote'
+        },
+        {
+          title: 'Private Dining',
+          description: 'Host your special occasion in our elegant private dining areas. Perfect for celebrations, business meetings, and intimate gatherings.',
+          cta: 'Reserve Now'
+        }
+      ]
+    },
+    'salon': {
+      heroTitle: 'Exceptional Beauty & Styling Services',
+      heroDescription: 'Experience professional hair and beauty services that help you look and feel your best. Our skilled stylists deliver personalized care in a relaxing environment.',
+      ctaText: 'Book Appointment',
+      services: [
+        {
+          title: 'Hair Styling',
+          description: 'From trendy cuts to elegant styles, our experienced stylists create the perfect look tailored to your preferences and hair type.',
+          cta: 'See Styles'
+        },
+        {
+          title: 'Color Services',
+          description: 'Transform your look with our premium color services. Our colorists are experts in techniques from subtle highlights to bold transformations.',
+          cta: 'Learn More'
+        },
+        {
+          title: 'Spa Treatments',
+          description: 'Indulge in our rejuvenating spa treatments designed to help you relax, refresh, and renew with professional products and techniques.',
+          cta: 'View Services'
+        }
+      ]
+    }
+  };
+  
+  // Default content for any business type not specifically defined
+  const defaultContent = {
+    heroTitle: 'Professional Services Tailored to Your Needs',
+    heroDescription: 'We provide high-quality services designed to meet your specific requirements. Our experienced team delivers exceptional results with personalized attention.',
+    ctaText: 'Learn More',
+    services: [
+      {
+        title: 'Primary Service',
+        description: 'Our core service offering designed to meet your essential needs with professional expertise and attention to detail.',
+        cta: 'Learn More'
+      },
+      {
+        title: 'Secondary Service',
+        description: 'Our complementary service that enhances our primary offering, providing additional value and solutions for more specialized requirements.',
+        cta: 'Discover'
+      },
+      {
+        title: 'Premium Service',
+        description: 'Our top-tier offering designed for clients with advanced needs, providing comprehensive solutions with exceptional attention to detail.',
+        cta: 'Get Started'
+      }
+    ]
+  };
+  
+  // Check if the business type is one of our predefined types
+  const normalizedType = businessType.toLowerCase().trim();
+  for (const [type, content] of Object.entries(businessTypes)) {
+    if (normalizedType.includes(type)) {
+      return content;
+    }
+  }
+  
+  // Return default content if no specific business type is matched
+  return defaultContent;
+}
+
 // Process website descriptions and generate website content
 export async function generateWebsiteContent(
   description: string,
@@ -31,6 +138,9 @@ export async function generateWebsiteContent(
     tiktok?: string;
   };
 }> {
+  // Determine business-specific content based on business type
+  const businessSpecificContent = getBusinessSpecificContent(businessType || '');
+  
   console.log("Generating website with images:", imageUrls);
   
   // Create a professional business website with minimal customization options
@@ -609,9 +719,9 @@ export async function generateWebsiteContent(
   <section class="hero">
     <div class="container">
       <div class="hero-content">
-        <h1>${description.split("|")[1] || (businessType === 'car dealership' ? "Quality Used Cars at Affordable Prices" : "Premier Business Services")}</h1>
-        <p>${description.split("|")[2] || (businessType === 'car dealership' ? "Discover our selection of quality pre-owned vehicles. We offer competitive pricing, financing options, and exceptional customer service to help you find the perfect car." : "We provide expert services tailored to your specific needs. From basic options to premium solutions, we treat every customer with professionalism and care.")}</p>
-        <a href="#contact" class="btn btn-primary">${businessType === 'car dealership' ? 'View Our Inventory' : 'Book An Appointment'}</a>
+        <h1>${description.split("|")[1] || businessSpecificContent.heroTitle}</h1>
+        <p>${description.split("|")[2] || businessSpecificContent.heroDescription}</p>
+        <a href="#contact" class="btn btn-primary">${businessSpecificContent.ctaText}</a>
       </div>
     </div>
   </section>
@@ -627,25 +737,25 @@ export async function generateWebsiteContent(
         <div class="service-card">
           <img src="${serviceImage1}" alt="Primary Service" onerror="this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>${businessType === 'car dealership' ? 'Used Vehicles' : 'Primary Service'}</h3>
-            <p>${businessType === 'car dealership' ? 'Browse our extensive inventory of quality used cars, trucks, and SUVs. Each vehicle undergoes thorough inspection to ensure reliability and performance.' : 'Our core service offering designed to meet your essential needs with professional expertise and attention to detail.'}</p>
-            <a href="#contact" class="btn btn-primary">${businessType === 'car dealership' ? 'View Inventory' : 'Learn More'}</a>
+            <h3>${businessSpecificContent.services[0].title}</h3>
+            <p>${businessSpecificContent.services[0].description}</p>
+            <a href="#contact" class="btn btn-primary">${businessSpecificContent.services[0].cta}</a>
           </div>
         </div>
         <div class="service-card">
-          <img src="${serviceImage2}" alt="${businessType === 'car dealership' ? 'Financing Options' : 'Secondary Service'}" onerror="this.src='https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${serviceImage2}" alt="${businessSpecificContent.services[1].title}" onerror="this.src='https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>${businessType === 'car dealership' ? 'Financing Options' : 'Secondary Service'}</h3>
-            <p>${businessType === 'car dealership' ? 'We offer competitive financing options to fit your budget. Our finance team works with multiple lenders to find the best rates and terms for your situation.' : 'Our complementary service that enhances our primary offering, providing additional value and solutions for more specialized requirements.'}</p>
-            <a href="#contact" class="btn btn-primary">${businessType === 'car dealership' ? 'Apply Today' : 'Learn More'}</a>
+            <h3>${businessSpecificContent.services[1].title}</h3>
+            <p>${businessSpecificContent.services[1].description}</p>
+            <a href="#contact" class="btn btn-primary">${businessSpecificContent.services[1].cta}</a>
           </div>
         </div>
         <div class="service-card">
-          <img src="${serviceImage3}" alt="${businessType === 'car dealership' ? 'Vehicle Service' : 'Premium Service'}" onerror="this.src='https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${serviceImage3}" alt="${businessSpecificContent.services[2].title}" onerror="this.src='https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>${businessType === 'car dealership' ? 'Vehicle Service' : 'Premium Service'}</h3>
-            <p>${businessType === 'car dealership' ? 'Our certified technicians provide quality maintenance and repair services to keep your vehicle running smoothly. From oil changes to major repairs, we have got you covered.' : 'Our top-tier offering designed for clients with advanced needs, providing comprehensive solutions with exceptional attention to detail.'}</p>
-            <a href="#contact" class="btn btn-primary">Learn More</a>
+            <h3>${businessSpecificContent.services[2].title}</h3>
+            <p>${businessSpecificContent.services[2].description}</p>
+            <a href="#contact" class="btn btn-primary">${businessSpecificContent.services[2].cta}</a>
           </div>
         </div>
       </div>
