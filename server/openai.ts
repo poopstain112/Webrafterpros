@@ -915,11 +915,18 @@ export async function generateWebsiteContent(
           
           SECONDARY GOAL: For certain fields like uniqueSellingPoints and businessDescription, craft a more polished, professional version while maintaining 100% factual accuracy to what was provided.
           
+          CRITICAL: Pay special attention to unique business concepts like:
+          - Specialty bars (puppy bars, cat cafes, themed establishments)
+          - Entertainment venues with unique concepts
+          - Hybrid businesses that combine multiple concepts
+          
+          When you see terms like "bar" in the business name, recognize it as a hospitality/entertainment establishment, not a service business.
+          
           Return a JSON object with the following structure:
           {
             "businessName": "The exact business name as provided",
-            "businessType": "The type of business (Restaurant, E-commerce, Professional Services, etc.)",
-            "industry": "The specific industry the business operates in",
+            "businessType": "The specific type of establishment (Bar, Restaurant, Retail Store, Pet Bar, Entertainment Venue, etc.)",
+            "industry": "The specific industry (Hospitality, Entertainment, Pet Services, etc.)",
             "location": "The specific business location",
             "services": ["Service 1", "Service 2"],
             "products": ["Product 1", "Product 2"],
@@ -1062,7 +1069,9 @@ export async function generateWebsiteContent(
           - Professional Services: Emphasize expertise, process, and client outcomes
           - Healthcare: Highlight care quality, patient experience, and wellness outcomes
           - Technology: Showcase innovation, efficiency, and competitive advantages
-          - Hospitality: Describe experiences, amenities, and ambiance
+          - Hospitality/Bars/Restaurants: Describe atmosphere, drinks/food, social experience, and unique venue concept
+          - Entertainment Venues: Focus on the experience, entertainment value, and social atmosphere
+          - Specialty Concepts (Pet Bars, Cat Cafes): Emphasize the unique concept, target audience, and distinctive experience
           - Education: Feature learning outcomes, teaching approach, and student success
           
           CRITICALLY IMPORTANT:
@@ -1077,6 +1086,9 @@ export async function generateWebsiteContent(
           
           While a bakery might need warm, sensory-rich descriptions:
           "Each morning at Wheatfield Bakery begins at 3 AM, when our artisans hand-mix organic heritage grains into doughs that will rise slowly, developing complex flavors and that perfect contrast between crackling crust and pillowy interior that only traditional methods can achieve."
+          
+          And a specialty bar might need vibrant, experience-focused language:
+          "Step into Savannah's Puppy Bar, where tail-wagging meets cocktail shaking in Daytona Beach's most unique social experience. Our specially crafted 'stiff drinks for pets' and welcoming atmosphere create the perfect playground for furry friends and their humans to unwind together."
           
           Return your content as a JSON object with the following structure:
           {
