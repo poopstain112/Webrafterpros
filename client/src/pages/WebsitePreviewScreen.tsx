@@ -13,16 +13,21 @@ const WebsitePreviewScreen = () => {
   const { socialMediaLinks, editWebsiteContent } = useChat();
   const { toast } = useToast();
 
-  // Safely load website HTML from localStorage
+  // Load website HTML from localStorage with multiple key attempts
   const loadWebsiteHTML = () => {
-    const storedHtml = localStorage.getItem('generatedWebsiteHTML');
-    console.log("WebsitePreviewScreen: Checking for stored HTML", 
-      storedHtml ? `HTML found, length: ${storedHtml.length}` : "No HTML found");
+    // Try multiple possible storage keys
+    const possibleKeys = ['generatedWebsiteHTML', 'websiteHtml', 'enhancedHTML'];
     
-    if (storedHtml) {
-      setWebsiteHtml(storedHtml);
-      return true;
+    for (const key of possibleKeys) {
+      const storedHtml = localStorage.getItem(key);
+      if (storedHtml) {
+        console.log(`Found HTML with key: ${key}, length: ${storedHtml.length}`);
+        setWebsiteHtml(storedHtml);
+        return true;
+      }
     }
+    
+    console.log("No HTML found in localStorage with any key");
     return false;
   };
   
