@@ -96,6 +96,14 @@ export default function SimpleChat() {
       const messageText = inputMessage.trim();
       setInputMessage("");
       await send(messageText);
+      
+      // Keep keyboard open on mobile by refocusing
+      setTimeout(() => {
+        const textarea = document.querySelector('textarea') as HTMLTextAreaElement;
+        if (textarea) {
+          textarea.focus();
+        }
+      }, 100);
     }
   };
 
