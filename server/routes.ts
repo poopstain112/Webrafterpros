@@ -542,7 +542,7 @@ Please return the complete updated HTML with the new section in place. Do not in
       const initialMessage = {
         websiteId: websiteId,
         role: "assistant",
-        content: "What's the name of your business?"
+        content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nLet's create an extraordinary website that captures the essence of your business perfectly! First, what's your business name and what industry or field are you in? (For example: restaurant, tech startup, medical practice, specialty bar, consulting firm, retail store, etc.)"
       };
       
       await storage.createMessage(initialMessage);
