@@ -128,25 +128,21 @@ export default function SimpleChat() {
     };
   }, []);
 
-  // Always start fresh when page loads
+  // Load existing messages when page loads (no auto-reset)
   useEffect(() => {
-    const startFresh = async () => {
+    const loadMessages = async () => {
       try {
-        // Reset the conversation to start fresh
-        await fetch('/api/reset_all', { method: 'POST' });
-        
-        // Load the fresh initial message
         const response = await fetch('/api/websites/1/messages');
         if (response.ok) {
           const loadedMessages = await response.json();
           setMessages(loadedMessages);
         }
       } catch (error) {
-        console.error('Error starting fresh conversation:', error);
+        console.error('Error loading messages:', error);
       }
     };
-    
-    startFresh();
+
+    loadMessages();
   }, []);
 
   const sendMessage = async () => {
