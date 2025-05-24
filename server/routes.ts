@@ -55,6 +55,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Direct access to generated website HTML
+  app.get("/website-view", async (req: Request, res: Response) => {
+    try {
+      const website = await storage.getWebsite(1);
+      if (!website || !website.content) {
+        return res.send(`
+          <html>
+            <body style="font-family: Arial; padding: 40px; text-align: center;">
+              <h2>No website generated yet</h2>
+              <p>Please generate a website first through the chat interface.</p>
+              <a href="/" style="color: blue;">← Back to Chat</a>
+            </body>
+          </html>
+        `);
+      }
+      res.send(website.content);
+    } catch (error) {
+      res.status(500).send("Error loading website");
+    }
+  });
+
   // API endpoint to get a single website
   app.get("/api/websites/:id", async (req: Request, res: Response) => {
     try {
