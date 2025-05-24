@@ -16,7 +16,7 @@ export const BUSINESS_QUESTIONS = [
   
   "What's the best way for customers to reach you? I'll need your phone number, email, address, and business hours. Also, do you prefer calls, texts, emails, or online booking?",
   
-  "Do you have specific brand colors, a logo, or any design preferences? If not, what style would appeal to your ideal customers - modern and clean, warm and welcoming, bold and vibrant?",
+  "Do you have specific brand colors or design preferences? What style would appeal to your ideal customers - modern and clean, warm and welcoming, bold and vibrant?",
   
   "Finally, what's the main action you want website visitors to take? Call you immediately, book an appointment, request a quote, or something else?",
   
