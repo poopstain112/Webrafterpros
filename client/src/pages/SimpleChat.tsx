@@ -567,10 +567,32 @@ export default function SimpleChat() {
                   if (response.ok) {
                     const uploadedImages = await response.json();
                     console.log('Upload successful:', uploadedImages);
-                    alert(`Successfully uploaded ${files.length} images!`);
                     
-                    // Generate website immediately
-                    handleGenerateWebsite();
+                    // Generate website immediately and redirect
+                    try {
+                      const conversationData = messages
+                        .filter(m => m.role === "user")
+                        .map(m => m.content)
+                        .join(" | ");
+                      
+                      const generateResponse = await fetch('/api/generate-website', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          websiteId: 1,
+                          description: conversationData,
+                          businessType: "Boat rental company",
+                          socialMedia: {}
+                        })
+                      });
+                      
+                      if (generateResponse.ok) {
+                        // Immediately redirect to website view
+                        window.location.href = '/website-view';
+                      }
+                    } catch (error) {
+                      console.error('Generation failed:', error);
+                    }
                   } else {
                     alert('Upload failed');
                   }
