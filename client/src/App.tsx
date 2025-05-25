@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import SimpleChat from "@/pages/SimpleChat";
 import GeneratingVariants from "@/pages/GeneratingVariants";
 import { VariantPreview } from "@/pages/VariantPreview";
+import { ConfirmDeployment } from "@/pages/ConfirmDeployment";
 import { WebsiteGenerationProvider } from "./contexts/WebsiteGenerationContext";
 import { Route, Switch } from "wouter";
 import "./App.css";
@@ -20,6 +21,7 @@ function App() {
               <Route path="/" component={SimpleChat} />
               <Route path="/generating-variants" component={GeneratingVariants} />
               <Route path="/variant-preview" component={VariantPreview} />
+              <Route path="/confirm-deployment" component={ConfirmDeployment} />
               <Route component={SimpleChat} />
             </Switch>
           </div>

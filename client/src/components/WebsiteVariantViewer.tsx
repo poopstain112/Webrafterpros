@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { useSwipeable } from 'react-swipeable';
+import { Button } from '@/components/ui/button';
 
 interface WebsiteVariantViewerProps {
   websiteId: number;
@@ -17,6 +18,14 @@ export function WebsiteVariantViewer({ websiteId, businessData }: WebsiteVariant
   const [currentVariant, setCurrentVariant] = useState(1);
   const [variants, setVariants] = useState<{ [key: number]: string }>({});
   const [loading, setLoading] = useState(false);
+
+  const handleChooseDesign = (variantNumber: number) => {
+    // Store the selected variant and redirect to confirmation
+    localStorage.setItem('selectedVariant', variantNumber.toString());
+    localStorage.setItem('selectedVariantName', VARIANT_NAMES[variantNumber - 1]);
+    localStorage.setItem('selectedVariantHtml', variants[variantNumber] || '');
+    window.location.href = '/confirm-deployment';
+  };
 
   const generateVariant = async (variantNumber: number) => {
     if (variants[variantNumber]) return; // Already generated
@@ -99,20 +108,31 @@ export function WebsiteVariantViewer({ websiteId, businessData }: WebsiteVariant
         </div>
       </div>
 
-      {/* Variant Dots */}
+      {/* Choose This Design Button */}
       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="flex space-x-2">
-          {[1, 2, 3].map((variant) => (
-            <button
-              key={variant}
-              onClick={() => switchVariant(variant)}
-              className={`w-3 h-3 rounded-full transition-all ${
-                currentVariant === variant
-                  ? 'bg-white scale-125'
-                  : 'bg-white/50 hover:bg-white/75'
-              }`}
-            />
-          ))}
+        <div className="flex flex-col items-center space-y-3">
+          <Button
+            onClick={() => handleChooseDesign(currentVariant)}
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+          >
+            <Check className="w-5 h-5 mr-2" />
+            Choose This Design
+          </Button>
+          
+          {/* Variant Dots */}
+          <div className="flex space-x-2">
+            {[1, 2, 3].map((variant) => (
+              <button
+                key={variant}
+                onClick={() => switchVariant(variant)}
+                className={`w-3 h-3 rounded-full transition-all ${
+                  currentVariant === variant
+                    ? 'bg-white scale-125'
+                    : 'bg-white/50 hover:bg-white/75'
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
