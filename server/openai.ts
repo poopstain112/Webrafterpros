@@ -159,9 +159,49 @@ export async function generateWebsiteContent(
 }> {
   // Extract detailed business information from conversation
   const businessDetails = extractBusinessDetails(description);
-  const businessSpecificContent = getBusinessSpecificContent(businessType || '');
   
   console.log("Generating website with images:", imageUrls);
+  
+  // Generate truly custom content using AI instead of templates
+  const customContentPrompt = `Create professional website content for this business:
+
+Business Description: ${description}
+
+Generate UNIQUE, CUSTOM content with:
+1. A compelling hero headline that captures their unique value
+2. A powerful tagline that sets them apart
+3. Three distinct service descriptions based on their offerings
+4. An engaging about section that tells their story
+5. A strong call-to-action that matches their goal
+
+Make it feel completely personalized, not generic. Use their exact business details and personality.
+
+Return as JSON with: { heroTitle, heroTagline, services: [{ title, description }], aboutText, ctaText }`;
+
+  let customContent;
+  try {
+    const aiResponse = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "user", content: customContentPrompt }],
+      temperature: 0.8
+    });
+    
+    customContent = JSON.parse(aiResponse.choices[0].message.content || '{}');
+  } catch (error) {
+    console.error("AI content generation failed:", error);
+    // Fallback to extracted business details
+    customContent = {
+      heroTitle: businessDetails.businessName || "Your Business",
+      heroTagline: businessDetails.valueProposition || "Professional Services",
+      services: [
+        { title: "Primary Service", description: businessDetails.services || "Professional service offering" },
+        { title: "Secondary Service", description: "Additional service offering" },
+        { title: "Premium Service", description: "Premium service offering" }
+      ],
+      aboutText: businessDetails.businessDescription || "About our business",
+      ctaText: businessDetails.callToAction || "Get Started"
+    };
+  }
   
   // Create a professional business website with minimal customization options
   // Focus on the essential elements: contact info, theme colors, images, and social media
@@ -760,22 +800,9 @@ export async function generateWebsiteContent(
   <section class="hero">
     <div class="container">
       <div class="hero-content">
-        <h1>${(() => {
-          // Extract business name from description - robust universal patterns
-          const parts = description.split('|').map(p => p.trim());
-          // Look for business name in the second part (most common pattern)
-          if (parts.length > 1 && parts[1].length > 0 && parts[1].length < 100) {
-            return parts[1];
-          }
-          // Fallback patterns for other formats
-          const businessNameMatch = description.match(/[Tt]he name is "([^"]+)"/i) || 
-                                  description.match(/name is "([^"]+)"/i) || 
-                                  description.match(/called "([^"]+)"/i) ||
-                                  description.match(/business is ([^.|]+)/i);
-          return businessNameMatch ? businessNameMatch[1].trim() : businessSpecificContent.heroTitle;
-        })()}</h1>
-        <p>${description.split("|")[0] || businessSpecificContent.heroDescription}</p>
-        <a href="#contact" class="btn btn-primary">${businessSpecificContent.ctaText}</a>
+        <h1>${customContent.heroTitle}</h1>
+        <p>${customContent.heroTagline}</p>
+        <a href="#contact" class="btn btn-primary">${customContent.ctaText}</a>
       </div>
     </div>
   </section>
