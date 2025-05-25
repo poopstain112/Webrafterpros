@@ -38,13 +38,19 @@ export default function SimpleImageUpload({ onImagesUploaded }: SimpleImageUploa
           description: `Uploading ${files.length} images...`,
         });
 
+        console.log('Starting upload with FormData:', formData);
+        
         const response = await fetch('/api/upload', {
           method: 'POST',
           body: formData,
         });
 
+        console.log('Upload response status:', response.status);
+        
         if (!response.ok) {
-          throw new Error('Upload failed');
+          const errorText = await response.text();
+          console.error('Upload error response:', errorText);
+          throw new Error(`Upload failed: ${response.status} ${errorText}`);
         }
 
         const data = await response.json();
