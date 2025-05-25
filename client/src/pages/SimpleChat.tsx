@@ -287,10 +287,16 @@ export default function SimpleChat() {
       }
 
       const result = await response.json();
-      console.log("Website generated successfully, redirecting...");
+      console.log("Website generated successfully");
       
-      // Simple redirect - no delays, no localStorage complexity
-      window.location.href = '/website-view';
+      // Show success message and set flag to show website
+      toast({
+        title: "Website generated successfully!",
+        description: "Your website is ready to view.",
+      });
+      
+      // Show the website preview directly in the chat interface
+      setShowWebsitePreview(true);
       
     } catch (error) {
       console.error('Website generation error:', error);
