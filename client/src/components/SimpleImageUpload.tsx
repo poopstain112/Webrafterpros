@@ -72,8 +72,9 @@ export default function SimpleImageUpload({ onImagesUploaded }: SimpleImageUploa
         
         // Redirect to loading screen after successful upload
         setTimeout(() => {
+          console.log('Redirecting to generating variants...');
           window.location.href = '/generating-variants';
-        }, 1000);
+        }, 500);
       } catch (error) {
         console.error('Error uploading images:', error);
         toast({
