@@ -456,7 +456,42 @@ export default function SimpleChat() {
                       type="file"
                       accept="image/*"
                       multiple
-                      onChange={handleFileChange}
+                      onChange={async (e) => {
+                        const files = Array.from(e.target.files || []);
+                        if (files.length === 0) return;
+                        
+                        try {
+                          const formData = new FormData();
+                          formData.append('websiteId', '1');
+                          files.forEach(file => formData.append('images', file));
+                          
+                          const response = await fetch('/api/upload', {
+                            method: 'POST',
+                            body: formData,
+                          });
+                          
+                          if (response.ok) {
+                            const uploadedImages = await response.json();
+                            console.log('Images uploaded successfully:', uploadedImages);
+                            
+                            // Add message showing images uploaded
+                            const imageMessage = {
+                              role: "user",
+                              content: `I've uploaded ${files.length} images for my website.`,
+                              images: uploadedImages
+                            };
+                            
+                            setMessages(prev => [...prev, imageMessage]);
+                            
+                            // Auto-generate website after upload
+                            setTimeout(() => {
+                              handleGenerateWebsite();
+                            }, 1000);
+                          }
+                        } catch (error) {
+                          console.error('Upload failed:', error);
+                        }
+                      }}
                       className="hidden"
                     />
                     <ImageIcon className="h-4 w-4" />
