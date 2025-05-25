@@ -519,6 +519,83 @@ Please return the complete updated HTML with the new section in place. Do not in
     }
   });
 
+  // Deploy website endpoint
+  app.post("/api/deploy-website", async (req: Request, res: Response) => {
+    try {
+      const { variant, variantName, html, customDomain } = req.body;
+      
+      if (!html || !variant) {
+        return res.status(400).json({ message: "Missing required data for deployment" });
+      }
+
+      // Generate a unique deployment ID
+      const deploymentId = `website-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Create deployment directory
+      const fs = require('fs');
+      const path = require('path');
+      const deploymentDir = path.join(__dirname, '../deployed-sites', deploymentId);
+      
+      if (!fs.existsSync(deploymentDir)) {
+        fs.mkdirSync(deploymentDir, { recursive: true });
+      }
+
+      // Save the HTML file
+      const htmlPath = path.join(deploymentDir, 'index.html');
+      fs.writeFileSync(htmlPath, html);
+
+      // Copy any uploaded images to the deployment
+      const uploadsDir = path.join(__dirname, '../uploads');
+      const deployedUploadsDir = path.join(deploymentDir, 'uploads');
+      
+      if (fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(deployedUploadsDir, { recursive: true });
+        const uploadFiles = fs.readdirSync(uploadsDir);
+        uploadFiles.forEach(file => {
+          const srcPath = path.join(uploadsDir, file);
+          const destPath = path.join(deployedUploadsDir, file);
+          fs.copyFileSync(srcPath, destPath);
+        });
+      }
+
+      // Determine the deployment URL
+      const baseUrl = req.protocol + '://' + req.get('host');
+      const deploymentUrl = customDomain ? 
+        `https://${customDomain}` : 
+        `${baseUrl}/deployed/${deploymentId}`;
+
+      // Save deployment metadata
+      const deploymentMeta = {
+        id: deploymentId,
+        variant,
+        variantName,
+        customDomain: customDomain || null,
+        deployedAt: new Date().toISOString(),
+        url: deploymentUrl
+      };
+      
+      const metaPath = path.join(deploymentDir, 'deployment.json');
+      fs.writeFileSync(metaPath, JSON.stringify(deploymentMeta, null, 2));
+
+      res.json({
+        success: true,
+        deploymentId,
+        url: deploymentUrl,
+        message: `${variantName} website deployed successfully!`
+      });
+
+    } catch (error: any) {
+      console.error('Deployment error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to deploy website: " + error.message 
+      });
+    }
+  });
+
+  // Serve deployed websites
+  app.use('/deployed', express.static(path.join(__dirname, '../deployed-sites')));
+
   app.post("/api/websites/:id/messages", async (req: Request, res: Response) => {
     try {
       const websiteId = parseInt(req.params.id);
