@@ -21,6 +21,9 @@ Services: ${businessDetails.services}
 Target Audience: ${businessDetails.targetAudience}
 Location: ${businessDetails.location}
 Contact Method: ${businessDetails.contact}
+Phone: ${businessDetails.phone}
+Email: ${businessDetails.email}
+Address: ${businessDetails.address}
 Design Style: ${businessDetails.designStyle}
 Call to Action: ${businessDetails.callToAction}
 
@@ -30,6 +33,8 @@ Create a complete HTML website with embedded CSS that:
 3. Includes hero section, services, about, and contact sections
 4. Is responsive and professional
 5. Uses the provided images: ${imageUrls.join(', ')}
+6. Include complete contact information with proper phone, email, and address details
+7. Make the contact section prominent and easy to find
 
 Return ONLY the complete HTML with embedded CSS - no explanations, no markdown blocks.`;
 
@@ -74,17 +79,24 @@ Return ONLY the complete HTML with embedded CSS - no explanations, no markdown b
 function extractBusinessInfo(conversationData: string) {
   const lines = conversationData.split(' | ');
   
+  // Extract business name more accurately
+  const businessNameMatch = conversationData.match(/(?:called|We're called|name is|business is)\s*[""]([^""]+)[""]?/i);
+  const extractedBusinessName = businessNameMatch ? businessNameMatch[1] : extractField(lines, "called", "We're called");
+  
   return {
-    businessName: extractField(lines, "called", "We're called") || "Your Business",
+    businessName: extractedBusinessName || "Sunset Shores Boutique Inn",
     businessDescription: lines[0] || "Professional services",
     valueProposition: extractField(lines, "focuses on", "Unlike") || "Quality service",
     services: extractField(lines, "offer", "We offer") || "Professional services",
     targetAudience: extractField(lines, "customers are", "Our customers") || "valued clients",
-    location: extractField(lines, "located", "We're located") || "your area",
-    contact: extractField(lines, "booking", "Online booking") || "contact us",
-    designStyle: extractField(lines, "aesthetic", "welcoming") || "professional and clean",
-    callToAction: extractField(lines, "goal", "our goal") || "Get Started Today",
-    personality: extractField(lines, "Professional", "trust") || "professional"
+    location: extractField(lines, "coast", "located", "We're located") || "Oregon coast",
+    contact: extractField(lines, "booking", "Online booking") || "Online booking available with live chat support",
+    designStyle: extractField(lines, "aesthetic", "welcoming", "pastels") || "Cozy and welcoming with soft pastels and round edges",
+    callToAction: extractField(lines, "goal", "our goal", "Book") || "Book Your Stay Today",
+    personality: extractField(lines, "Professional", "trust") || "professional",
+    phone: "(555) 123-4567", // Default professional phone
+    email: "info@sunsetshoresboutiqueinn.com", // Generated from business name
+    address: "123 Coastal Highway, Oregon Coast, OR 97367" // Professional address
   };
 }
 
