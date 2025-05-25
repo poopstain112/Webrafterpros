@@ -481,10 +481,17 @@ export default function SimpleChat() {
                           if (response.ok) {
                             const uploadedImages = await response.json();
                             console.log('Images uploaded successfully:', uploadedImages);
-                            alert(`Successfully uploaded ${files.length} images!`);
                             
-                            // Immediately generate website
-                            handleGenerateWebsite();
+                            // Show success message
+                            toast({
+                              title: "Images uploaded successfully!",
+                              description: `${files.length} images uploaded. Redirecting to website generation...`,
+                            });
+                            
+                            // Wait a moment then redirect directly to website view
+                            setTimeout(() => {
+                              window.location.href = '/website-view';
+                            }, 1500);
                           } else {
                             const errorText = await response.text();
                             console.error('Upload failed:', errorText);
