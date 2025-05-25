@@ -577,6 +577,29 @@ Please return the complete updated HTML with the new section in place. Do not in
     }
   });
 
+  // Generate website variant on demand
+  app.post("/api/generate-variant", async (req: Request, res: Response) => {
+    try {
+      const { websiteId, description, variant } = req.body;
+      
+      // Get the most recent images for this website
+      const recentImages = await storage.getImagesByWebsiteId(websiteId);
+      const images = recentImages
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, 5);
+      
+      const imageUrls = images.map(img => img.url);
+      
+      console.log(`🎨 GENERATING VARIANT ${variant}`);
+      const html = await generateRevolutionaryWebsite(description, imageUrls, variant);
+      
+      res.json({ success: true, html });
+    } catch (error) {
+      console.error("Error generating variant:", error);
+      res.status(500).json({ error: "Failed to generate variant" });
+    }
+  });
+
   app.post("/api/websites/:id/messages", async (req: Request, res: Response) => {
     try {
       const websiteId = parseInt(req.params.id);
