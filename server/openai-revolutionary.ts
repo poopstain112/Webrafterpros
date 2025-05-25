@@ -158,7 +158,7 @@ INTERACTIVE FEATURES:
 
 MANDATORY SECTIONS - ALL MUST BE INCLUDED:
 1. Hero Section: Full-viewport with dramatic boat image and headline
-2. Fleet Gallery: ALL 5 BOAT IMAGES prominently displayed with descriptions  
+2. Fleet Gallery: ALL 10 BOAT IMAGES prominently displayed with descriptions  
 3. Experience Section: Port Orange adventures and destinations
 4. REVIEWS SECTION: Complete section with "Customer Reviews" heading, space for testimonials, AND a "Leave a Review" form with fields for name, email, star rating, and comment - THIS SECTION IS REQUIRED
 5. Local Expertise: Why choose Poseidon's Boat Rentals
@@ -168,7 +168,7 @@ MANDATORY SECTIONS - ALL MUST BE INCLUDED:
 CRITICAL: The Reviews Section MUST be included with proper styling even if empty.
 
 VISUAL IMPACT REQUIREMENTS:
-- Each of the 5 uploaded boat images MUST be prominently displayed
+- Each of the 10 uploaded boat images MUST be prominently displayed
 - Create image galleries, hero backgrounds, and feature sections using ALL images
 - Design should immediately captivate visitors like a $2,000+ professional website with premium touches
 - Use bold typography, dramatic spacing, and premium visual hierarchy

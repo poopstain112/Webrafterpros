@@ -272,7 +272,7 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
   // Old generate-website route removed - now using clean 3-variant system
 
   // API endpoint to upload images - completely simplified version
-  app.post("/api/upload", upload.array("images", 5), async (req: Request, res: Response) => {
+  app.post("/api/upload", upload.array("images", 10), async (req: Request, res: Response) => {
     try {
       console.log("Upload request received");
       
