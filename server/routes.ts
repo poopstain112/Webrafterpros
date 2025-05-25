@@ -501,16 +501,27 @@ Please return the complete updated HTML with the new section in place. Do not in
     try {
       const { websiteId, description, variant } = req.body;
       
+      // Get the conversation messages to build the real business data
+      const messages = await storage.getMessagesByWebsiteId(websiteId);
+      const userMessages = messages.filter(msg => msg.role === 'user');
+      
+      // Build conversation data from actual user responses
+      const conversationData = userMessages.length > 0 ? 
+        userMessages.map(msg => msg.content).join(' | ') : 
+        'Universal business website';
+      console.log(`🚀 REVOLUTIONARY GENERATION STARTING`);
+      console.log(`Conversation data: ${conversationData}`);
+      
       // Get the most recent images for this website
       const recentImages = await storage.getImagesByWebsiteId(websiteId);
       const images = recentImages
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        .slice(0, 5);
+        .slice(0, 10);
       
       const imageUrls = images.map(img => img.url);
       
       console.log(`🎨 GENERATING VARIANT ${variant}`);
-      const html = await generateRevolutionaryWebsite(description, imageUrls, variant);
+      const html = await generateRevolutionaryWebsite(conversationData, imageUrls, variant);
       
       res.json({ success: true, html });
     } catch (error) {
@@ -534,7 +545,7 @@ Please return the complete updated HTML with the new section in place. Do not in
       // Create deployment directory
       const fs = require('fs');
       const path = require('path');
-      const deploymentDir = path.join(__dirname, '../deployed-sites', deploymentId);
+      const deploymentDir = path.join(process.cwd(), 'deployed-sites', deploymentId);
       
       if (!fs.existsSync(deploymentDir)) {
         fs.mkdirSync(deploymentDir, { recursive: true });
@@ -545,7 +556,7 @@ Please return the complete updated HTML with the new section in place. Do not in
       fs.writeFileSync(htmlPath, html);
 
       // Copy any uploaded images to the deployment
-      const uploadsDir = path.join(__dirname, '../uploads');
+      const uploadsDir = path.join(process.cwd(), 'uploads');
       const deployedUploadsDir = path.join(deploymentDir, 'uploads');
       
       if (fs.existsSync(uploadsDir)) {
@@ -594,7 +605,7 @@ Please return the complete updated HTML with the new section in place. Do not in
   });
 
   // Serve deployed websites
-  app.use('/deployed', express.static(path.join(__dirname, '../deployed-sites')));
+  app.use('/deployed', express.static(path.join(process.cwd(), 'deployed-sites')));
 
   app.post("/api/websites/:id/messages", async (req: Request, res: Response) => {
     try {

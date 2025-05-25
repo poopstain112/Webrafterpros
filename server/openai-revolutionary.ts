@@ -64,15 +64,19 @@ export async function generateRevolutionaryWebsite(
   console.log("🚀 REVOLUTIONARY GENERATION STARTING");
   console.log("Conversation data:", conversationData);
   
-  // Parse the pipe-separated data directly
+  // Parse the pipe-separated data directly, handle undefined
+  if (!conversationData) {
+    throw new Error("No conversation data provided");
+  }
   const parts = conversationData.split(' | ');
-  const businessName = parts[1] || "Poseidon's Boat Rentals";
-  const description = parts[2] || "We have pontoon boats for rent";
-  const target = parts[3] || "Anyone looking for a day out on the water";
-  const services = parts[4] || "We offer pontoon boats for rent";
-  const location = parts[5] || "Port Orange, FL";
-  const experience = parts[6] || "We want customers to feel welcome";
-  const contact = parts[7] || "386-871-9200, poseidonsboatrentals@gmail.com";
+  const businessType = parts[0] || "Business";
+  const businessName = parts[1] || "Professional Services";
+  const description = parts[2] || "Quality services";
+  const target = parts[3] || "Local customers";
+  const services = parts[4] || "Professional services";
+  const location = parts[5] || "Local area";
+  const experience = parts[6] || "Professional and reliable";
+  const contact = parts[7] || "Contact us for more information";
   const style = parts[8] || "Bold and vibrant. God like";
   const cta = parts[9] || "Call immediately";
 
