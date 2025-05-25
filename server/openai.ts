@@ -194,7 +194,15 @@ export async function generateWebsiteContent(
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${description.split("|")[0] || "Longs Pet Grooming"} | Professional Pet Grooming Services</title>
+  <title>${(() => {
+    // Extract business name from description
+    const businessNameMatch = description.match(/name is "([^"]+)"/i) || description.match(/called "([^"]+)"/i);
+    if (businessNameMatch) return businessNameMatch[1];
+    
+    // Fallback to first part of description
+    const firstPart = description.split("|")[0] || description.split(".")[0];
+    return firstPart.length > 50 ? "Professional Services" : firstPart;
+  })()} | Professional Services</title>
   <meta name="description" content="Professional pet grooming services for all types of pets. We provide grooming, bathing, styling and specialized pet care in a jungle-themed environment.">
   <style>
     /* Reset and base styles */
