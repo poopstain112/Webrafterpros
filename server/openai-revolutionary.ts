@@ -112,25 +112,40 @@ You MUST create a website that looks like it cost $10,000+ with these features:
 - Asymmetrical grid layouts
 - Typography that scales from 6rem to 0.8rem
 
-MANDATORY SECTIONS WITH RICH CONTENT:
-1. Hero: Full viewport with compelling headline about Port Orange boat adventures
-2. Fleet: Detailed descriptions of pontoon boats, capacity, amenities, and features
-3. Destinations: Specific local spots - restaurants, islands, scenic routes in Port Orange waters
-4. Experience: What makes a day worry-free - safety, convenience, local expertise
-5. Wildlife & Scenery: Marine life, dolphins, birds, sunset cruises
-6. Why Choose Us: Local knowledge, pristine boats, exceptional service
-7. Contact: Multiple ways to reach out with immediate response promise
+MANDATORY SECTIONS WITH CAPTIVATING CONTENT:
+1. Hero: Stunning full-viewport section featuring your best boat image with dramatic headline
+2. Premium Fleet Gallery: Showcase ALL 5 BOAT IMAGES prominently with detailed descriptions
+3. Ultimate Experience: Rich descriptions of Port Orange adventures, destinations, marine life
+4. Customer Reviews Section: Beautiful testimonial area (empty but styled for future authentic reviews)
+5. Local Expertise: What makes you the premier choice in Port Orange waters
+6. Booking Experience: Premium contact section with multiple ways to connect
+7. About the Captain: Your expertise and commitment to worry-free boat days
 
-CONTENT DEPTH REQUIREMENTS:
-- Write 3-4 detailed paragraphs per section minimum
-- Include specific local references and unique selling points
-- Create compelling, benefit-focused copy that converts visitors
-- Use authentic details about boating experiences and Port Orange area
-- Make content feel premium and professional
+VISUAL IMPACT REQUIREMENTS:
+- Each of the 5 uploaded boat images MUST be prominently displayed
+- Create image galleries, hero backgrounds, and feature sections using ALL images
+- Design should immediately captivate visitors like a $10,000+ website
+- Use bold typography, dramatic spacing, and premium visual hierarchy
+- Every section should feel complete and polished, not half-finished
 
-IMAGES TO USE: ${images.join(', ')}
+CONTENT CAPTIVATION REQUIREMENTS:
+- Write compelling, benefit-driven copy that excites visitors about boat adventures
+- Create detailed descriptions that make visitors want to book immediately
+- Include specific Port Orange references and unique local experiences
+- Make every paragraph feel premium and professionally crafted
+- Focus on the emotional experience of a perfect day on the water
 
-OUTPUT: Complete HTML document with embedded CSS. No explanations. No markdown. Just pure HTML with rich, detailed content.`;
+CRITICAL IMAGE REQUIREMENTS:
+YOU MUST USE ALL 5 IMAGES - EVERY SINGLE ONE:
+${images.map((img, i) => `${i + 1}. ${img} - MUST be prominently featured`).join('\n')}
+
+FAILURE TO USE ALL 5 IMAGES IS UNACCEPTABLE. Each image must be:
+- Prominently displayed in high-quality sections
+- Used in hero, gallery, or feature areas
+- Never hidden or made small
+- Integrated into the design meaningfully
+
+OUTPUT: Complete HTML document with embedded CSS that uses ALL 5 images prominently. No explanations. No markdown. Just pure HTML with captivating, rich content.`;
 
   try {
     const response = await openai.chat.completions.create({
