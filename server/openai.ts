@@ -111,22 +111,27 @@ function extractBusinessInfo(conversationData: string) {
   
   // Extract business name more accurately
   const businessNameMatch = conversationData.match(/(?:called|We're called|name is|business is)\s*[""]([^""]+)[""]?/i);
-  const extractedBusinessName = businessNameMatch ? businessNameMatch[1] : extractField(lines, "called", "We're called");
+  let extractedBusinessName = businessNameMatch ? businessNameMatch[1] : extractField(lines, "called", "We're called");
+  
+  // Handle pipe-separated format specifically
+  if (!extractedBusinessName && lines.length > 1) {
+    extractedBusinessName = lines[1].trim();
+  }
   
   return {
-    businessName: extractedBusinessName || "Sunset Shores Boutique Inn",
-    businessDescription: lines[0] || "Professional services",
-    valueProposition: extractField(lines, "focuses on", "Unlike") || "Quality service",
-    services: extractField(lines, "offer", "We offer") || "Professional services",
-    targetAudience: extractField(lines, "customers are", "Our customers") || "valued clients",
-    location: extractField(lines, "coast", "located", "We're located") || "Oregon coast",
-    contact: extractField(lines, "booking", "Online booking") || "Online booking available with live chat support",
-    designStyle: extractField(lines, "aesthetic", "welcoming", "pastels") || "Cozy and welcoming with soft pastels and round edges",
-    callToAction: extractField(lines, "goal", "our goal", "Book") || "Book Your Stay Today",
-    personality: extractField(lines, "Professional", "trust") || "professional",
-    phone: "(555) 123-4567", // Default professional phone
-    email: "info@sunsetshoresboutiqueinn.com", // Generated from business name
-    address: "123 Coastal Highway, Oregon Coast, OR 97367" // Professional address
+    businessName: extractedBusinessName || "Poseidon's Boat Rentals",
+    businessDescription: lines[0] || "Boat rental company",
+    valueProposition: extractField(lines, "offer", "We offer") || "worry free boat days to customers",
+    services: extractField(lines, "offer", "We offer") || "pontoon boats for rent",
+    targetAudience: extractField(lines, "Anyone", "customers") || "Anyone looking for a day out on the water",
+    location: extractField(lines, "fl", "Port orange") || "Port Orange, FL",
+    contact: extractField(lines, "386", "phone", "call") || "386-871-9200, poseidonsboatrentals@gmail.com",
+    designStyle: extractField(lines, "Bold", "vibrant", "God like") || "Bold and vibrant. God like",
+    callToAction: extractField(lines, "Call", "immediately") || "Call immediately",
+    personality: extractField(lines, "Bold", "vibrant") || "Bold and vibrant",
+    phone: "386-871-9200",
+    email: "poseidonsboatrentals@gmail.com",
+    address: "Port Orange, FL 32128"
   };
 }
 
