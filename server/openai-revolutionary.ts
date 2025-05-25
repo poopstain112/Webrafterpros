@@ -116,7 +116,7 @@ MANDATORY SECTIONS WITH CAPTIVATING CONTENT:
 1. Hero: Stunning full-viewport section featuring your best boat image with dramatic headline
 2. Premium Fleet Gallery: Showcase ALL 5 BOAT IMAGES prominently with detailed descriptions
 3. Ultimate Experience: Rich descriptions of Port Orange adventures, destinations, marine life
-4. Customer Reviews Section: Beautiful testimonial area (empty but styled for future authentic reviews)
+4. Customer Reviews Section: Elegant testimonial area with "Coming Soon" message - NO FAKE REVIEWS
 5. Local Expertise: What makes you the premier choice in Port Orange waters
 6. Booking Experience: Premium contact section with multiple ways to connect
 7. About the Captain: Your expertise and commitment to worry-free boat days
@@ -128,12 +128,21 @@ VISUAL IMPACT REQUIREMENTS:
 - Use bold typography, dramatic spacing, and premium visual hierarchy
 - Every section should feel complete and polished, not half-finished
 
+STRICT AUTHENTICITY REQUIREMENTS:
+- ONLY use PONTOON BOATS - NO speedboats, yacht references, or boat types not shown
+- Base ALL content on the actual business: Poseidon's Boat Rentals in Port Orange
+- NO fake reviews, testimonials, or made-up customer quotes
+- Reviews section should be styled but empty with "Customer Reviews Coming Soon"
+- ONLY describe services actually offered by a pontoon boat rental business
+- Focus on family-friendly, leisurely pontoon boat experiences
+- NO assumptions about services not explicitly mentioned
+
 CONTENT CAPTIVATION REQUIREMENTS:
-- Write compelling, benefit-driven copy that excites visitors about boat adventures
-- Create detailed descriptions that make visitors want to book immediately
+- Write compelling copy about PONTOON BOAT adventures specifically
+- Create detailed descriptions that make visitors want to book pontoon rentals
 - Include specific Port Orange references and unique local experiences
 - Make every paragraph feel premium and professionally crafted
-- Focus on the emotional experience of a perfect day on the water
+- Focus on the relaxing, family-friendly pontoon boat experience
 
 CRITICAL IMAGE REQUIREMENTS:
 YOU MUST USE ALL 5 IMAGES - EVERY SINGLE ONE:
