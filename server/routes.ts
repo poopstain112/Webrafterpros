@@ -5,7 +5,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { insertMessageSchema, insertWebsiteSchema } from "@shared/schema";
-import { generateWebsiteContent, generateChatResponse, analyzeImages } from "./openai";
+import { generateRevolutionaryWebsite, generateChatResponse, analyzeImages } from "./openai-revolutionary";
 
 // Set up multer for file uploads
 const uploadDir = path.join(process.cwd(), "uploads");
@@ -308,11 +308,9 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
       console.log("Full image URLs for website:", fullImageUrls);
       
       // Generate the website content with enhanced parameters
-      const websiteContent = await generateWebsiteContent(
+      const htmlContent = await generateRevolutionaryWebsite(
         description, 
-        fullImageUrls,
-        businessType,
-        socialMedia
+        fullImageUrls
       );
       
       // Always create fresh website content - never reuse existing data
@@ -321,13 +319,13 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
         name: businessType || "My Website",
         userId: 1, // Default user ID
         description: description,
-        generatedHtml: websiteContent.html,
+        generatedHtml: htmlContent,
         websiteJson: {
-          html: websiteContent.html,
-          css: websiteContent.css,
-          structure: websiteContent.structure || {},
+          html: htmlContent,
+          css: "",
+          structure: {},
         },
-        sectionOptions: websiteContent.sectionOptions || {}
+        sectionOptions: {}
       };
       
       const existingWebsite = await storage.getWebsite(websiteId);
@@ -344,7 +342,7 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
       }
       
       console.log("Website generated successfully");
-      res.json(websiteContent);
+      res.json({ html: htmlContent });
     } catch (error: any) {
       console.error("Website generation error:", error);
       res.status(500).json({ 
