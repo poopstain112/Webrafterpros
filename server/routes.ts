@@ -322,6 +322,7 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
         // Update existing website with new content including section options
         const updatedWebsite = {
           ...existingWebsite,
+          generatedHtml: websiteContent.html,
           websiteJson: {
             html: websiteContent.html,
             css: websiteContent.css,
@@ -336,6 +337,7 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
           name: businessType || "My Website",
           userId: 1, // Default user ID
           description: description,
+          generatedHtml: websiteContent.html,
           websiteJson: {
             html: websiteContent.html,
             css: websiteContent.css,
