@@ -540,6 +540,52 @@ export default function SimpleChat() {
       {/* Message Input - Fixed like modern messaging apps */}
       <div className="sticky bottom-0 bg-white border-t border-gray-200 p-3 safe-area-pb">
         <div className="flex items-center gap-3 max-w-4xl mx-auto">
+          <button
+            onClick={async () => {
+              const fileInput = document.createElement('input');
+              fileInput.type = 'file';
+              fileInput.accept = 'image/*';
+              fileInput.multiple = true;
+              fileInput.onchange = async (e) => {
+                const files = Array.from((e.target as HTMLInputElement).files || []);
+                if (files.length === 0) return;
+                
+                console.log('Files selected:', files.map(f => f.name));
+                
+                try {
+                  const formData = new FormData();
+                  formData.append('websiteId', '1');
+                  files.forEach(file => {
+                    formData.append('images', file);
+                  });
+                  
+                  const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData,
+                  });
+                  
+                  if (response.ok) {
+                    const uploadedImages = await response.json();
+                    console.log('Upload successful:', uploadedImages);
+                    alert(`Successfully uploaded ${files.length} images!`);
+                    
+                    // Generate website immediately
+                    handleGenerateWebsite();
+                  } else {
+                    alert('Upload failed');
+                  }
+                } catch (error) {
+                  console.error('Upload error:', error);
+                  alert('Upload failed: ' + error);
+                }
+              };
+              fileInput.click();
+            }}
+            className="p-3 text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
+            title="Upload Images"
+          >
+            <ImageIcon className="h-5 w-5" />
+          </button>
           <div className="flex-1 relative">
             <textarea
               id="chat-input"
