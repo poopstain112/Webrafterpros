@@ -157,13 +157,13 @@ INTERACTIVE FEATURES:
 - Social media integration with icon hover effects
 
 MANDATORY SECTIONS - ALL MUST BE INCLUDED:
-1. Hero Section: Full-viewport with dramatic boat image and headline
-2. Fleet Gallery: ALL 10 BOAT IMAGES prominently displayed with descriptions  
-3. Experience Section: Port Orange adventures and destinations
+1. Hero Section: Full-viewport with dramatic business image and compelling headline
+2. Gallery Section: ALL 10 UPLOADED IMAGES prominently displayed with descriptions  
+3. Services Section: Business offerings and specialties from user conversation
 4. REVIEWS SECTION: Complete section with "Customer Reviews" heading, space for testimonials, AND a "Leave a Review" form with fields for name, email, star rating, and comment - THIS SECTION IS REQUIRED
-5. Local Expertise: Why choose Poseidon's Boat Rentals
-6. Contact Section: Professional booking system with multiple contact methods (phone, email, booking form), business hours, location map integration
-7. About Section: Captain expertise and service commitment
+5. Why Choose Us: Unique value proposition and expertise from user input
+6. Contact Section: Professional contact system with multiple methods (phone, email, contact form), business hours, location details from conversation
+7. About Section: Business expertise and commitment based on user conversation
 
 CRITICAL: The Reviews Section MUST be included with proper styling even if empty.
 
