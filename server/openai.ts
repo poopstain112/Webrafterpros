@@ -714,12 +714,12 @@ export async function generateWebsiteContent(
   <header>
     <div class="container header-container">
       <a href="#" class="logo">${(() => {
-        // Extract business name from description - look for "GreenNest Living" specifically
-        const businessNameMatch = description.match(/[Tt]he name is "([^"]+)"/i) || 
+        // Extract business name from description - universal pattern for any business
+        const businessNameMatch = description.match(/\| ([^|]+) \|/i) || 
+                                description.match(/[Tt]he name is "([^"]+)"/i) || 
                                 description.match(/name is "([^"]+)"/i) || 
-                                description.match(/called "([^"]+)"/i) ||
-                                description.match(/"([^"]*GreenNest[^"]*)"/i);
-        return businessNameMatch ? businessNameMatch[1] : "GreenNest Living";
+                                description.match(/called "([^"]+)"/i);
+        return businessNameMatch ? businessNameMatch[1].trim() : "Your Business";
       })()}</a>
       <button class="mobile-menu-btn">&#9776;</button>
       <ul class="nav-menu">
@@ -736,12 +736,12 @@ export async function generateWebsiteContent(
     <div class="container">
       <div class="hero-content">
         <h1>${(() => {
-          // Extract business name from description - look for "GreenNest Living" specifically
-          const businessNameMatch = description.match(/[Tt]he name is "([^"]+)"/i) || 
+          // Extract business name from description - universal pattern for any business
+          const businessNameMatch = description.match(/\| ([^|]+) \|/i) || 
+                                  description.match(/[Tt]he name is "([^"]+)"/i) || 
                                   description.match(/name is "([^"]+)"/i) || 
-                                  description.match(/called "([^"]+)"/i) ||
-                                  description.match(/"([^"]*GreenNest[^"]*)"/i);
-          return businessNameMatch ? businessNameMatch[1] : "GreenNest Living";
+                                  description.match(/called "([^"]+)"/i);
+          return businessNameMatch ? businessNameMatch[1].trim() : businessSpecificContent.heroTitle;
         })()}</h1>
         <p>${description.split("|")[0] || businessSpecificContent.heroDescription}</p>
         <a href="#contact" class="btn btn-primary">${businessSpecificContent.ctaText}</a>
