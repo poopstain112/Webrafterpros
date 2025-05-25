@@ -110,6 +110,24 @@ function getBusinessSpecificContent(businessType: string) {
   return defaultContent;
 }
 
+// Enhanced content extraction function
+function extractBusinessDetails(description: string) {
+  const parts = description.split('|').map(p => p.trim());
+  
+  return {
+    businessDescription: parts[0] || '',
+    businessName: parts[1] || '',
+    valueProposition: parts[2] || '',
+    targetAudience: parts[3] || '',
+    services: parts[4] || '',
+    location: parts[5] || '',
+    personality: parts[6] || '',
+    contact: parts[7] || '',
+    designStyle: parts[8] || '',
+    callToAction: parts[9] || ''
+  };
+}
+
 // Process website descriptions and generate website content
 export async function generateWebsiteContent(
   description: string,
@@ -139,7 +157,8 @@ export async function generateWebsiteContent(
     tiktok?: string;
   };
 }> {
-  // Determine business-specific content based on business type
+  // Extract detailed business information from conversation
+  const businessDetails = extractBusinessDetails(description);
   const businessSpecificContent = getBusinessSpecificContent(businessType || '');
   
   console.log("Generating website with images:", imageUrls);
