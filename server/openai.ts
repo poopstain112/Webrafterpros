@@ -27,34 +27,61 @@ Address: ${businessDetails.address}
 Design Style: ${businessDetails.designStyle}
 Call to Action: ${businessDetails.callToAction}
 
-Create a stunning, completely custom HTML website with embedded CSS that showcases this business uniquely:
+🔥 CREATE A WEBSITE THAT BREAKS THE INTERNET 🔥
 
-DESIGN REQUIREMENTS:
-1. Match their exact aesthetic: "${businessDetails.designStyle}" - be creative and interpret this style boldly
-2. Use sophisticated color schemes, premium typography, and innovative layouts that reflect their brand personality
-3. Create visually striking sections: hero, services, about, and contact with unique visual elements
-4. Make it fully responsive with smooth animations and modern interactions
-5. Incorporate the provided images creatively: ${imageUrls.join(', ')}
-6. Design a prominent, beautiful contact section with all details: phone, email, address
-7. Add subtle but impressive visual effects like gradients, shadows, hover states, and smooth transitions
-8. Use modern CSS techniques like flexbox, grid, custom properties, and creative typography
-9. Make the design feel premium and expensive - like a $2000+ custom website
-10. Be bold and creative with the layout - don't use generic templates
+This business deserves a website that makes people's jaws DROP. Create something so stunning, so unique, so BOLD that visitors will screenshot it and share it. This is NOT a template - this is ART.
 
-CREATIVE ELEMENTS TO INCLUDE:
-- Custom animations and micro-interactions
-- Unique section layouts that reflect the business personality
-- Creative use of whitespace and typography hierarchy
-- Sophisticated color gradients and visual effects
-- Modern design patterns and premium styling
+BUSINESS PERSONALITY: "${businessDetails.designStyle}"
+🎯 MISSION: Make this the most memorable website they've ever seen for this industry.
+
+🚀 DESIGN DEMANDS (NO COMPROMISES):
+1. EXPLOSIVE VISUAL IMPACT - Use the aesthetic "${businessDetails.designStyle}" but push it to the EXTREME
+2. CINEMATIC HERO SECTIONS - Make the first impression unforgettable with dramatic visuals
+3. PERSONALITY-DRIVEN LAYOUTS - Every section should scream this business's unique character
+4. ADVANCED ANIMATIONS - Scroll-triggered reveals, hover magic, smooth page transitions
+5. TYPOGRAPHY MASTERY - Mix fonts boldly, create hierarchy that guides the eye dramatically
+6. COLOR PSYCHOLOGY - Use colors that evoke the exact emotions this business wants
+7. IMMERSIVE IMAGERY - Transform these images into art: ${imageUrls.join(', ')}
+8. CONTACT SECTION THAT CONVERTS - Make it irresistible to reach out
+
+🎨 VISUAL REQUIREMENTS:
+- Use CSS transforms, clips, masks, and advanced properties
+- Create depth with layered backgrounds, shadows, and overlays
+- Add particle effects, geometric shapes, or abstract elements
+- Design custom cursors, loading animations, or interactive elements
+- Use viewport units, calc(), and modern CSS for dynamic layouts
+- Create sections that feel like scenes in a movie
+
+⚡ TECHNICAL EXCELLENCE:
+- Flawless mobile responsiveness with touch-friendly interactions
+- Optimized performance with smooth 60fps animations
+- Accessibility without compromising visual impact
+- Modern CSS Grid and Flexbox for perfect layouts
+
+🎭 PERSONALITY INJECTION:
+- Make the copy feel like it was written by the business owner themselves
+- Use the business's voice throughout every section
+- Create moments of delight and surprise
+- Tell their story in a way that creates emotional connection
+
+💥 FINAL CHALLENGE: Make this website so good that competitors will try to copy it.
 
 Return ONLY the complete HTML with embedded CSS - no explanations, no markdown blocks.`;
 
   try {
     const aiResponse = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [{ role: "user", content: customWebsitePrompt }],
-      temperature: 0.9
+      messages: [
+        {
+          role: "system",
+          content: "You are an award-winning web designer known for creating BOLD, MEMORABLE websites that break conventions. Your designs are talked about, shared, and remembered. You never create boring or generic websites. Every design should make people say 'WOW' and feel like they're experiencing something special."
+        },
+        {
+          role: "user", 
+          content: customWebsitePrompt
+        }
+      ],
+      temperature: 1.0
     });
     
     let customWebsiteHtml = aiResponse.choices[0].message.content || '';
