@@ -189,10 +189,20 @@ Return ONLY valid JSON (no markdown, no code blocks) with: { "heroTitle": "...",
     let aiContent = aiResponse.choices[0].message.content || '{}';
     console.log("Raw AI response:", aiContent);
     
-    // Remove all code block markers if present
-    aiContent = aiContent.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-    console.log("Cleaned AI content:", aiContent);
+    // More aggressive cleaning - handle all possible markdown formats
+    aiContent = aiContent
+      .replace(/```json/gi, '')
+      .replace(/```/g, '')
+      .replace(/`/g, '')
+      .trim();
     
+    // Extract JSON if it's embedded in text
+    const jsonMatch = aiContent.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      aiContent = jsonMatch[0];
+    }
+    
+    console.log("Cleaned AI content:", aiContent);
     customContent = JSON.parse(aiContent);
   } catch (error) {
     console.error("AI content generation failed:", error);
