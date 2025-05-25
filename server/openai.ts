@@ -187,8 +187,12 @@ Return ONLY valid JSON (no markdown, no code blocks) with: { "heroTitle": "...",
     });
     
     let aiContent = aiResponse.choices[0].message.content || '{}';
+    console.log("Raw AI response:", aiContent);
+    
     // Remove all code block markers if present
     aiContent = aiContent.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+    console.log("Cleaned AI content:", aiContent);
+    
     customContent = JSON.parse(aiContent);
   } catch (error) {
     console.error("AI content generation failed:", error);
