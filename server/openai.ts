@@ -816,27 +816,27 @@ Return as JSON with: { heroTitle, heroTagline, services: [{ title, description }
       </div>
       <div class="services-grid">
         <div class="service-card">
-          <img src="${serviceImage1}" alt="Primary Service" onerror="this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${serviceImage1}" alt="${customContent.services[0]?.title || 'Primary Service'}" onerror="this.src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>${businessSpecificContent.services[0].title}</h3>
-            <p>${businessSpecificContent.services[0].description}</p>
-            <a href="#contact" class="btn btn-primary">${businessSpecificContent.services[0].cta}</a>
+            <h3>${customContent.services[0]?.title || 'Primary Service'}</h3>
+            <p>${customContent.services[0]?.description || 'Professional service offering'}</p>
+            <a href="#contact" class="btn btn-primary">${customContent.ctaText}</a>
           </div>
         </div>
         <div class="service-card">
-          <img src="${serviceImage2}" alt="${businessSpecificContent.services[1].title}" onerror="this.src='https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${serviceImage2}" alt="${customContent.services[1]?.title || 'Secondary Service'}" onerror="this.src='https://images.unsplash.com/photo-1613553474179-e1eda3ea5734?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>${businessSpecificContent.services[1].title}</h3>
-            <p>${businessSpecificContent.services[1].description}</p>
-            <a href="#contact" class="btn btn-primary">${businessSpecificContent.services[1].cta}</a>
+            <h3>${customContent.services[1]?.title || 'Secondary Service'}</h3>
+            <p>${customContent.services[1]?.description || 'Additional service offering'}</p>
+            <a href="#contact" class="btn btn-primary">${customContent.ctaText}</a>
           </div>
         </div>
         <div class="service-card">
-          <img src="${serviceImage3}" alt="${businessSpecificContent.services[2].title}" onerror="this.src='https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
+          <img src="${serviceImage3}" alt="${customContent.services[2]?.title || 'Premium Service'}" onerror="this.src='https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'; this.onerror=null;">
           <div class="service-content">
-            <h3>${businessSpecificContent.services[2].title}</h3>
-            <p>${businessSpecificContent.services[2].description}</p>
-            <a href="#contact" class="btn btn-primary">${businessSpecificContent.services[2].cta}</a>
+            <h3>${customContent.services[2]?.title || 'Premium Service'}</h3>
+            <p>${customContent.services[2]?.description || 'Premium service offering'}</p>
+            <a href="#contact" class="btn btn-primary">${customContent.ctaText}</a>
           </div>
         </div>
       </div>
