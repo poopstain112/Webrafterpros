@@ -713,7 +713,11 @@ export async function generateWebsiteContent(
   <!-- Header & Navigation -->
   <header>
     <div class="container header-container">
-      <a href="#" class="logo">${description.split("|")[0] || "Business"}</a>
+      <a href="#" class="logo">${(() => {
+        // Extract business name from description
+        const businessNameMatch = description.match(/name is "([^"]+)"/i) || description.match(/called "([^"]+)"/i);
+        return businessNameMatch ? businessNameMatch[1] : "Your Business";
+      })()}</a>
       <button class="mobile-menu-btn">&#9776;</button>
       <ul class="nav-menu">
         <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
@@ -728,8 +732,12 @@ export async function generateWebsiteContent(
   <section class="hero">
     <div class="container">
       <div class="hero-content">
-        <h1>${description.split("|")[1] || businessSpecificContent.heroTitle}</h1>
-        <p>${description.split("|")[2] || businessSpecificContent.heroDescription}</p>
+        <h1>${(() => {
+          // Extract business name from description
+          const businessNameMatch = description.match(/name is "([^"]+)"/i) || description.match(/called "([^"]+)"/i);
+          return businessNameMatch ? businessNameMatch[1] : businessSpecificContent.heroTitle;
+        })()}</h1>
+        <p>${description.split("|")[0] || businessSpecificContent.heroDescription}</p>
         <a href="#contact" class="btn btn-primary">${businessSpecificContent.ctaText}</a>
       </div>
     </div>
