@@ -92,6 +92,16 @@ BUSINESS DATA (USE EXACTLY):
 - Style: ${style}
 - Call to Action: ${cta}
 
+CONTENT REQUIREMENTS:
+Create rich, detailed content that showcases the unique experience. Include:
+- Specific details about pontoon boats and fleet
+- Descriptions of local Port Orange waterways and destinations
+- Information about nearby restaurants and islands to explore
+- What makes a "worry-free boat day" special
+- The marine wildlife and scenery customers will discover
+- Why customers should choose this specific boat rental service
+- Detailed service descriptions beyond basic rental
+
 VISUAL REQUIREMENTS:
 You MUST create a website that looks like it cost $10,000+ with these features:
 - Full-screen hero with dramatic animations
@@ -102,15 +112,25 @@ You MUST create a website that looks like it cost $10,000+ with these features:
 - Asymmetrical grid layouts
 - Typography that scales from 6rem to 0.8rem
 
-MANDATORY SECTIONS:
-1. Hero: Full viewport, animated background, business name prominent
-2. Services: Cards with hover animations
-3. Experience: Customer-focused messaging
-4. Contact: Floating form with glass effects
+MANDATORY SECTIONS WITH RICH CONTENT:
+1. Hero: Full viewport with compelling headline about Port Orange boat adventures
+2. Fleet: Detailed descriptions of pontoon boats, capacity, amenities, and features
+3. Destinations: Specific local spots - restaurants, islands, scenic routes in Port Orange waters
+4. Experience: What makes a day worry-free - safety, convenience, local expertise
+5. Wildlife & Scenery: Marine life, dolphins, birds, sunset cruises
+6. Why Choose Us: Local knowledge, pristine boats, exceptional service
+7. Contact: Multiple ways to reach out with immediate response promise
+
+CONTENT DEPTH REQUIREMENTS:
+- Write 3-4 detailed paragraphs per section minimum
+- Include specific local references and unique selling points
+- Create compelling, benefit-focused copy that converts visitors
+- Use authentic details about boating experiences and Port Orange area
+- Make content feel premium and professional
 
 IMAGES TO USE: ${images.join(', ')}
 
-OUTPUT: Complete HTML document with embedded CSS. No explanations. No markdown. Just pure HTML.`;
+OUTPUT: Complete HTML document with embedded CSS. No explanations. No markdown. Just pure HTML with rich, detailed content.`;
 
   try {
     const response = await openai.chat.completions.create({
