@@ -27,39 +27,37 @@ Address: ${businessDetails.address}
 Design Style: ${businessDetails.designStyle}
 Call to Action: ${businessDetails.callToAction}
 
-Create an exceptional, memorable website that stands out in this industry. This business has a unique personality that must shine through every design choice.
+Create a website with the visual impact of Apple's iPhone launch pages, the bold geometry of Tesla's Cybertruck site, and the sophisticated animations of Stripe's homepage.
 
-DESIGN BRIEF:
-Business Style: "${businessDetails.designStyle}"
-Industry: ${businessDetails.personality}
-Target: Create a website that visitors remember and talk about
+BUSINESS IDENTITY: "${businessDetails.designStyle}" for ${businessDetails.businessName}
 
-DESIGN REQUIREMENTS:
-1. Bold visual hierarchy with striking typography combinations
-2. Dramatic color schemes that reflect the business personality
-3. Immersive hero section with compelling visual storytelling
-4. Unique section layouts that break conventional patterns
-5. Advanced CSS animations and smooth interactions
-6. Creative use of the provided images: ${imageUrls.join(', ')}
-7. Professional contact section with clear call-to-action
+SPECIFIC DESIGN TECHNIQUES TO USE:
+- CSS clip-path for diagonal sections and unique shapes
+- backdrop-filter blur effects for glass morphism
+- CSS Grid with overlapping elements and negative margins
+- Complex gradient overlays with multiple color stops
+- Transform3d animations triggered on scroll
+- Typography with dramatic size contrasts (8rem headers, 0.875rem body)
+- Asymmetrical layouts with intentional white space imbalances
+- Layered box-shadows for depth (0 25px 50px -12px rgba(0,0,0,0.25))
 
-TECHNICAL SPECIFICATIONS:
-- Use modern CSS Grid and Flexbox for innovative layouts
-- Implement CSS transforms, gradients, and shadow effects
-- Create responsive design with smooth transitions
-- Add hover states and interactive elements
-- Use advanced typography with multiple font weights
-- Implement smooth scrolling and animation triggers
+VISUAL EXECUTION:
+Hero: Full viewport height with video-like CSS animations, overlapping geometric shapes
+Services: Cards that tilt on hover using transform: perspective() rotateX() rotateY()
+About: Split-screen layout with one side image, one side text, diagonal divider
+Contact: Floating contact form with glassmorphism backdrop-filter effect
 
-CREATIVE DIRECTION:
-- Interpret the business style with confidence and creativity
-- Design sections that feel cinematic and engaging
-- Use color psychology to evoke the right emotions
-- Create visual depth with layered elements
-- Make the design feel premium and custom-built
-- Ensure the website personality matches the business character
+MANDATORY CSS FEATURES:
+- At least 3 different @keyframes animations
+- CSS Grid with grid-template-areas for complex layouts
+- Custom CSS variables for consistent spacing and colors
+- Advanced selectors like :nth-child(odd) for alternating layouts
+- Viewport units (vw, vh) for responsive typography
+- CSS calc() for precise positioning and spacing
 
-OUTPUT: Complete HTML document with embedded CSS styling. No explanations or markdown formatting.`;
+IMAGES: ${imageUrls.join(', ')} - Use these with CSS object-fit, filter effects, and creative masking
+
+Return complete HTML with embedded CSS. Make it visually stunning and technically advanced.`;
 
   try {
     const aiResponse = await openai.chat.completions.create({
@@ -67,7 +65,7 @@ OUTPUT: Complete HTML document with embedded CSS styling. No explanations or mar
       messages: [
         {
           role: "system",
-          content: "You are an award-winning web designer known for creating BOLD, MEMORABLE websites that break conventions. Your designs are talked about, shared, and remembered. You never create boring or generic websites. Every design should make people say 'WOW' and feel like they're experiencing something special."
+          content: "You are a world-class web designer who creates websites like Apple's product pages, Tesla's bold layouts, and Stripe's sophisticated interfaces. Your websites use cutting-edge CSS techniques like clip-path, backdrop-filter, CSS Grid subgrid, scroll-driven animations, and complex gradient overlays. You never use basic layouts - every section has unique geometry, asymmetrical designs, and innovative visual treatments that feel like modern digital art."
         },
         {
           role: "user", 
