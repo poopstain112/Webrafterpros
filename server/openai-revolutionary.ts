@@ -112,14 +112,16 @@ You MUST create a website that looks like it cost $10,000+ with these features:
 - Asymmetrical grid layouts
 - Typography that scales from 6rem to 0.8rem
 
-MANDATORY SECTIONS WITH CAPTIVATING CONTENT:
-1. Hero: Stunning full-viewport section featuring your best boat image with dramatic headline
-2. Premium Fleet Gallery: Showcase ALL 5 BOAT IMAGES prominently with detailed descriptions
-3. Ultimate Experience: Rich descriptions of Port Orange adventures, destinations, marine life
-4. Customer Reviews Section: Beautiful testimonial area with elegant placeholder design ready for authentic reviews
-5. Local Expertise: What makes you the premier choice in Port Orange waters
-6. Booking Experience: Premium contact section with multiple ways to connect
-7. About the Captain: Your expertise and commitment to worry-free boat days
+MANDATORY SECTIONS - ALL MUST BE INCLUDED:
+1. Hero Section: Full-viewport with dramatic boat image and headline
+2. Fleet Gallery: ALL 5 BOAT IMAGES prominently displayed with descriptions  
+3. Experience Section: Port Orange adventures and destinations
+4. REVIEWS SECTION: Professional testimonial area with "Customer Reviews" heading and elegant styling ready for future reviews - THIS SECTION IS REQUIRED
+5. Local Expertise: Why choose Poseidon's Boat Rentals
+6. Contact Section: Multiple ways to book and connect
+7. About Section: Captain expertise and service commitment
+
+CRITICAL: The Reviews Section MUST be included with proper styling even if empty.
 
 VISUAL IMPACT REQUIREMENTS:
 - Each of the 5 uploaded boat images MUST be prominently displayed
