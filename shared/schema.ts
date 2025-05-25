@@ -26,6 +26,9 @@ export const websites = pgTable("websites", {
   websiteJson: jsonb("website_json").notNull(),
   sectionOptions: jsonb("section_options"), // Store multiple section options for editing
   generatedHtml: text("generatedhtml"), // Store the complete HTML website
+  variant1: text("variant1"), // Bold & Dramatic design
+  variant2: text("variant2"), // Premium Luxury design
+  variant3: text("variant3"), // Vibrant Energy design
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

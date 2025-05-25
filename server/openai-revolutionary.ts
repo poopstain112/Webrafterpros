@@ -58,7 +58,8 @@ export async function analyzeImages(imageUrl: string): Promise<string> {
 
 export async function generateRevolutionaryWebsite(
   conversationData: string,
-  imageUrls: string[] = []
+  imageUrls: string[] = [],
+  designVariant: number = 1
 ): Promise<string> {
   console.log("🚀 REVOLUTIONARY GENERATION STARTING");
   console.log("Conversation data:", conversationData);
@@ -80,7 +81,32 @@ export async function generateRevolutionaryWebsite(
     'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1200'
   ];
 
+  // Define three distinct design approaches
+  const designApproaches = {
+    1: {
+      name: "BOLD & DRAMATIC",
+      style: "Dark theme with dramatic contrasts, Tesla-inspired minimal geometry, bold typography",
+      layout: "Full-screen hero with video-style backgrounds, asymmetrical grid layouts"
+    },
+    2: {
+      name: "PREMIUM LUXURY", 
+      style: "Light elegant theme with gold accents, Apple-inspired clean lines, sophisticated typography",
+      layout: "Magazine-style layouts with premium spacing and elegant image galleries"
+    },
+    3: {
+      name: "VIBRANT ENERGY",
+      style: "Bright colorful theme with ocean blues and sunset oranges, dynamic animations",
+      layout: "Card-based design with parallax scrolling and interactive elements"
+    }
+  };
+
+  const currentDesign = designApproaches[designVariant as keyof typeof designApproaches] || designApproaches[1];
+
   const prompt = `Create a REVOLUTIONARY website for ${businessName} with these exact specifications:
+
+DESIGN VARIANT: ${currentDesign.name}
+VISUAL STYLE: ${currentDesign.style}
+LAYOUT APPROACH: ${currentDesign.layout}
 
 BUSINESS DATA (USE EXACTLY):
 - Name: ${businessName}
