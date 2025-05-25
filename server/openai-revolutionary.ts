@@ -128,15 +128,33 @@ Create rich, detailed content that showcases the unique experience. Include:
 - Why customers should choose this specific boat rental service
 - Detailed service descriptions beyond basic rental
 
-VISUAL REQUIREMENTS:
-You MUST create a website that looks like it cost $10,000+ with these features:
-- Full-screen hero with dramatic animations
-- CSS clip-path geometric shapes
-- Backdrop-filter glass effects
-- Complex gradient overlays
-- 3D transform animations
-- Asymmetrical grid layouts
-- Typography that scales from 6rem to 0.8rem
+PREMIUM $2000+ WEBSITE REQUIREMENTS:
+You MUST create a website that immediately looks expensive and professional:
+
+ADVANCED VISUAL EFFECTS:
+- Parallax scrolling with multiple layers moving at different speeds
+- Smooth scroll animations that trigger when sections enter viewport
+- Floating navigation with backdrop blur and subtle shadow
+- Interactive image galleries with hover zoom and lightbox effects
+- Dynamic gradient overlays that shift subtly
+- Micro-interactions on buttons (scale, glow, color shift on hover)
+- CSS transforms creating depth and dimension
+- Professional loading animations between sections
+
+LUXURY DESIGN ELEMENTS:
+- Premium typography with multiple font weights (300, 400, 600, 700)
+- Golden ratio spacing for perfect visual balance
+- Asymmetrical layouts that break conventional grids elegantly
+- Strategic whitespace creating breathing room and luxury feel
+- High-contrast sections alternating light/dark for visual interest
+
+INTERACTIVE FEATURES:
+- Buttons with gradient backgrounds and hover animations
+- Image carousels with smooth slide transitions
+- Real-time form validation with elegant error states
+- Testimonial sliders with fade-in effects
+- Smooth reveal animations for text and images as user scrolls
+- Social media integration with icon hover effects
 
 MANDATORY SECTIONS - ALL MUST BE INCLUDED:
 1. Hero Section: Full-viewport with dramatic boat image and headline
@@ -144,7 +162,7 @@ MANDATORY SECTIONS - ALL MUST BE INCLUDED:
 3. Experience Section: Port Orange adventures and destinations
 4. REVIEWS SECTION: Complete section with "Customer Reviews" heading, space for testimonials, AND a "Leave a Review" form with fields for name, email, star rating, and comment - THIS SECTION IS REQUIRED
 5. Local Expertise: Why choose Poseidon's Boat Rentals
-6. Contact Section: Multiple ways to book and connect
+6. Contact Section: Professional booking system with multiple contact methods (phone, email, booking form), business hours, location map integration
 7. About Section: Captain expertise and service commitment
 
 CRITICAL: The Reviews Section MUST be included with proper styling even if empty.
@@ -152,9 +170,14 @@ CRITICAL: The Reviews Section MUST be included with proper styling even if empty
 VISUAL IMPACT REQUIREMENTS:
 - Each of the 5 uploaded boat images MUST be prominently displayed
 - Create image galleries, hero backgrounds, and feature sections using ALL images
-- Design should immediately captivate visitors like a $10,000+ website
+- Design should immediately captivate visitors like a $2,000+ professional website with premium touches
 - Use bold typography, dramatic spacing, and premium visual hierarchy
 - Every section should feel complete and polished, not half-finished
+- Add premium elements: interactive booking calendars, professional contact forms, elegant testimonial carousels
+- Include sophisticated animations: parallax scrolling, smooth reveal effects, hover transformations
+- Professional typography hierarchy with multiple font weights and perfect spacing
+- Interactive elements: image galleries with lightbox, smooth carousel transitions, dynamic hover states
+- Contact sections with multiple booking methods: phone, email, forms, business hours, location integration
 
 STRICT AUTHENTICITY REQUIREMENTS:
 - ONLY use PONTOON BOATS - NO speedboats, yacht references, or boat types not shown
