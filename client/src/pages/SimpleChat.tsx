@@ -290,7 +290,7 @@ export default function SimpleChat() {
       console.log("Website generated successfully, redirecting...");
       
       // Simple redirect - no delays, no localStorage complexity
-      window.location.href = '/website-preview';
+      window.location.href = '/website-view';
       
     } catch (error) {
       console.error('Website generation error:', error);
