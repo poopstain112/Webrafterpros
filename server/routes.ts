@@ -315,36 +315,32 @@ Please provide ONLY the complete, updated HTML code with the requested changes. 
         socialMedia
       );
       
-      // Store website with section options in the database
+      // Always create fresh website content - never reuse existing data
+      // Generate completely new website every time
+      const newWebsite = {
+        name: businessType || "My Website",
+        userId: 1, // Default user ID
+        description: description,
+        generatedHtml: websiteContent.html,
+        websiteJson: {
+          html: websiteContent.html,
+          css: websiteContent.css,
+          structure: websiteContent.structure || {},
+        },
+        sectionOptions: websiteContent.sectionOptions || {}
+      };
+      
       const existingWebsite = await storage.getWebsite(websiteId);
       
       if (existingWebsite) {
-        // Update existing website with new content including section options
-        const updatedWebsite = {
+        // Always replace with completely fresh content
+        await storage.updateWebsite({
           ...existingWebsite,
-          generatedHtml: websiteContent.html,
-          websiteJson: {
-            html: websiteContent.html,
-            css: websiteContent.css,
-            structure: websiteContent.structure || {},
-          },
-          sectionOptions: websiteContent.sectionOptions || {}
-        };
-        await storage.updateWebsite(updatedWebsite);
-      } else {
-        // Create a new website with section options
-        await storage.createWebsite({
-          name: businessType || "My Website",
-          userId: 1, // Default user ID
-          description: description,
-          generatedHtml: websiteContent.html,
-          websiteJson: {
-            html: websiteContent.html,
-            css: websiteContent.css,
-            structure: websiteContent.structure || {},
-          },
-          sectionOptions: websiteContent.sectionOptions || {}
+          ...newWebsite
         });
+      } else {
+        // Create new website
+        await storage.createWebsite(newWebsite);
       }
       
       console.log("Website generated successfully");
