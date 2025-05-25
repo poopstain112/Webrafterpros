@@ -180,27 +180,27 @@ VISUAL IMPACT REQUIREMENTS:
 - Contact sections with multiple booking methods: phone, email, forms, business hours, location integration
 
 STRICT AUTHENTICITY REQUIREMENTS:
-- ONLY use PONTOON BOATS - NO speedboats, yacht references, or boat types not shown
-- Base ALL content on the actual business: Poseidon's Boat Rentals in Port Orange
+- Base ALL content ONLY on the actual business information provided in the conversation
+- Use ONLY the business type, services, and details mentioned by the user
 - NO fake reviews, testimonials, or made-up customer quotes
 - NO social media overlays, viewer counts, usernames, or Instagram-style elements
 - Create a complete reviews section with "Leave a Review" form (name, email, rating, comment fields)
-- ONLY describe services actually offered by a pontoon boat rental business
-- Focus on family-friendly, leisurely pontoon boat experiences
-- NO assumptions about services not explicitly mentioned
+- ONLY describe services actually offered by THIS SPECIFIC business
+- Focus on the business personality and target audience described by the user
+- NO assumptions about services not explicitly mentioned by the user
 
 CONTENT CAPTIVATION REQUIREMENTS:
-- Write compelling copy about PONTOON BOAT adventures specifically
-- Create detailed descriptions that make visitors want to book pontoon rentals
-- Include specific Port Orange references and unique local experiences
+- Write compelling copy about THIS SPECIFIC BUSINESS based on the conversation data
+- Create detailed descriptions that make visitors want to use this business
+- Include specific location and service references from the user's input
 - Make every paragraph feel premium and professionally crafted
-- Focus on the relaxing, family-friendly pontoon boat experience
+- Focus on the business personality and approach described by the user
 
 CRITICAL IMAGE REQUIREMENTS:
-YOU MUST USE ALL 5 IMAGES - EVERY SINGLE ONE:
+YOU MUST USE ALL 10 IMAGES - EVERY SINGLE ONE:
 ${images.map((img, i) => `${i + 1}. ${img} - MUST be prominently featured`).join('\n')}
 
-FAILURE TO USE ALL 5 IMAGES IS UNACCEPTABLE. Each image must be:
+FAILURE TO USE ALL 10 IMAGES IS UNACCEPTABLE. Each image must be:
 - Prominently displayed in high-quality sections
 - Used in hero, gallery, or feature areas
 - Never hidden or made small
