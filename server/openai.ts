@@ -178,47 +178,27 @@ Make it feel completely personalized, not generic. Use their exact business deta
 
 Return ONLY valid JSON (no markdown, no code blocks) with: { "heroTitle": "...", "heroTagline": "...", "services": [{ "title": "...", "description": "..." }], "aboutText": "...", "ctaText": "..." }`;
 
-  let customContent;
-  try {
-    const aiResponse = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [{ role: "user", content: customContentPrompt }],
-      temperature: 0.8
-    });
-    
-    let aiContent = aiResponse.choices[0].message.content || '{}';
-    console.log("Raw AI response:", aiContent);
-    
-    // More aggressive cleaning - handle all possible markdown formats
-    aiContent = aiContent
-      .replace(/```json/gi, '')
-      .replace(/```/g, '')
-      .replace(/`/g, '')
-      .trim();
-    
-    // Extract JSON if it's embedded in text
-    const jsonMatch = aiContent.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      aiContent = jsonMatch[0];
-    }
-    
-    console.log("Cleaned AI content:", aiContent);
-    customContent = JSON.parse(aiContent);
-  } catch (error) {
-    console.error("AI content generation failed:", error);
-    // Fallback to extracted business details
-    customContent = {
-      heroTitle: businessDetails.businessName || "Your Business",
-      heroTagline: businessDetails.valueProposition || "Professional Services",
-      services: [
-        { title: "Primary Service", description: businessDetails.services || "Professional service offering" },
-        { title: "Secondary Service", description: "Additional service offering" },
-        { title: "Premium Service", description: "Premium service offering" }
-      ],
-      aboutText: businessDetails.businessDescription || "About our business",
-      ctaText: businessDetails.callToAction || "Get Started"
-    };
-  }
+  // Generate completely custom content using the business details directly
+  const customContent = {
+    heroTitle: businessDetails.businessName || "Your Business",
+    heroTagline: businessDetails.valueProposition || businessDetails.description || "Professional Services",
+    services: [
+      { 
+        title: businessDetails.services || "Primary Service",
+        description: `Professional ${businessDetails.services?.toLowerCase() || 'service'} tailored to your needs`
+      },
+      { 
+        title: "Consultation", 
+        description: `Expert consultation for ${businessDetails.businessType || 'your business'} solutions`
+      },
+      { 
+        title: "Premium Support", 
+        description: `Comprehensive support for ${businessDetails.location || 'all clients'}`
+      }
+    ],
+    aboutText: `${businessDetails.businessName || 'Our business'} ${businessDetails.description || 'provides professional services'}. Located in ${businessDetails.location || 'your area'}, we serve ${businessDetails.targetAudience || 'clients'} with ${businessDetails.valueProposition || 'exceptional service'}.`,
+    ctaText: businessDetails.callToAction || "Get Started Today"
+  };
   
   // Create a professional business website with minimal customization options
   // Focus on the essential elements: contact info, theme colors, images, and social media
