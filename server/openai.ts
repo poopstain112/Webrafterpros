@@ -186,7 +186,12 @@ Return as JSON with: { heroTitle, heroTagline, services: [{ title, description }
       temperature: 0.8
     });
     
-    customContent = JSON.parse(aiResponse.choices[0].message.content || '{}');
+    let aiContent = aiResponse.choices[0].message.content || '{}';
+    // Remove code block markers if present
+    if (aiContent.includes('```json')) {
+      aiContent = aiContent.replace(/```json\s*/, '').replace(/```\s*$/, '');
+    }
+    customContent = JSON.parse(aiContent);
   } catch (error) {
     console.error("AI content generation failed:", error);
     // Fallback to extracted business details
