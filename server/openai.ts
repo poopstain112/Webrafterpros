@@ -27,46 +27,39 @@ Address: ${businessDetails.address}
 Design Style: ${businessDetails.designStyle}
 Call to Action: ${businessDetails.callToAction}
 
-🔥 CREATE A WEBSITE THAT BREAKS THE INTERNET 🔥
+Create an exceptional, memorable website that stands out in this industry. This business has a unique personality that must shine through every design choice.
 
-This business deserves a website that makes people's jaws DROP. Create something so stunning, so unique, so BOLD that visitors will screenshot it and share it. This is NOT a template - this is ART.
+DESIGN BRIEF:
+Business Style: "${businessDetails.designStyle}"
+Industry: ${businessDetails.personality}
+Target: Create a website that visitors remember and talk about
 
-BUSINESS PERSONALITY: "${businessDetails.designStyle}"
-🎯 MISSION: Make this the most memorable website they've ever seen for this industry.
+DESIGN REQUIREMENTS:
+1. Bold visual hierarchy with striking typography combinations
+2. Dramatic color schemes that reflect the business personality
+3. Immersive hero section with compelling visual storytelling
+4. Unique section layouts that break conventional patterns
+5. Advanced CSS animations and smooth interactions
+6. Creative use of the provided images: ${imageUrls.join(', ')}
+7. Professional contact section with clear call-to-action
 
-🚀 DESIGN DEMANDS (NO COMPROMISES):
-1. EXPLOSIVE VISUAL IMPACT - Use the aesthetic "${businessDetails.designStyle}" but push it to the EXTREME
-2. CINEMATIC HERO SECTIONS - Make the first impression unforgettable with dramatic visuals
-3. PERSONALITY-DRIVEN LAYOUTS - Every section should scream this business's unique character
-4. ADVANCED ANIMATIONS - Scroll-triggered reveals, hover magic, smooth page transitions
-5. TYPOGRAPHY MASTERY - Mix fonts boldly, create hierarchy that guides the eye dramatically
-6. COLOR PSYCHOLOGY - Use colors that evoke the exact emotions this business wants
-7. IMMERSIVE IMAGERY - Transform these images into art: ${imageUrls.join(', ')}
-8. CONTACT SECTION THAT CONVERTS - Make it irresistible to reach out
+TECHNICAL SPECIFICATIONS:
+- Use modern CSS Grid and Flexbox for innovative layouts
+- Implement CSS transforms, gradients, and shadow effects
+- Create responsive design with smooth transitions
+- Add hover states and interactive elements
+- Use advanced typography with multiple font weights
+- Implement smooth scrolling and animation triggers
 
-🎨 VISUAL REQUIREMENTS:
-- Use CSS transforms, clips, masks, and advanced properties
-- Create depth with layered backgrounds, shadows, and overlays
-- Add particle effects, geometric shapes, or abstract elements
-- Design custom cursors, loading animations, or interactive elements
-- Use viewport units, calc(), and modern CSS for dynamic layouts
-- Create sections that feel like scenes in a movie
+CREATIVE DIRECTION:
+- Interpret the business style with confidence and creativity
+- Design sections that feel cinematic and engaging
+- Use color psychology to evoke the right emotions
+- Create visual depth with layered elements
+- Make the design feel premium and custom-built
+- Ensure the website personality matches the business character
 
-⚡ TECHNICAL EXCELLENCE:
-- Flawless mobile responsiveness with touch-friendly interactions
-- Optimized performance with smooth 60fps animations
-- Accessibility without compromising visual impact
-- Modern CSS Grid and Flexbox for perfect layouts
-
-🎭 PERSONALITY INJECTION:
-- Make the copy feel like it was written by the business owner themselves
-- Use the business's voice throughout every section
-- Create moments of delight and surprise
-- Tell their story in a way that creates emotional connection
-
-💥 FINAL CHALLENGE: Make this website so good that competitors will try to copy it.
-
-Return ONLY the complete HTML with embedded CSS - no explanations, no markdown blocks.`;
+OUTPUT: Complete HTML document with embedded CSS styling. No explanations or markdown formatting.`;
 
   try {
     const aiResponse = await openai.chat.completions.create({
