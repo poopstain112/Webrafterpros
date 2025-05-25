@@ -27,14 +27,26 @@ Address: ${businessDetails.address}
 Design Style: ${businessDetails.designStyle}
 Call to Action: ${businessDetails.callToAction}
 
-Create a complete HTML website with embedded CSS that:
-1. Matches their exact design style: "${businessDetails.designStyle}"
-2. Uses appropriate colors, fonts, and layout for their business type
-3. Includes hero section, services, about, and contact sections
-4. Is responsive and professional
-5. Uses the provided images: ${imageUrls.join(', ')}
-6. Include complete contact information with proper phone, email, and address details
-7. Make the contact section prominent and easy to find
+Create a stunning, completely custom HTML website with embedded CSS that showcases this business uniquely:
+
+DESIGN REQUIREMENTS:
+1. Match their exact aesthetic: "${businessDetails.designStyle}" - be creative and interpret this style boldly
+2. Use sophisticated color schemes, premium typography, and innovative layouts that reflect their brand personality
+3. Create visually striking sections: hero, services, about, and contact with unique visual elements
+4. Make it fully responsive with smooth animations and modern interactions
+5. Incorporate the provided images creatively: ${imageUrls.join(', ')}
+6. Design a prominent, beautiful contact section with all details: phone, email, address
+7. Add subtle but impressive visual effects like gradients, shadows, hover states, and smooth transitions
+8. Use modern CSS techniques like flexbox, grid, custom properties, and creative typography
+9. Make the design feel premium and expensive - like a $2000+ custom website
+10. Be bold and creative with the layout - don't use generic templates
+
+CREATIVE ELEMENTS TO INCLUDE:
+- Custom animations and micro-interactions
+- Unique section layouts that reflect the business personality
+- Creative use of whitespace and typography hierarchy
+- Sophisticated color gradients and visual effects
+- Modern design patterns and premium styling
 
 Return ONLY the complete HTML with embedded CSS - no explanations, no markdown blocks.`;
 
@@ -42,7 +54,7 @@ Return ONLY the complete HTML with embedded CSS - no explanations, no markdown b
     const aiResponse = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [{ role: "user", content: customWebsitePrompt }],
-      temperature: 0.7
+      temperature: 0.9
     });
     
     let customWebsiteHtml = aiResponse.choices[0].message.content || '';
