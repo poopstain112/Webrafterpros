@@ -142,7 +142,7 @@ MANDATORY SECTIONS - ALL MUST BE INCLUDED:
 1. Hero Section: Full-viewport with dramatic boat image and headline
 2. Fleet Gallery: ALL 5 BOAT IMAGES prominently displayed with descriptions  
 3. Experience Section: Port Orange adventures and destinations
-4. REVIEWS SECTION: Professional testimonial area with "Customer Reviews" heading and elegant styling ready for future reviews - THIS SECTION IS REQUIRED
+4. REVIEWS SECTION: Complete section with "Customer Reviews" heading, space for testimonials, AND a "Leave a Review" form with fields for name, email, star rating, and comment - THIS SECTION IS REQUIRED
 5. Local Expertise: Why choose Poseidon's Boat Rentals
 6. Contact Section: Multiple ways to book and connect
 7. About Section: Captain expertise and service commitment
@@ -160,7 +160,8 @@ STRICT AUTHENTICITY REQUIREMENTS:
 - ONLY use PONTOON BOATS - NO speedboats, yacht references, or boat types not shown
 - Base ALL content on the actual business: Poseidon's Boat Rentals in Port Orange
 - NO fake reviews, testimonials, or made-up customer quotes
-- Create a premium reviews section with elegant styling and placeholder text like "Share your experience" - ready for real reviews
+- NO social media overlays, viewer counts, usernames, or Instagram-style elements
+- Create a complete reviews section with "Leave a Review" form (name, email, rating, comment fields)
 - ONLY describe services actually offered by a pontoon boat rental business
 - Focus on family-friendly, leisurely pontoon boat experiences
 - NO assumptions about services not explicitly mentioned
