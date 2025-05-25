@@ -449,54 +449,60 @@ export default function SimpleChat() {
               {message.role === "assistant" && 
                message.content.includes("Perfect! I have everything I need to create your professional website. Now please upload") && (
                 <div className="mt-3">
-                  <label 
-                    className="px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg flex items-center gap-2 transition-colors duration-200 cursor-pointer"
-                  >
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={async (e) => {
-                        const files = Array.from(e.target.files || []);
+                  <button
+                    onClick={() => {
+                      const input = document.createElement('input');
+                      input.type = 'file';
+                      input.multiple = true;
+                      input.accept = 'image/*';
+                      
+                      input.onchange = async (e) => {
+                        const files = Array.from((e.target as HTMLInputElement).files || []);
                         if (files.length === 0) return;
+                        
+                        console.log('Files selected:', files.map(f => f.name));
                         
                         try {
                           const formData = new FormData();
                           formData.append('websiteId', '1');
-                          files.forEach(file => formData.append('images', file));
+                          files.forEach(file => {
+                            console.log('Adding file to FormData:', file.name);
+                            formData.append('images', file);
+                          });
                           
+                          console.log('Uploading to /api/upload...');
                           const response = await fetch('/api/upload', {
                             method: 'POST',
                             body: formData,
                           });
                           
+                          console.log('Upload response status:', response.status);
+                          
                           if (response.ok) {
                             const uploadedImages = await response.json();
                             console.log('Images uploaded successfully:', uploadedImages);
+                            alert(`Successfully uploaded ${files.length} images!`);
                             
-                            // Add message showing images uploaded
-                            const imageMessage = {
-                              role: "user",
-                              content: `I've uploaded ${files.length} images for my website.`,
-                              images: uploadedImages
-                            };
-                            
-                            setMessages(prev => [...prev, imageMessage]);
-                            
-                            // Auto-generate website after upload
-                            setTimeout(() => {
-                              handleGenerateWebsite();
-                            }, 1000);
+                            // Immediately generate website
+                            handleGenerateWebsite();
+                          } else {
+                            const errorText = await response.text();
+                            console.error('Upload failed:', errorText);
+                            alert('Upload failed: ' + errorText);
                           }
                         } catch (error) {
-                          console.error('Upload failed:', error);
+                          console.error('Upload error:', error);
+                          alert('Upload error: ' + error);
                         }
-                      }}
-                      className="hidden"
-                    />
+                      };
+                      
+                      input.click();
+                    }}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2 transition-colors duration-200"
+                  >
                     <ImageIcon className="h-4 w-4" />
                     <span>Upload Images</span>
-                  </label>
+                  </button>
                 </div>
               )}
               
