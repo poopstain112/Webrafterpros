@@ -289,20 +289,8 @@ export default function SimpleChat() {
       const result = await response.json();
       console.log("Website generated successfully");
       
-      // Store the website HTML and force navigation
-      if (result.html) {
-        // Create a blob URL with the website HTML
-        const blob = new Blob([result.html], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        
-        // Open in same window
-        window.location.href = url;
-      } else {
-        toast({
-          title: "Website generated successfully!",
-          description: "Your website is ready.",
-        });
-      }
+      // Immediate redirect to website view
+      window.location.replace('/website-view');
       
     } catch (error) {
       console.error('Website generation error:', error);

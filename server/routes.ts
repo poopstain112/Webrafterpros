@@ -59,7 +59,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/website-view", async (req: Request, res: Response) => {
     try {
       const website = await storage.getWebsite(1);
-      if (!website || !website.content) {
+      if (!website || !website.generatedHtml) {
         return res.send(`
           <html>
             <body style="font-family: Arial; padding: 40px; text-align: center;">
@@ -70,7 +70,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           </html>
         `);
       }
-      res.send(website.content);
+      res.send(website.generatedHtml);
     } catch (error) {
       res.status(500).send("Error loading website");
     }
