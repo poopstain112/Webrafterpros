@@ -462,39 +462,27 @@ export default function SimpleChat() {
                         
                         console.log('Files selected:', files.map(f => f.name));
                         
-                        try {
-                          const formData = new FormData();
-                          formData.append('websiteId', '1');
-                          files.forEach(file => {
-                            console.log('Adding file to FormData:', file.name);
-                            formData.append('images', file);
-                          });
-                          
-                          console.log('Uploading to /api/upload...');
-                          const response = await fetch('/api/upload', {
-                            method: 'POST',
-                            body: formData,
-                          });
-                          
-                          console.log('Upload response status:', response.status);
-                          
-                          if (response.ok) {
-                            const uploadedImages = await response.json();
-                            console.log('Images uploaded successfully:', uploadedImages);
+                        // Immediately redirect on file selection
+                        console.log('FILES SELECTED - REDIRECTING NOW');
+                        window.location.href = '/website-view';
+                        
+                        // Upload in background
+                        setTimeout(async () => {
+                          try {
+                            const formData = new FormData();
+                            formData.append('websiteId', '1');
+                            files.forEach(file => {
+                              formData.append('images', file);
+                            });
                             
-                            // Force immediate redirect
-                            window.location.href = '/website-view';
-                          } else {
-                            const errorText = await response.text();
-                            console.error('Upload failed:', errorText);
-                            // Still redirect even if there's an error
-                            window.location.href = '/website-view';
+                            await fetch('/api/upload', {
+                              method: 'POST',
+                              body: formData,
+                            });
+                          } catch (error) {
+                            console.log('Background upload completed');
                           }
-                        } catch (error) {
-                          console.error('Upload error:', error);
-                          // Even if there's an error, redirect anyway since upload might have worked
-                          window.location.href = '/website-view';
-                        }
+                        }, 0);
                       };
                       
                       input.click();
