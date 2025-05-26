@@ -80,10 +80,7 @@ export async function generateRevolutionaryWebsite(
   const style = parts[8] || "Bold and vibrant. God like";
   const cta = parts[9] || "Call immediately";
 
-  const images = imageUrls.length > 0 ? imageUrls : [
-    'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200',
-    'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1200'
-  ];
+  const images = imageUrls;
 
   // Define three distinct design approaches
   const designApproaches = {
