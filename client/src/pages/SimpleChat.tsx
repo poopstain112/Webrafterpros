@@ -464,7 +464,7 @@ export default function SimpleChat() {
                         
                         // Immediately redirect on file selection
                         console.log('FILES SELECTED - REDIRECTING NOW');
-                        window.location.href = '/website-view';
+                        window.location.href = '/generating-variants';
                         
                         // Upload in background
                         setTimeout(async () => {
