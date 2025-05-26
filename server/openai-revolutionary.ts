@@ -200,17 +200,21 @@ CONTENT CAPTIVATION REQUIREMENTS:
 - Make every paragraph feel premium and professionally crafted
 - Focus on the business personality and approach described by the user
 
-CRITICAL IMAGE REQUIREMENTS:
-YOU MUST USE ALL 10 IMAGES - EVERY SINGLE ONE:
-${images.map((img, i) => `${i + 1}. ${img} - MUST be prominently featured`).join('\n')}
+CRITICAL AUTHENTIC IMAGE REQUIREMENTS:
+THESE ARE THE ONLY IMAGES YOU CAN USE - NO FAKE OR GENERATED IMAGES ALLOWED:
+${images.map((img, i) => `${i + 1}. src="${img}" - Real uploaded business photo`).join('\n')}
 
-FAILURE TO USE ALL 10 IMAGES IS UNACCEPTABLE. Each image must be:
-- Prominently displayed in high-quality sections
-- Used in hero, gallery, or feature areas
-- Never hidden or made small
-- Integrated into the design meaningfully
+STRICT REQUIREMENTS:
+- Use ONLY these exact image paths with src="${images[0]}", src="${images[1]}", etc.
+- NO fake images, stock photos, or placeholder.jpg images
+- NO data:image/ base64 images
+- NO generated or synthetic images
+- Each real image must be prominently displayed
+- Use these authentic business photos in hero, gallery, and feature sections
 
-OUTPUT: Complete HTML document with embedded CSS that uses ALL 5 images prominently. No explanations. No markdown. Just pure HTML with captivating, rich content.`;
+AUTHENTICATION CHECK: If you generate ANY fake images, the website will be rejected.
+
+OUTPUT: Complete HTML document with embedded CSS using ONLY the authentic uploaded images listed above. No explanations. No markdown. Just pure HTML.`;
 
   try {
     const response = await openai.chat.completions.create({
