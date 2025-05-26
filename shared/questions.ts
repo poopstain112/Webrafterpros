@@ -4,9 +4,11 @@
 export const BUSINESS_QUESTIONS = [
   "Perfect! Now that I know what type of business we're designing for, what's your business name?",
   
-  "Great! Now help me understand what makes your business special. What's the main problem you solve for customers, and what's your unique approach that sets you apart from competitors?",
+  "Great! Now help me understand what makes your business special. What's the main problem you solve for customers?",
   
   "That's excellent. Who is your ideal customer? Paint me a picture - what do they do for work, what challenges are they facing, and what are they really hoping to achieve when they find your business?",
+  
+  "What sets you apart from your competitors? What's your unique approach or what makes you different from others in your field?",
   
   "Now tell me about your services. What exactly do you offer, and more importantly, what's the experience like for your customers from start to finish? Do you have any signature services that really showcase your expertise?",
   
