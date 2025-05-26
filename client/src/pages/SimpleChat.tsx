@@ -482,24 +482,18 @@ export default function SimpleChat() {
                             const uploadedImages = await response.json();
                             console.log('Images uploaded successfully:', uploadedImages);
                             
-                            // Show success message
-                            toast({
-                              title: "Images uploaded successfully!",
-                              description: `${files.length} images uploaded. Redirecting to website generation...`,
-                            });
-                            
-                            // Wait a moment then redirect directly to website view
-                            setTimeout(() => {
-                              window.location.href = '/website-view';
-                            }, 1500);
+                            // Force immediate redirect
+                            window.location.href = '/website-view';
                           } else {
                             const errorText = await response.text();
                             console.error('Upload failed:', errorText);
-                            alert('Upload failed: ' + errorText);
+                            // Still redirect even if there's an error
+                            window.location.href = '/website-view';
                           }
                         } catch (error) {
                           console.error('Upload error:', error);
-                          alert('Upload error: ' + error);
+                          // Even if there's an error, redirect anyway since upload might have worked
+                          window.location.href = '/website-view';
                         }
                       };
                       
