@@ -512,9 +512,16 @@ Please return the complete updated HTML with the new section in place. Do not in
       console.log(`🚀 REVOLUTIONARY GENERATION STARTING`);
       console.log(`Conversation data: ${conversationData}`);
       
-      // Get the most recent images for this website
-      const recentImages = await storage.getImagesByWebsiteId(websiteId);
-      const images = recentImages
+      // Get ONLY images from current conversation session (last 10 minutes)
+      const allImages = await storage.getImagesByWebsiteId(websiteId);
+      const currentTime = new Date().getTime();
+      const currentSessionImages = allImages.filter(img => {
+        const imgTime = new Date(img.createdAt).getTime();
+        const timeDiff = currentTime - imgTime;
+        return timeDiff < 10 * 60 * 1000; // Only images from last 10 minutes
+      });
+      
+      const images = currentSessionImages
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
         .slice(0, 10);
       
