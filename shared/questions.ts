@@ -10,8 +10,6 @@ export const BUSINESS_QUESTIONS = [
   
   "What sets you apart from your competitors? What's your unique approach or what makes you different from others in your field?",
   
-  "Now tell me about your services. What exactly do you offer, and more importantly, what's the experience like for your customers from start to finish? Do you have any signature services that really showcase your expertise?",
-  
   "Where are you located and what area do you serve? Do customers come to you, do you go to them, or both?",
   
   "What's the personality of your brand? Are you more professional and trustworthy, friendly and approachable, or maybe premium and exclusive? How do you want people to feel when they interact with your business?",
