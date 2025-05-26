@@ -445,7 +445,49 @@ export default function SimpleChat() {
                 </div>
               )}
               
-              {/* Image Upload Button in Message - shown only for the FINAL question about uploading photos */}
+              {/* Logo Upload Button - shown for logo question */}
+              {message.role === "assistant" && 
+               message.content.includes("Great! Now please upload your business logo and tell me your slogan") && (
+                <div className="mt-3">
+                  <button
+                    onClick={() => {
+                      const input = document.createElement('input');
+                      input.type = 'file';
+                      input.multiple = false;
+                      input.accept = 'image/*';
+                      
+                      input.onchange = async (e) => {
+                        const files = Array.from((e.target as HTMLInputElement).files || []);
+                        if (files.length === 0) return;
+                        
+                        console.log('Logo uploaded:', files[0].name);
+                        // Just upload logo, don't redirect to generation
+                        try {
+                          const formData = new FormData();
+                          formData.append('websiteId', '1');
+                          formData.append('images', files[0]);
+                          
+                          await fetch('/api/upload', {
+                            method: 'POST',
+                            body: formData,
+                          });
+                          console.log('Logo upload completed');
+                        } catch (error) {
+                          console.error('Logo upload error:', error);
+                        }
+                      };
+                      
+                      input.click();
+                    }}
+                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center gap-2 transition-colors duration-200"
+                  >
+                    <ImageIcon className="h-4 w-4" />
+                    <span>Upload Logo</span>
+                  </button>
+                </div>
+              )}
+              
+              {/* Business Images Upload Button - shown only for the FINAL question about uploading photos */}
               {message.role === "assistant" && 
                message.content.includes("Perfect! I have everything I need to create your professional website. Now please upload") && (
                 <div className="mt-3">

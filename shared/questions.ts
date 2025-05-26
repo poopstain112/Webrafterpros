@@ -20,7 +20,9 @@ export const BUSINESS_QUESTIONS = [
   
   "Finally, what's the main action you want website visitors to take? Call you immediately, book an appointment, request a quote, or something else?",
   
-  "Perfect! I have everything I need to create your professional website. Now please upload 1-5 high-quality photos of your work, location, or team so I can build a site that truly represents your business."
+  "Great! Now please upload your business logo and tell me your slogan or tagline (if you have one). This will help brand your website perfectly.",
+  
+  "Perfect! I have everything I need to create your professional website. Now please upload 1-10 high-quality photos of your work, location, or team so I can build a site that truly represents your business."
 ];
 
 export const INITIAL_GREETING = "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nFirst, tell me what type of business you have and we'll build from there. Are you in hospitality, services, retail, healthcare, or something else?";
