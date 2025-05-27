@@ -620,9 +620,10 @@ export default function SimpleChat() {
                 </div>
               )}
               
-              {/* Business Images Upload Button - shown only for the FINAL question about uploading photos */}
+              {/* Business Images Upload Button - shown after logo upload or for business images request */}
               {message.role === "assistant" && 
-               message.content.includes("Perfect! I have everything I need to create your professional website. Now please upload") && (
+               (message.content.includes("Now please upload 1-10 high-quality images") || 
+                message.content.includes("Perfect! I have everything I need to create your professional website. Now please upload")) && (
                 <div className="mt-3">
                   <button
                     onClick={() => {
