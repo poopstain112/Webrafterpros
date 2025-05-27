@@ -554,21 +554,8 @@ export default function SimpleChat() {
                         const files = Array.from((e.target as HTMLInputElement).files || []);
                         if (files.length === 0) return;
                         
-                        console.log('Logo uploaded:', files[0].name);
-                        // Just upload logo, don't redirect to generation
-                        try {
-                          const formData = new FormData();
-                          formData.append('websiteId', '1');
-                          formData.append('images', files[0]);
-                          
-                          await fetch('/api/upload', {
-                            method: 'POST',
-                            body: formData,
-                          });
-                          console.log('Logo upload completed');
-                        } catch (error) {
-                          console.error('Logo upload error:', error);
-                        }
+                        // Use the main upload function with progress tracking
+                        await handleImageUpload(files);
                       };
                       
                       input.click();
