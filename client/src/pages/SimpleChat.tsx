@@ -264,28 +264,23 @@ export default function SimpleChat() {
       const uploadedFiles = await response.json();
       setUploadedImages(prev => [...prev, ...uploadedFiles]);
 
+      // Show upload success
       toast({
-        title: "Images uploaded successfully!",
-        description: `${files.length} image(s) added. Total: ${uploadedImages.length + files.length}/5`,
+        title: "Upload successful!",
+        description: `${files.length} image(s) uploaded successfully`,
       });
 
-      // Check if we need to ask for business images after logo upload
-      const lastMessage = messages[messages.length - 1];
-      const isLogoUploadStep = lastMessage && lastMessage.content.includes("upload your business logo");
-      
-      if (isLogoUploadStep) {
-        // This was the logo upload, now ask for business images
-        setTimeout(() => {
-          const newMessage = {
-            id: Date.now(),
-            websiteId: 1,
-            content: "Perfect! Logo uploaded successfully! 🎉\n\nNow please upload 1-10 high-quality images of your business work, facility, team, or services. These will showcase your business on the website.",
-            role: "assistant",
-            createdAt: new Date(),
-          };
-          setMessages(prev => [...prev, newMessage]);
-        }, 1000);
-      }
+      // Always continue conversation after any upload
+      setTimeout(() => {
+        const newMessage = {
+          id: Date.now(),
+          websiteId: 1,
+          content: "Great! Images uploaded successfully! Now please upload 1-10 high-quality images of your business work, facility, team, or services to showcase on your website.",
+          role: "assistant",
+          createdAt: new Date(),
+        };
+        setMessages(prev => [...prev, newMessage]);
+      }, 1000);
     } catch (error) {
       console.error('Error uploading files:', error);
       toast({
