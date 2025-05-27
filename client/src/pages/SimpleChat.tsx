@@ -268,6 +268,14 @@ export default function SimpleChat() {
         title: "Images uploaded successfully!",
         description: `${files.length} image(s) added. Total: ${uploadedImages.length + files.length}/5`,
       });
+
+      // Check if this was a logo upload (first upload) and continue conversation
+      if (uploadedImages.length === 0) {
+        // This was the logo upload, now ask for business images
+        setTimeout(() => {
+          handleSendMessage("Perfect! Now please upload 1-10 high-quality images of your business work, facility, team, or services. These will showcase your business on the website.", "assistant");
+        }, 1000);
+      }
     } catch (error) {
       console.error('Error uploading files:', error);
       toast({
