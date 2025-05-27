@@ -178,6 +178,28 @@ export function ConfirmDeployment() {
             <p className="text-sm text-gray-500">
               Leave empty to use a free subdomain, or enter your custom domain
             </p>
+            
+            {customDomain && (
+              <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <h4 className="font-semibold text-amber-800 mb-2">📋 Custom Domain Setup</h4>
+                <div className="text-sm text-amber-700 space-y-2">
+                  <p><strong>Step 1:</strong> Purchase your domain from any registrar (GoDaddy, Namecheap, etc.)</p>
+                  <p><strong>Step 2:</strong> In your domain's DNS settings, add these records:</p>
+                  <div className="bg-white p-3 rounded border font-mono text-xs">
+                    <div>Type: CNAME</div>
+                    <div>Name: www</div>
+                    <div>Value: your-site.ourplatform.com</div>
+                  </div>
+                  <div className="bg-white p-3 rounded border font-mono text-xs">
+                    <div>Type: A</div>
+                    <div>Name: @</div>
+                    <div>Value: [IP will be provided after deployment]</div>
+                  </div>
+                  <p><strong>Step 3:</strong> Wait 24-48 hours for DNS to propagate</p>
+                  <p className="text-amber-600">💡 <strong>Tip:</strong> We'll email you the exact settings after deployment!</p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Deployment Features */}
