@@ -4,7 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { Send, RefreshCw, ImageIcon, Facebook } from "lucide-react";
+import { Send, RefreshCw, ImageIcon, Facebook, Upload } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -40,6 +41,11 @@ export default function SimpleChat() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [editingMessage, setEditingMessage] = useState<{index: number, content: string} | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<{isUploading: boolean, progress: number, fileName: string}>({
+    isUploading: false,
+    progress: 0,
+    fileName: ''
+  });
 
   // Handle editing a message
   const handleEditMessage = (index: number, content: string) => {
@@ -249,13 +255,32 @@ export default function SimpleChat() {
     }
 
     try {
+      // Start upload progress
+      setUploadProgress({
+        isUploading: true,
+        progress: 0,
+        fileName: files[0]?.name || 'image'
+      });
+
       const formData = new FormData();
       files.forEach(file => formData.append('images', file));
+
+      // Simulate progress updates
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => ({
+          ...prev,
+          progress: Math.min(prev.progress + 20, 90)
+        }));
+      }, 200);
 
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
       });
+
+      // Complete progress
+      clearInterval(progressInterval);
+      setUploadProgress(prev => ({ ...prev, progress: 100 }));
 
       if (!response.ok) {
         throw new Error('Upload failed');
@@ -281,8 +306,15 @@ export default function SimpleChat() {
         createdAt: new Date(),
       };
       setMessages(prev => [...prev, successMessage]);
+
+      // Reset progress after success
+      setTimeout(() => {
+        setUploadProgress({ isUploading: false, progress: 0, fileName: '' });
+      }, 2000);
+
     } catch (error) {
       console.error('Error uploading files:', error);
+      setUploadProgress({ isUploading: false, progress: 0, fileName: '' });
       toast({
         title: "Upload failed",
         description: "Please try again.",
@@ -449,6 +481,20 @@ export default function SimpleChat() {
           </button>
         </div>
       </div>
+
+      {/* Upload Progress Indicator */}
+      {uploadProgress.isUploading && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg p-4 border border-gray-200 z-50 min-w-[300px]">
+          <div className="flex items-center gap-3 mb-2">
+            <Upload className="h-5 w-5 text-blue-600 animate-pulse" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-900">Uploading {uploadProgress.fileName}</p>
+              <p className="text-xs text-gray-500">{uploadProgress.progress}% complete</p>
+            </div>
+          </div>
+          <Progress value={uploadProgress.progress} className="w-full h-2" />
+        </div>
+      )}
 
       {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 max-w-4xl mx-auto w-full">
