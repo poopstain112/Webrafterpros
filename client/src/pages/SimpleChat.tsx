@@ -11,6 +11,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import type { Message, Website } from "@shared/schema";
 import WebsitePreview from "@/components/WebsitePreview";
+import { trackBusinessType, trackImageUpload, trackConversationComplete } from "@/lib/analytics";
 
 interface UploadedImage {
   url: string;
@@ -578,6 +579,9 @@ export default function SimpleChat() {
                           if (response.ok) {
                             const uploadedFiles = await response.json();
                             setUploadedImages(prev => [...prev, ...uploadedFiles]);
+                            
+                            // Track analytics - Logo upload
+                            trackImageUpload(files.length, 'logo');
                             
                             toast({
                               title: "✅ Logo uploaded!",
