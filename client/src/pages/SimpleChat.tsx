@@ -269,14 +269,17 @@ export default function SimpleChat() {
         description: `${files.length} image(s) added. Total: ${uploadedImages.length + files.length}/5`,
       });
 
-      // Check if this was a logo upload (first upload) and continue conversation
-      if (uploadedImages.length === 0) {
+      // Check if we need to ask for business images after logo upload
+      const lastMessage = messages[messages.length - 1];
+      const isLogoUploadStep = lastMessage && lastMessage.content.includes("upload your business logo");
+      
+      if (isLogoUploadStep) {
         // This was the logo upload, now ask for business images
         setTimeout(() => {
           const newMessage = {
             id: Date.now(),
             websiteId: 1,
-            content: "Perfect! Logo uploaded successfully! Now please upload 1-10 high-quality images of your business work, facility, team, or services. These will showcase your business on the website.",
+            content: "Perfect! Logo uploaded successfully! 🎉\n\nNow please upload 1-10 high-quality images of your business work, facility, team, or services. These will showcase your business on the website.",
             role: "assistant",
             createdAt: new Date(),
           };
