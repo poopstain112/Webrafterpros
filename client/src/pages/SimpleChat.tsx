@@ -320,6 +320,7 @@ export default function SimpleChat() {
         description: "Please try again.",
         variant: "destructive",
       });
+      return; // Prevent further execution
     }
   };
 
@@ -555,7 +556,7 @@ export default function SimpleChat() {
                         if (files.length === 0) return;
                         
                         // Use the main upload function with progress tracking
-                        await handleImageUpload(files);
+                        await uploadFiles(files);
                       };
                       
                       input.click();
