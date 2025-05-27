@@ -273,7 +273,14 @@ export default function SimpleChat() {
       if (uploadedImages.length === 0) {
         // This was the logo upload, now ask for business images
         setTimeout(() => {
-          handleSendMessage("Perfect! Now please upload 1-10 high-quality images of your business work, facility, team, or services. These will showcase your business on the website.", "assistant");
+          const newMessage = {
+            id: Date.now(),
+            websiteId: 1,
+            content: "Perfect! Logo uploaded successfully! Now please upload 1-10 high-quality images of your business work, facility, team, or services. These will showcase your business on the website.",
+            role: "assistant",
+            createdAt: new Date(),
+          };
+          setMessages(prev => [...prev, newMessage]);
         }, 1000);
       }
     } catch (error) {
