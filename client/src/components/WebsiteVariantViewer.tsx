@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { useSwipeable } from 'react-swipeable';
 import { Button } from '@/components/ui/button';
+import { trackVariantSelection } from '@/lib/analytics';
 
 interface WebsiteVariantViewerProps {
   websiteId: number;
@@ -20,6 +21,9 @@ export function WebsiteVariantViewer({ websiteId, businessData }: WebsiteVariant
   const [loading, setLoading] = useState(false);
 
   const handleChooseDesign = (variantNumber: number) => {
+    // Track variant selection - Key business intelligence!
+    trackVariantSelection(VARIANT_NAMES[variantNumber - 1], variantNumber);
+    
     // Store the selected variant and redirect to confirmation
     localStorage.setItem('selectedVariant', variantNumber.toString());
     localStorage.setItem('selectedVariantName', VARIANT_NAMES[variantNumber - 1]);
