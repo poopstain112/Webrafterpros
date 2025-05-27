@@ -682,6 +682,36 @@ export default function SimpleChat() {
           onEdit={editWebsiteContent}
         />
       )}
+
+      {/* Edit Message Dialog */}
+      {editingMessage && (
+        <Dialog open={!!editingMessage} onOpenChange={() => setEditingMessage(null)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit Your Response</DialogTitle>
+              <DialogDescription>
+                Correct any typos or update your information.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              <Input
+                value={editingMessage.content}
+                onChange={(e) => setEditingMessage({...editingMessage, content: e.target.value})}
+                placeholder="Type your corrected response here..."
+                className="w-full"
+              />
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setEditingMessage(null)}>
+                Cancel
+              </Button>
+              <Button onClick={saveEditedMessage}>
+                Save Changes
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
       
       {/* Social Media Dialog */}
       <Dialog open={showSocialMediaDialog} onOpenChange={setShowSocialMediaDialog}>
