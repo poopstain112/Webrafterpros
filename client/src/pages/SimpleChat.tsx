@@ -39,6 +39,30 @@ export default function SimpleChat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [editingMessage, setEditingMessage] = useState<{index: number, content: string} | null>(null);
+
+  // Handle editing a message
+  const handleEditMessage = (index: number, content: string) => {
+    setEditingMessage({ index, content });
+  };
+
+  // Save edited message
+  const saveEditedMessage = () => {
+    if (!editingMessage) return;
+    
+    const updatedMessages = [...messages];
+    updatedMessages[editingMessage.index] = {
+      ...updatedMessages[editingMessage.index],
+      content: editingMessage.content
+    };
+    setMessages(updatedMessages);
+    setEditingMessage(null);
+    
+    toast({
+      title: "Message updated!",
+      description: "Your information has been corrected.",
+    });
+  };
 
   // Function to extract business info from conversation messages
   const extractBusinessInfo = (messages: any[]) => {
@@ -429,7 +453,18 @@ export default function SimpleChat() {
                   : "bg-white text-gray-800 rounded-bl-none border border-gray-100"
               }`}
             >
-              <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{message.content}</p>
+              <div className="flex justify-between items-start gap-2">
+                <p className="whitespace-pre-wrap text-[15px] leading-relaxed flex-1">{message.content}</p>
+                {message.role === "user" && (
+                  <button
+                    onClick={() => handleEditMessage(i, message.content)}
+                    className="text-xs opacity-70 hover:opacity-100 px-2 py-1 rounded hover:bg-black/10 transition-all"
+                    title="Edit this message"
+                  >
+                    Edit
+                  </button>
+                )}
+              </div>
               
               {/* Social Media Button in Message - shown only for assistant messages about social media */}
               {message.role === "assistant" && 
