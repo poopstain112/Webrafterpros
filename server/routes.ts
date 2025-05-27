@@ -611,6 +611,42 @@ Please return the complete updated HTML with the new section in place. Do not in
     }
   });
 
+  // Contact form submission endpoint
+  app.post("/api/contact", async (req: Request, res: Response) => {
+    try {
+      const { name, email, phone, message } = req.body;
+      
+      // Validate required fields
+      if (!name || !email || !message) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Name, email, and message are required" 
+        });
+      }
+      
+      // Log the contact form submission
+      console.log("📧 Contact Form Submission:", {
+        name,
+        email,
+        phone: phone || "Not provided",
+        message: message.substring(0, 100) + (message.length > 100 ? "..." : ""),
+        timestamp: new Date().toISOString()
+      });
+      
+      res.json({ 
+        success: true, 
+        message: "Thank you! Your message has been sent successfully." 
+      });
+      
+    } catch (error: any) {
+      console.error("Contact form error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to send message. Please try again." 
+      });
+    }
+  });
+
   // Serve deployed websites
   app.use('/deployed', express.static(path.join(process.cwd(), 'deployed-sites')));
 

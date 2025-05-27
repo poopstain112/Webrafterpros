@@ -159,12 +159,26 @@ INTERACTIVE FEATURES:
 
 MANDATORY SECTIONS - ALL MUST BE INCLUDED:
 1. Hero Section: Full-viewport with dramatic business image and compelling headline
-2. Gallery Section: ALL 10 UPLOADED IMAGES prominently displayed with descriptions  
+2. Gallery Section: ALL UPLOADED IMAGES prominently displayed with descriptions  
 3. Services Section: Business offerings and specialties from user conversation
 4. REVIEWS SECTION: Complete section with "Customer Reviews" heading, space for testimonials, AND a "Leave a Review" form with fields for name, email, star rating, and comment - THIS SECTION IS REQUIRED
 5. Why Choose Us: Unique value proposition and expertise from user input
-6. Contact Section: Professional contact system with multiple methods (phone, email, contact form), business hours, location details from conversation
+6. WORKING CONTACT SECTION: Professional contact system with FUNCTIONAL contact form that submits to /api/contact, phone, email, business hours, location details from conversation
 7. About Section: Business expertise and commitment based on user conversation
+
+CRITICAL SEO REQUIREMENTS - MUST BE INCLUDED:
+- Add proper <title> tag with business name and main service
+- Add meta description summarizing the business in 150-160 characters
+- Add meta keywords based on business type and location
+- Include proper heading hierarchy (H1, H2, H3)
+- Add alt text to all images describing the business content
+- Include structured data for local business if location provided
+
+FUNCTIONAL REQUIREMENTS:
+- Contact form MUST use action="/api/contact" method="POST" with fields: name, email, phone, message
+- All buttons must have proper hover effects and functionality
+- Mobile-responsive design that works perfectly on all devices
+- Fast loading with optimized images and CSS
 
 CRITICAL: The Reviews Section MUST be included with proper styling even if empty.
 
