@@ -159,21 +159,32 @@ export default function SimpleChat() {
     };
   }, []);
 
-  // Load existing messages when page loads (no auto-reset)
+  // Initialize with fresh greeting for new users
   useEffect(() => {
-    const loadMessages = async () => {
+    const initializeChat = async () => {
       try {
-        const response = await fetch('/api/websites/1/messages');
-        if (response.ok) {
-          const loadedMessages = await response.json();
-          setMessages(loadedMessages);
-        }
+        // Always start fresh by clearing any existing data
+        await fetch('/api/reset_all', { method: 'POST' });
+        
+        // Set the welcome greeting message
+        const greetingMessage = {
+          id: 1,
+          role: "assistant",
+          content: "👋 Welcome! I'm here to create a stunning, professional website tailored specifically for your business. Let's get started!\n\nFirst, tell me what type of business you have and we'll build from there. Are you in hospitality, services, retail, healthcare, or something else?",
+          websiteId: 1,
+          createdAt: new Date().toISOString(),
+        };
+        
+        setMessages([greetingMessage]);
+        setUploadedImages([]);
+        setWebsiteStructure(null);
+        
       } catch (error) {
-        console.error('Error loading messages:', error);
+        console.error('Error initializing chat:', error);
       }
     };
 
-    loadMessages();
+    initializeChat();
   }, []);
 
   const sendMessage = async () => {
