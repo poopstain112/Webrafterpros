@@ -12,6 +12,11 @@ export function ConfirmDeployment() {
   const [deploying, setDeploying] = useState(false);
   const [deployed, setDeployed] = useState(false);
   const [deploymentUrl, setDeploymentUrl] = useState('');
+  const [businessInfo, setBusinessInfo] = useState({
+    name: '',
+    type: '',
+    location: ''
+  });
 
   useEffect(() => {
     const variant = localStorage.getItem('selectedVariant');
@@ -24,6 +29,28 @@ export function ConfirmDeployment() {
     
     setSelectedVariant(variant);
     setSelectedVariantName(variantName);
+    
+    // Extract business info from conversation data
+    const conversationData = localStorage.getItem('conversationData') || '';
+    const parts = conversationData.split(' | ');
+    
+    // Parse business details from the conversation
+    const businessType = parts[0] || 'business';
+    const businessName = parts[1] || 'Your Business';
+    const location = parts.find(part => part.toLowerCase().includes('beach') || part.toLowerCase().includes('city')) || 'your area';
+    
+    setBusinessInfo({
+      name: businessName,
+      type: businessType,
+      location: location
+    });
+    
+    // Set suggested domain based on business name
+    const suggestedDomain = businessName.toLowerCase()
+      .replace(/[^a-z0-9]/g, '')
+      .substring(0, 15) + '.com';
+    setCustomDomain(suggestedDomain);
+    
   }, []);
 
   const handleGoBack = () => {
@@ -133,7 +160,7 @@ export function ConfirmDeployment() {
             <h3 className="font-semibold text-blue-800 mb-2">Selected Design</h3>
             <p className="text-blue-700">{selectedVariantName}</p>
             <p className="text-sm text-blue-600 mt-1">
-              Professional website with premium features and your boat images
+              Professional website with premium features and your {businessInfo.type} images
             </p>
           </div>
 
@@ -143,7 +170,7 @@ export function ConfirmDeployment() {
             <Input
               id="domain"
               type="text"
-              placeholder="yourboatrentals.com"
+              placeholder={businessInfo.name ? `${businessInfo.name.toLowerCase().replace(/[^a-z0-9]/g, '')}.com` : "yourbusiness.com"}
               value={customDomain}
               onChange={(e) => setCustomDomain(e.target.value)}
               className="w-full"
