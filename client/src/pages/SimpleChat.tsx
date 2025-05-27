@@ -555,8 +555,59 @@ export default function SimpleChat() {
                         const files = Array.from((e.target as HTMLInputElement).files || []);
                         if (files.length === 0) return;
                         
-                        // Use the main upload function with progress tracking
-                        await uploadFiles(files);
+                        try {
+                          // Show progress
+                          setUploadProgress({
+                            isUploading: true,
+                            progress: 20,
+                            fileName: files[0].name
+                          });
+                          
+                          const formData = new FormData();
+                          files.forEach(file => formData.append('images', file));
+
+                          setUploadProgress(prev => ({ ...prev, progress: 60 }));
+                          
+                          const response = await fetch('/api/upload', {
+                            method: 'POST',
+                            body: formData,
+                          });
+
+                          setUploadProgress(prev => ({ ...prev, progress: 100 }));
+                          
+                          if (response.ok) {
+                            const uploadedFiles = await response.json();
+                            setUploadedImages(prev => [...prev, ...uploadedFiles]);
+                            
+                            toast({
+                              title: "✅ Logo uploaded!",
+                              description: "Ready for next step",
+                            });
+                            
+                            // Add success message
+                            const successMessage = {
+                              id: Date.now(),
+                              websiteId: 1,
+                              content: "Perfect! Logo uploaded successfully! 🎉\n\nNow please upload 1-10 high-quality images of your business.",
+                              role: "assistant",
+                              createdAt: new Date(),
+                            };
+                            setMessages(prev => [...prev, successMessage]);
+                          }
+                          
+                          setTimeout(() => {
+                            setUploadProgress({ isUploading: false, progress: 0, fileName: '' });
+                          }, 2000);
+                          
+                        } catch (error) {
+                          console.error('Upload error:', error);
+                          setUploadProgress({ isUploading: false, progress: 0, fileName: '' });
+                          toast({
+                            title: "Upload failed",
+                            description: "Please try again",
+                            variant: "destructive",
+                          });
+                        }
                       };
                       
                       input.click();
