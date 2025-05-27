@@ -262,25 +262,25 @@ export default function SimpleChat() {
       }
 
       const uploadedFiles = await response.json();
+      
+      console.log("Upload response:", uploadedFiles);
       setUploadedImages(prev => [...prev, ...uploadedFiles]);
 
-      // Show upload success
+      // Show immediate upload success feedback
       toast({
-        title: "Upload successful!",
+        title: "✅ Upload Complete!",
         description: `${files.length} image(s) uploaded successfully`,
       });
 
-      // Always continue conversation after any upload
-      setTimeout(() => {
-        const newMessage = {
-          id: Date.now(),
-          websiteId: 1,
-          content: "Great! Images uploaded successfully! Now please upload 1-10 high-quality images of your business work, facility, team, or services to showcase on your website.",
-          role: "assistant",
-          createdAt: new Date(),
-        };
-        setMessages(prev => [...prev, newMessage]);
-      }, 1000);
+      // Add success message to chat immediately  
+      const successMessage = {
+        id: Date.now(),
+        websiteId: 1,
+        content: "Perfect! Images uploaded successfully! 🎉\n\nNow please upload 1-10 high-quality images of your business work, facility, team, or services to showcase on your website.",
+        role: "assistant",
+        createdAt: new Date(),
+      };
+      setMessages(prev => [...prev, successMessage]);
     } catch (error) {
       console.error('Error uploading files:', error);
       toast({
