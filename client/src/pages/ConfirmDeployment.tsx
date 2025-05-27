@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { CheckCircle, Globe, ArrowLeft, Rocket } from 'lucide-react';
+import { trackCustomDomainInterest } from '@/lib/analytics';
 
 export function ConfirmDeployment() {
   const [selectedVariant, setSelectedVariant] = useState('');
@@ -77,6 +78,11 @@ export function ConfirmDeployment() {
       const data = await response.json();
       
       if (response.ok) {
+        // Track successful deployment completion - Critical conversion metric!
+        if (customDomain.trim()) {
+          trackCustomDomainInterest(customDomain.trim());
+        }
+        
         setDeploymentUrl(data.url);
         setDeployed(true);
         // Clean up localStorage

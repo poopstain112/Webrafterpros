@@ -341,6 +341,12 @@ export default function SimpleChat() {
       // Get all the conversation data
       const allMessages = messages.filter(m => m.role === 'user').map(m => m.content).join(' | ');
       
+      // Track business type for marketing insights - Key analytics!
+      const businessInfo = extractBusinessInfo(messages);
+      if (businessInfo.name) {
+        trackBusinessType(businessInfo.name, businessInfo.location || 'unknown');
+      }
+      
       console.log("Starting website generation with conversation data:", allMessages);
       
       // Simple API call - no complex logic
