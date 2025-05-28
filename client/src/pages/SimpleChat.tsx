@@ -256,6 +256,30 @@ export default function SimpleChat() {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
+    // Validate file types and sizes
+    const maxFileSize = 10 * 1024 * 1024; // 10MB limit
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    
+    for (const file of files) {
+      if (!allowedTypes.includes(file.type)) {
+        toast({
+          title: "Invalid File Type",
+          description: `Please upload only JPG, PNG, or WebP images. "${file.name}" is not supported.`,
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      if (file.size > maxFileSize) {
+        toast({
+          title: "File Too Large",
+          description: `"${file.name}" is too large. Please use images under 10MB for best results.`,
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
     // Check if adding these files would exceed the 5-image limit
     if (uploadedImages.length + files.length > 5) {
       toast({
@@ -371,7 +395,13 @@ export default function SimpleChat() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate website');
+        if (response.status === 429) {
+          throw new Error('Too many requests. Please wait a moment and try again.');
+        } else if (response.status === 500) {
+          throw new Error('Server error. Our team has been notified. Please try again in a few minutes.');
+        } else {
+          throw new Error('Generation failed. Please check your internet connection and try again.');
+        }
       }
 
       const result = await response.json();
@@ -382,11 +412,23 @@ export default function SimpleChat() {
       
     } catch (error) {
       console.error('Website generation error:', error);
+      
+      // Specific error messages for better user experience
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      
       toast({
-        title: "Generation failed", 
-        description: "Please try again.",
+        title: "Website Generation Failed", 
+        description: errorMessage + " Don't worry - your information is saved and you can try again.",
         variant: "destructive",
       });
+      
+      // Offer recovery options
+      setTimeout(() => {
+        toast({
+          title: "💡 Quick Fix", 
+          description: "Try refreshing the page or contact support if the issue persists.",
+        });
+      }, 3000);
     } finally {
       setIsGenerating(false);
     }
