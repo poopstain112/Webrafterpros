@@ -754,6 +754,23 @@ Please return the complete updated HTML with the new section in place. Do not in
     }
   });
 
+  // Health check endpoints for cloud deployment
+  app.get("/health", (req: Request, res: Response) => {
+    res.status(200).json({ 
+      status: "healthy", 
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime()
+    });
+  });
+
+  app.get("/api/health", (req: Request, res: Response) => {
+    res.status(200).json({ 
+      status: "healthy", 
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime()
+    });
+  });
+
   // Serve deployed websites with HTTPS redirect
   app.use('/deployed', express.static(path.join(process.cwd(), 'deployed-sites')));
 
